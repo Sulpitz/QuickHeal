@@ -1,0 +1,14 @@
+## Interface: 11200
+## Title: QuickHeal
+## Author: Thomas Thorsen, Scott Geeding and Kostas Karachalios
+## Notes: Quick healing of party/raid members
+## OptionalDeps: BonusScanner,Titan Panel,myAddOns,CT_RaidAssist
+## SavedVariables: 
+## SavedVariablesPerCharacter: QuickHealVariables
+
+libs\RosterLib-2.0\RosterLib-2.0.lua
+
+libs\HealComm-1.0\HealComm-1.0.lua
+
+QuickHeal.xml
+HealingBar.xml
