@@ -1,5 +1,5 @@
 # QuickHeal
-QuickHeal for Vanilla WoW 1.12. Modifikation made here is for integration with HealComm.
+QuickHeal for Vanilla WoW 1.12. Modifikations made here is for integration with HealComm.
 
 I'm not the author of QuickHeal.
 
