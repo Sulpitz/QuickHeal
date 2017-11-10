@@ -42,7 +42,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
     local Health;
     if UnitHasHealthInfo(Target) then
         -- Full info available
-        healneed = UnitHealthMax(Target) - UnitHealth(Target);
+        healneed = UnitHealthMax(Target) - UnitHealth(Target) + HealComm:getHeal(UnitName(Target)); -- Implementatio for HealComm
         Health = UnitHealth(Target) / UnitHealthMax(Target);
     else
         -- Estimate target health

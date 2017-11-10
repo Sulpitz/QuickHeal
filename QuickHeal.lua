@@ -979,8 +979,8 @@ local function FindWhoToHeal(Restrict,extParam)
                     
                     local IncHeal = HealComm:getHeal(UnitName(unit))
                     local PredictedHealth = (UnitHealth(unit) + IncHeal) / UnitHealthMax(unit);
-                    writeLine("Values for "..UnitName(unit)..":")
-                    writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealth: "..PredictedHealth) --Edelete
+                    --writeLine("Values for "..UnitName(unit)..":")
+                    --writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealth: "..PredictedHealth) --Edelete
                     if PredictedHealth < QHV.RatioFull then
                         if PredictedHealth < healingTargetHealth then
                             healingTarget = unit;

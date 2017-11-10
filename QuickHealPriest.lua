@@ -1,3 +1,8 @@
+local function writeLine(s,r,g,b)
+   if DEFAULT_CHAT_FRAME then
+       DEFAULT_CHAT_FRAME:AddMessage(s, r or 1, g or 1, b or 0.5)
+   end
+end
 
 function QuickHeal_Priest_GetRatioHealthyExplanation()
     if QuickHealVariables.RatioHealthyPriest >= QuickHealVariables.RatioFull then
@@ -14,7 +19,6 @@ end
 function QuickHeal_Priest_FindSpellToUse(Target)
     local SpellID = nil;
     local HealSize = 0;
-
     -- Return immediatly if no player needs healing
     if not Target then
         return SpellID,HealSize;
@@ -32,11 +36,12 @@ function QuickHeal_Priest_FindSpellToUse(Target)
 
     if QuickHeal_UnitHasHealthInfo(Target) then
         -- Full info available
-        healneed = UnitHealthMax(Target) - UnitHealth(Target);
+        healneed = UnitHealthMax(Target) - UnitHealth(Target) + HealComm:getHeal(UnitName(Target)); -- Implementatio for HealComm
+        --writeLine("healneed = "..UnitHealthMax(Target).." (MaxHealth) - "..UnitHealth(Target).." (Health) + "..HealComm:getHeal(UnitName(Target)).." (IncHeal)")
         Health = UnitHealth(Target) / UnitHealthMax(Target);
     else
         -- Estimate target health
-        healneed = QuickHeal_EstimateUnitHealNeed(Target,true);
+        healneed = QuickHeal_EstimateUnitHealNeed(Target,true); -- needs HealComm implementation maybe
         Health = UnitHealth(Target)/100;
     end
 
