@@ -6,7 +6,7 @@ HealComm = AceLibrary("HealComm-1.0")
 --[ Mod data ]--
 QuickHealData = {
     name = 'QuickHeal',
-    version = '1.13.4',
+    version = '1.13.4_hc01',
     releaseDate = 'September 6th, 2006',
     author = 'T. Thorsen, S. Geeding and K. Karachalios',
     website = 'http://ui.worldofwar.net/ui.php?id=1872',
@@ -251,6 +251,9 @@ local function Initialise()
     -- Listen to LEARNED_SPELL_IN_TAB to clear cache when learning new spells
     QuickHealConfig:RegisterEvent("LEARNED_SPELL_IN_TAB");
 
+    --Register for Addon message event
+    QuickHealConfig:RegisterEvent("CHAT_MSG_ADDON")
+    
     QUICKHEAL_LOADED = true;
 end
 
@@ -423,6 +426,11 @@ function QuickHeal_OnEvent()
         SpellCache = {};
     elseif (event == "VARIABLES_LOADED") then
         Initialise();
+    elseif (event == "CHAT_MSG_ADDON") then
+        if arg1 == "QuickHeal" and arg2 == "versioncheck" then
+            SendAddonMessage("QuickHeal", QuickHealData.version, RAID)
+            
+        end
     else
         QuickHeal_debug((event or "Unknown Event"), (arg1 or "nil"))
     end

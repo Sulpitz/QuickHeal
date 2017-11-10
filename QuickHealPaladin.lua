@@ -42,7 +42,7 @@ function QuickHeal_Paladin_FindSpellToUse(Target)
 
     if UnitHasHealthInfo(Target) then
         -- Full info available
-        healneed = UnitHealthMax(Target) - UnitHealth(Target) + HealComm:getHeal(UnitName(Target)); -- Implementatio for HealComm
+        healneed = UnitHealthMax(Target) - UnitHealth(Target) - HealComm:getHeal(UnitName(Target)); -- Implementatio for HealComm
         Health = UnitHealth(Target) / UnitHealthMax(Target);
     else
         -- Estimate target health

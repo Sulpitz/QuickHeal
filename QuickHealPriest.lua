@@ -36,8 +36,9 @@ function QuickHeal_Priest_FindSpellToUse(Target)
 
     if QuickHeal_UnitHasHealthInfo(Target) then
         -- Full info available
-        healneed = UnitHealthMax(Target) - UnitHealth(Target) + HealComm:getHeal(UnitName(Target)); -- Implementatio for HealComm
-        --writeLine("healneed = "..UnitHealthMax(Target).." (MaxHealth) - "..UnitHealth(Target).." (Health) + "..HealComm:getHeal(UnitName(Target)).." (IncHeal)")
+        healneed = UnitHealthMax(Target) - UnitHealth(Target) - HealComm:getHeal(UnitName(Target)); -- Implementatin for HealComm
+        writeLine(healneed.." (healneed) = "..UnitHealthMax(Target).." (MaxHealth) - "..UnitHealth(Target).." (Health) + "..HealComm:getHeal(UnitName(Target)).." (IncHeal)")
+        SendChatMessage(healneed.." (healneed) = "..UnitHealthMax(Target).." (MaxHealth) - "..UnitHealth(Target).." (Health) + "..HealComm:getHeal(UnitName(Target)).." (IncHeal)", PARTY, nil)
         Health = UnitHealth(Target) / UnitHealthMax(Target);
     else
         -- Estimate target health
