@@ -6,7 +6,7 @@ HealComm = AceLibrary("HealComm-1.0")
 --[ Mod data ]--
 QuickHealData = {
     name = 'QuickHeal',
-    version = '1.13.4_hc01',
+    version = '1.13.4_hc02',
     releaseDate = 'September 6th, 2006',
     author = 'T. Thorsen, S. Geeding and K. Karachalios',
     website = 'http://ui.worldofwar.net/ui.php?id=1872',
@@ -79,6 +79,7 @@ BINDING_NAME_QUICKHEAL_HEALNONMT = "Heal Non MT";
 BINDING_NAME_QUICKHEAL_HEALSELF = "Heal Player";
 BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target";
 BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target";
+BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%"
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
@@ -576,6 +577,55 @@ end
 function QuickHeal_ToggleConfigurationPanel()
     if QuickHealConfig:IsVisible() then QuickHealConfig:Hide() else QuickHealConfig:Show() end
 end
+
+-- Toggle Healthy Threshold
+function QuickHeal_Toggle_Healthy_Threshold()
+    local _,PlayerClass = UnitClass('player');
+    if string.lower(PlayerClass) == "druid" then 
+        if QuickHealVariables.RatioHealthyDruid < 1 then 
+            QuickHealVariables.RatioHealthyDruid = 1
+            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+        else
+            QuickHealVariables.RatioHealthyDruid = 0
+            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+        end
+    return
+    end
+   
+    if string.lower(PlayerClass) == "paladin" then
+        if QuickHealVariables.RatioHealthyPaladin < 1 then 
+            QuickHealVariables.RatioHealthyPaladin = 1
+            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+        else
+            QuickHealVariables.RatioHealthyPaladin = 0
+            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+        end
+    return
+    end
+   
+    if string.lower(PlayerClass) == "priest" then
+        if QuickHealVariables.RatioHealthyPriest < 1 then 
+            QuickHealVariables.RatioHealthyPriest = 1
+            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+        else
+            QuickHealVariables.RatioHealthyPriest = 0
+            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+        end        
+    return
+    end
+   
+    if string.lower(PlayerClass) == "shaman" then
+        if QuickHealVariables.RatioHealthyShaman < 1 then 
+            QuickHealVariables.RatioHealthyShaman = 1
+            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+        else
+            QuickHealVariables.RatioHealthyShaman = 0
+            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+        end
+    return
+    end
+end
+
 
 --[ Buff and Debuff detection ]--
 
@@ -1399,6 +1449,11 @@ function QuickHeal_Command(msg)
 
     if cmd == "cfg" then
         QuickHeal_ToggleConfigurationPanel();
+        return;
+    end
+    
+    if cmd == "toggle" then
+        QuickHeal_Toggle_Healthy_Threshold();
         return;
     end
 
