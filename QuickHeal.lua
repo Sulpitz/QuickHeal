@@ -21,7 +21,7 @@ local OriginalUIErrorsFrame_OnEvent;
 QuickHealVariables = {};
 local QHV; -- Local alias
 local DQHV = { -- Default values
-    DebugMode = true,
+    DebugMode = false,
     PetPriority = 1,
     TargetPriority = false,
     RatioForceself = 0.4,
@@ -129,13 +129,13 @@ end
 
 -- Display debug info in the chat frame if debug is enabled
 function QuickHeal_debug(...)
-   if DEFAULT_CHAT_FRAME and QHV.DebugMode then
+   if QHV.DebugMode then
        local msg = ''
        for k,v in ipairs(arg) do
           msg = msg .. tostring(v) .. ' : '
        end
        writeLine(msg)
-   end
+  end
 end
 
 local function Message(text,kind,duration)
