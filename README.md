@@ -16,4 +16,5 @@ I got the original version of QuickHeal from https://wow.curseforge.com/projects
 # What this version of QuickHeal does:
 
 **Integration of HealComm**
+
 QuickHeal is now using the incomming heal information broadcasted by HealComm (Luna unit Frames) through the addonchannel to reduce overhealing and making this addon used by multible raidmembers more effective.
