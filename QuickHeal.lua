@@ -1000,7 +1000,9 @@ local function FindWhoToHeal(Restrict,extParam)
     end
 
     local healingTarget = nil;
-    local healingTargetHealth = 1;
+    local healingTargetHealth = 100000;
+    local healingTargetHealthPct = 1;
+    local healingTargetMissinHealth = 0;
     local unit;
 
     -- Clear any healable target
@@ -1035,17 +1037,54 @@ local function FindWhoToHeal(Restrict,extParam)
                 if SpellCanTargetUnit(unit) then                
                     QuickHeal_debug(string.format("%s (%s) : %d/%d",UnitFullName(unit),unit,UnitHealth(unit),UnitHealthMax(unit)));
                     
+                    --Get who to heal for different classes
                     local IncHeal = HealComm:getHeal(UnitName(unit))
-                    local PredictedHealth = (UnitHealth(unit) + IncHeal) / UnitHealthMax(unit);
-                    --writeLine("Values for "..UnitName(unit)..":")
-                    --writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealth: "..PredictedHealth) --Edelete
-                    if PredictedHealth < QHV.RatioFull then
-                        if PredictedHealth < healingTargetHealth then
-                            healingTarget = unit;
-                            healingTargetHealth = PredictedHealth;
-                            AllPlayersAreFull = false;
+                    local PredictedHealth = (UnitHealth(unit) + IncHeal)
+                    local PredictedHealthPct = (UnitHealth(unit) + IncHeal) / UnitHealthMax(unit);
+                    local PredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - IncHeal ;
+                    
+                    if PredictedHealthPct < QHV.RatioFull then
+                        local _,PlayerClass = UnitClass('player');
+                        PlayerClass = string.lower(PlayerClass);
+                   
+                        if PlayerClass == "shaman" then
+                            if PredictedHealthPct < healingTargetHealthPct then
+                                healingTarget = unit;
+                                healingTargetHealthPct = PredictedHealthPct;
+                                AllPlayersAreFull = false;
+                            end                     
+                        elseif PlayerClass == "priest" then
+                        --writeLine("Find who to heal for Priest");
+                        --writeLine("Missing health: "..PredictedMissingHealth);
+                            if PredictedMissingHealth > healingTargetMissinHealth then
+                                healingTarget = unit;
+                                healingTargetMissinHealth = PredictedMissingHealth;
+                                AllPlayersAreFull = false;
+                            end                           
+                        
+                        
+                        elseif PlayerClass == "paladin" then
+                        --writeLine("Find who to heal for Paladin") 
+                            if PredictedHealth < healingTargetHealth then
+                                healingTarget = unit;
+                                healingTargetHealth = PredictedHealth;
+                                AllPlayersAreFull = false;
+                            end 
+                        elseif PlayerClass == "druid" then
+                            if PredictedHealthPct < healingTargetHealthPct then
+                                healingTarget = unit;
+                                healingTargetHealthPct = PredictedHealthPct;
+                                AllPlayersAreFull = false;
+                            end                  
+                        else
+                            writeLine(QuickHealData.name .. " " .. QuickHealData.version .. " does not support " .. UnitClass('player') .. ". " .. QuickHealData.name .. " not loaded.")
+                            return;
                         end
                     end
+                    
+                    
+                    --writeLine("Values for "..UnitName(unit)..":")
+                    --writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealthPct: "..PredictedHealthPct) --Edelete
                 else
                     QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")","is out-of-range or unhealable");
                 end
@@ -1069,9 +1108,9 @@ local function FindWhoToHeal(Restrict,extParam)
                         local Health = UnitHealth(unit) / UnitHealthMax(unit);
                         if Health < QHV.RatioFull then
                             if ((QHV.PetPriority == 1) and AllPlayersAreFull) or (QHV.PetPriority == 2) or UnitIsUnit(unit,"target") then
-                                if Health < healingTargetHealth then
+                                if Health < healingTargetHealthPct then
                                     healingTarget = unit;
-                                    healingTargetHealth = Health;
+                                    healingTargetHealthPct = Health;
                                     AllPetsAreFull = false;
                                 end
                             end
