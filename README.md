@@ -22,7 +22,7 @@ QuickHeal is now using the incomming heal information broadcasted by HealComm (L
 # Changes:
 
 hc03:
-- /qh downrank or /qh dr toggles a window where the maximum spell rank to be used for healspells can be set.
+- /qh downrank or /qh dr toggles a window where the maximum spell rank to be used for healspells can be set. (hold rightclick on frame to drag the window)
 - Keybind for toggeling downrank window
 - /qh toggle will change between Flash heals and Normal heals on Priest
 - Keybind to toggle between Flash heals and Normal heals on Priest
@@ -30,3 +30,4 @@ hc03:
 - Heal sent from other players via HealComm will now be considered for player that is target of target prioity healing
 - Priests will now heal the player with the most health missing
 - Paladin will now heal the player with the lowest amount of health
+- For Paladins healing out of fight will now use the same spells as infight
