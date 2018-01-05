@@ -1543,7 +1543,7 @@ function QuickHeal_Command(msg)
     writeLine(QuickHealData.name .. " Usage:");
     writeLine("/qh cfg - Opens up the configuration panel.");
     writeLine("/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%).");
-    writeLine("/qh downrank - Opens the slider to limit QuickHeal to use only lower ranks.");
+    writeLine("/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks.");
     writeLine("/qh - Heals the party/raid member that most need it with the best suited healing spell.");
     writeLine("/qh player - Forces the target of the healing to be yourself.");
     writeLine("/qh target - Forces the target of the healing to be your current target.");
