@@ -6,7 +6,7 @@ HealComm = AceLibrary("HealComm-1.0")
 --[ Mod data ]--
 QuickHealData = {
     name = 'QuickHeal',
-    version = '1.13.4_hc02',
+    version = '1.13.4_hc03',
     releaseDate = 'September 6th, 2006',
     author = 'T. Thorsen, S. Geeding and K. Karachalios',
     website = 'http://ui.worldofwar.net/ui.php?id=1872',
@@ -80,6 +80,7 @@ BINDING_NAME_QUICKHEAL_HEALSELF = "Heal Player";
 BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target";
 BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target";
 BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%"
+BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Show/Hide Downrank Window"
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
@@ -212,6 +213,16 @@ local function Initialise()
     elseif PlayerClass == "paladin" then
         FindSpellToUse = QuickHeal_Paladin_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Paladin_GetRatioHealthyExplanation;
+        -- convert default (priest) downrank window to Paladin with only FH Slider shown
+        QuickHealDownrank_Slider_NH:Hide();
+        QuickHealDownrank_RankNumberTop:Hide();
+        QuickHealDownrank_MarkerTop:Hide()
+        QuickHealDownrank_MarkerBot:Hide()
+        QuickHeal_DownrankSlider:SetHeight(40)
+        QuickHealDownrank_Slider_FH:SetPoint("TOPLEFT", 20, -10)
+        QuickHealDownrank_Slider_FH:SetMinMaxValues(1,6);
+        QuickHealDownrank_Slider_FH:SetValue(6)
+        QuickHealDownrank_RankNumberBot:SetPoint("CENTER", 108, 1)
     elseif PlayerClass == "druid" then
         FindSpellToUse = QuickHeal_Druid_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Druid_GetRatioHealthyExplanation;
@@ -493,7 +504,7 @@ end
 -- Get an explanation of effects based on current settings
 function QuickHeal_GetExplanation(Parameter)
     local string = "";
-
+   
     if Parameter == "RatioFull" then
         if QHV.RatioFull > 0 then
             return "Will only heal targets with less than " .. QHV.RatioFull*100 .. "% health.";
@@ -581,49 +592,42 @@ end
 -- Toggle Healthy Threshold
 function QuickHeal_Toggle_Healthy_Threshold()
     local _,PlayerClass = UnitClass('player');
-    if string.lower(PlayerClass) == "druid" then 
-        if QuickHealVariables.RatioHealthyDruid < 1 then 
-            QuickHealVariables.RatioHealthyDruid = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyDruid = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
-   
-    if string.lower(PlayerClass) == "paladin" then
-        if QuickHealVariables.RatioHealthyPaladin < 1 then 
-            QuickHealVariables.RatioHealthyPaladin = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyPaladin = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
+--    if string.lower(PlayerClass) == "druid" then 
+--        if QuickHealVariables.RatioHealthyDruid < 1 then 
+--            QuickHealVariables.RatioHealthyDruid = 1
+--            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+--        else
+--            QuickHealVariables.RatioHealthyDruid = 0
+--            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+--        end
+--    return
+--    end
    
     if string.lower(PlayerClass) == "priest" then
         if QuickHealVariables.RatioHealthyPriest < 1 then 
             QuickHealVariables.RatioHealthyPriest = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+            --writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+            QuickHealDownrank_MarkerTop:Hide()
+            QuickHealDownrank_MarkerBot:Show()
         else
             QuickHealVariables.RatioHealthyPriest = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+            --writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+            QuickHealDownrank_MarkerTop:Show()
+            QuickHealDownrank_MarkerBot:Hide()
         end        
     return
     end
    
-    if string.lower(PlayerClass) == "shaman" then
-        if QuickHealVariables.RatioHealthyShaman < 1 then 
-            QuickHealVariables.RatioHealthyShaman = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyShaman = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
+ --   if string.lower(PlayerClass) == "shaman" then
+ --       if QuickHealVariables.RatioHealthyShaman < 1 then 
+ --           QuickHealVariables.RatioHealthyShaman = 1
+ --           writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+ --       else
+ --           QuickHealVariables.RatioHealthyShaman = 0
+ --           writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+ --       end
+ --   return
+ --   end
 end
 
 
@@ -936,7 +940,7 @@ local function FindWhoToHeal(Restrict,extParam)
     local AllPetsAreFull = true;
 
     -- Self Preservation
-    local selfPercentage = UnitHealth('player') / UnitHealthMax('player');
+    local selfPercentage = (UnitHealth('player') + HealComm:getHeal('player')) / UnitHealthMax('player');
     if (selfPercentage < QHV.RatioForceself) and (selfPercentage < QHV.RatioFull) then
         QuickHeal_debug("********** Self Preservation **********");
         return 'player';
@@ -1311,6 +1315,7 @@ end
 -- If parameters are missing they will be determined automatically
 function QuickHeal(Target,SpellID,extParam)
 
+
     -- Only one instance of QuickHeal allowed at a time
     if QuickHealBusy then
         if HealingTarget and MassiveOverhealInProgress then
@@ -1353,7 +1358,7 @@ function QuickHeal(Target,SpellID,extParam)
             QuickHeal_debug(string.format("%s (%s) : %d/%d",UnitFullName(Target),Target,UnitHealth(Target),UnitHealthMax(Target)));
             local targetPercentage;
             if QuickHeal_UnitHasHealthInfo(Target) then
-                targetPercentage = UnitHealth(Target) / UnitHealthMax(Target);
+                targetPercentage = (UnitHealth(Target) + HealComm:getHeal(UnitName(Target))) / UnitHealthMax(Target);
             else
                 targetPercentage = UnitHealth(Target) / 100;
             end
@@ -1482,6 +1487,10 @@ function QuickHeal(Target,SpellID,extParam)
     SetCVar("autoSelfCast",AutoSelfCast);
 end
 
+function ToggleDownrankWindow()
+        if QuickHeal_DownrankSlider:IsVisible() then QuickHeal_DownrankSlider:Hide() else QuickHeal_DownrankSlider:Show() end
+    end
+
 function QuickHeal_Command(msg)
 
     local cmd = string.lower(msg)
@@ -1496,6 +1505,11 @@ function QuickHeal_Command(msg)
         return;
     end
 
+    if cmd == "downrank" or cmd == "dr" then
+        ToggleDownrankWindow()
+        return;
+    end   
+    
     if cmd == "debug on" then
         QHV.DebugMode = true;
         writeLine(QuickHealData.name .. " debug mode enabled",0,0,1);
@@ -1527,6 +1541,9 @@ function QuickHeal_Command(msg)
 
     -- Print usage information
     writeLine(QuickHealData.name .. " Usage:");
+    writeLine("/qh cfg - Opens up the configuration panel.");
+    writeLine("/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%).");
+    writeLine("/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks.");
     writeLine("/qh - Heals the party/raid member that most need it with the best suited healing spell.");
     writeLine("/qh player - Forces the target of the healing to be yourself.");
     writeLine("/qh target - Forces the target of the healing to be your current target.");
@@ -1535,6 +1552,5 @@ function QuickHeal_Command(msg)
     writeLine("/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA.");
     writeLine("/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA.");
     writeLine("/qh subgroup - Forces the healing to the groups selected in the configuration panel.");
-    writeLine("/qh cfg - Opens up the configuration panel.");
     writeLine("/qh reset - Reset configuration to default parameters for all classes.");
 end
