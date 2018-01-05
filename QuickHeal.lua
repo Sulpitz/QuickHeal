@@ -504,17 +504,7 @@ end
 -- Get an explanation of effects based on current settings
 function QuickHeal_GetExplanation(Parameter)
     local string = "";
-
-     if Parameter == "DownrankSlider" then
-     return "Set max allowed Healspell"
-    --     if QHV.RatioFull > 0 then
-    --         return "Will only heal targets with less than " .. QHV.RatioFull*100 .. "% health.";
-    --     else
-    --         return QuickHealData.name .. " is disabled.";
-    --     end
-     end        
-    
-    
+   
     if Parameter == "RatioFull" then
         if QHV.RatioFull > 0 then
             return "Will only heal targets with less than " .. QHV.RatioFull*100 .. "% health.";
@@ -602,53 +592,42 @@ end
 -- Toggle Healthy Threshold
 function QuickHeal_Toggle_Healthy_Threshold()
     local _,PlayerClass = UnitClass('player');
-    if string.lower(PlayerClass) == "druid" then 
-        if QuickHealVariables.RatioHealthyDruid < 1 then 
-            QuickHealVariables.RatioHealthyDruid = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyDruid = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
-   
-    if string.lower(PlayerClass) == "paladin" then
-        if QuickHealVariables.RatioHealthyPaladin < 1 then 
-            QuickHealVariables.RatioHealthyPaladin = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyPaladin = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
+--    if string.lower(PlayerClass) == "druid" then 
+--        if QuickHealVariables.RatioHealthyDruid < 1 then 
+--            QuickHealVariables.RatioHealthyDruid = 1
+--            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+--        else
+--            QuickHealVariables.RatioHealthyDruid = 0
+--            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+--        end
+--    return
+--    end
    
     if string.lower(PlayerClass) == "priest" then
         if QuickHealVariables.RatioHealthyPriest < 1 then 
             QuickHealVariables.RatioHealthyPriest = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+            --writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
             QuickHealDownrank_MarkerTop:Hide()
             QuickHealDownrank_MarkerBot:Show()
         else
             QuickHealVariables.RatioHealthyPriest = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+            --writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
             QuickHealDownrank_MarkerTop:Show()
             QuickHealDownrank_MarkerBot:Hide()
         end        
     return
     end
    
-    if string.lower(PlayerClass) == "shaman" then
-        if QuickHealVariables.RatioHealthyShaman < 1 then 
-            QuickHealVariables.RatioHealthyShaman = 1
-            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-        else
-            QuickHealVariables.RatioHealthyShaman = 0
-            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-        end
-    return
-    end
+ --   if string.lower(PlayerClass) == "shaman" then
+ --       if QuickHealVariables.RatioHealthyShaman < 1 then 
+ --           QuickHealVariables.RatioHealthyShaman = 1
+ --           writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
+ --       else
+ --           QuickHealVariables.RatioHealthyShaman = 0
+ --           writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
+ --       end
+ --   return
+ --   end
 end
 
 
