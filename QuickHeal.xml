@@ -1371,8 +1371,8 @@
         </Frames>
     </Frame>
     
-        <!-- Downrank Slider Frame -->
-    <Frame name="QuickHeal_DownrankSlider" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="false" movable="true" enableMouse="true">
+    <!-- Downrank Slider Frame -->
+    <Frame name="QuickHeal_DownrankSlider" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="true" movable="true" enableMouse="true">
         <Size><AbsDimension x="240" y="80"/></Size>
         <Anchors>
             <Anchor point="CENTER"/>

@@ -26,4 +26,7 @@
     <Binding name="QUICKHEAL_TOGGLEHEALTHYTHRESHOLD">
         if QUICKHEAL_LOADED then QuickHeal_Toggle_Healthy_Threshold() end
 	</Binding>
+    <Binding name="QUICKHEAL_SHOWDOWNRANKWINDOW">
+        if QUICKHEAL_LOADED then ToggleDownrankWindow() end
+	</Binding>
 </Bindings>

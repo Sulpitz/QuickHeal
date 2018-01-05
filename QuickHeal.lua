@@ -80,6 +80,7 @@ BINDING_NAME_QUICKHEAL_HEALSELF = "Heal Player";
 BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target";
 BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target";
 BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%"
+BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Show/Hide Downrank Window"
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
@@ -1335,6 +1336,7 @@ end
 -- If parameters are missing they will be determined automatically
 function QuickHeal(Target,SpellID,extParam)
 
+
     -- Only one instance of QuickHeal allowed at a time
     if QuickHealBusy then
         if HealingTarget and MassiveOverhealInProgress then
@@ -1506,6 +1508,10 @@ function QuickHeal(Target,SpellID,extParam)
     SetCVar("autoSelfCast",AutoSelfCast);
 end
 
+function ToggleDownrankWindow()
+        if QuickHeal_DownrankSlider:IsVisible() then QuickHeal_DownrankSlider:Hide() else QuickHeal_DownrankSlider:Show() end
+    end
+
 function QuickHeal_Command(msg)
 
     local cmd = string.lower(msg)
@@ -1521,8 +1527,8 @@ function QuickHeal_Command(msg)
     end
 
     if cmd == "downrank" or cmd == "dr" then
-       if QuickHeal_DownrankSlider:IsVisible() then QuickHeal_DownrankSlider:Hide() else QuickHeal_DownrankSlider:Show() end
-       return;
+        ToggleDownrankWindow()
+        return;
     end   
     
     if cmd == "debug on" then
