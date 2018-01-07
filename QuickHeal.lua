@@ -1574,5 +1574,5 @@ function QuickHeal_Command(msg)
     writeLine("/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA.");
     writeLine("/qh subgroup - Forces the healing to the groups selected in the configuration panel.");
     writeLine("/qh reset - Reset configuration to default parameters for all classes.");
-    writeLine("/qh healpct - Will prioritise the player with the lowest Percentage of health.");
+    writeLine("/qh healpct - Will prioritise the player with the lowest percentage of health.");
 end

@@ -21,6 +21,10 @@ QuickHeal is now using the incomming heal information broadcasted by HealComm (L
 
 # Changes:
 
+hc04:
+- new command: /qh healpct - Will prioritise the player with the lowest percentage of health. (override changes of hc03, where priests heal the target with the most healing needed and paladins the lowest target)
+
+
 hc03:
 - /qh downrank or /qh dr toggles a window where the maximum spell rank to be used for healspells can be set. (hold rightclick on frame to drag the window)
 - Keybind for toggeling downrank window
