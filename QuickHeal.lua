@@ -1059,21 +1059,34 @@ local function FindWhoToHeal(Restrict,extParam)
                             end                     
                         elseif PlayerClass == "priest" then
                         --writeLine("Find who to heal for Priest");
-                        --writeLine("Missing health: "..PredictedMissingHealth);
-                            if PredictedMissingHealth > healingTargetMissinHealth then
-                                healingTarget = unit;
-                                healingTargetMissinHealth = PredictedMissingHealth;
-                                AllPlayersAreFull = false;
-                            end                           
-                        
-                        
+							if healPlayerWithLowestPercentageOfLife == 1 then
+								if PredictedHealthPct < healingTargetHealthPct then
+									healingTarget = unit;
+									healingTargetHealthPct = PredictedHealthPct;
+									AllPlayersAreFull = false;
+								end     							
+							else
+								if PredictedMissingHealth > healingTargetMissinHealth then
+									healingTarget = unit;
+									healingTargetMissinHealth = PredictedMissingHealth;
+									AllPlayersAreFull = false;
+								end
+							end
                         elseif PlayerClass == "paladin" then
                         --writeLine("Find who to heal for Paladin") 
-                            if PredictedHealth < healingTargetHealth then
-                                healingTarget = unit;
-                                healingTargetHealth = PredictedHealth;
-                                AllPlayersAreFull = false;
-                            end 
+							if healPlayerWithLowestPercentageOfLife == 1 then
+								if PredictedHealthPct < healingTargetHealthPct then
+									healingTarget = unit;
+									healingTargetHealthPct = PredictedHealthPct;
+									AllPlayersAreFull = false;
+								end     							
+							else
+								if PredictedHealth < healingTargetHealth then
+									healingTarget = unit;
+									healingTargetHealth = PredictedHealth;
+									AllPlayersAreFull = false;
+								end 
+							end
                         elseif PlayerClass == "druid" then
                             if PredictedHealthPct < healingTargetHealthPct then
                                 healingTarget = unit;
@@ -1097,7 +1110,7 @@ local function FindWhoToHeal(Restrict,extParam)
             end
         end
     end
-
+	healPlayerWithLowestPercentageOfLife = 0
     -- Examine Healable Pets
     if QHV.PetPriority > 0 then
         for unit,i in petIds do
@@ -1530,6 +1543,14 @@ function QuickHeal_Command(msg)
         return;
     end
 
+    if cmd == "healpct" then
+			healPlayerWithLowestPercentageOfLife = 1
+			QuickHeal();
+        return;
+    end
+	
+
+
     -- Parse healing commands
     if cmd == "" then
         QuickHeal();
@@ -1553,4 +1574,5 @@ function QuickHeal_Command(msg)
     writeLine("/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA.");
     writeLine("/qh subgroup - Forces the healing to the groups selected in the configuration panel.");
     writeLine("/qh reset - Reset configuration to default parameters for all classes.");
+    writeLine("/qh healpct - Will prioritise the player with the lowest Percentage of health.");
 end
