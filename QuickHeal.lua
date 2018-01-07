@@ -6,7 +6,7 @@ HealComm = AceLibrary("HealComm-1.0")
 --[ Mod data ]--
 QuickHealData = {
     name = 'QuickHeal',
-    version = '1.13.4_hc03',
+    version = '1.13.4_hc04',
     releaseDate = 'September 6th, 2006',
     author = 'T. Thorsen, S. Geeding and K. Karachalios',
     website = 'http://ui.worldofwar.net/ui.php?id=1872',
