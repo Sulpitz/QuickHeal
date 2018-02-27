@@ -1560,6 +1560,7 @@ function QuickHeal_Command(msg)
     end
     if cmd == "healmode 3" or cmd == "hm 3" then
 			quickHealHealMode = 3
+      DEFAULT_CHAT_FRAME:AddMessage("Activating maximum HPS mode only for glorious 8/8 Tier 2 Priests!",0.843, 0.376, 0.035)
         return;
     end
 	

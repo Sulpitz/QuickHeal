@@ -189,14 +189,14 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       if healneed > (704*shMod+healMod15)*k and ManaLeft >= 315 and maxRankFH >=6 and downRankFH >= 6 then SpellIDFH = SpellIDsFH[6]; HealSizeFH = 704*shMod+healMod15 end
       if healneed > (885*shMod+healMod15)*k and ManaLeft >= 380 and maxRankFH >=7 and downRankFH >= 7 then SpellIDFH = SpellIDsFH[7]; HealSizeFH = 885*shMod+healMod15 end
       
-      writeLine("HealSize_FH " .. HealSizeFH)
-      writeLine("HealSize_NH " .. HealSizeNH)
+      --writeLine("HealSize_FH " .. HealSizeFH)
+      --writeLine("HealSize_NH " .. HealSizeNH)
       if (HealSizeFH / 1.5) > (HealSizeNH / 2.5) then
-        writeLine("HPSFH: " .. (HealSizeFH / 1.5) .. " > HPS_NH: " ..(HealSizeNH / 2.5))
+        --writeLine("HPSFH: " .. (HealSizeFH / 1.5) .. " > HPS_NH: " ..(HealSizeNH / 2.5))
         SpellID = SpellIDFH
         HealSize = HealSizeFH
       else
-        writeLine("HPS_FH: " .. (HealSizeFH / 1.5) .. " < HPS_NH: " ..(HealSizeNH / 2.5))
+        --writeLine("HPS_FH: " .. (HealSizeFH / 1.5) .. " < HPS_NH: " ..(HealSizeNH / 2.5))
         SpellID = SpellIDNH
         HealSize = HealSizeNH
       end
