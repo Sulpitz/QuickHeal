@@ -203,6 +203,7 @@ local function Initialise()
 
     local _,PlayerClass = UnitClass('player');
     PlayerClass = string.lower(PlayerClass);
+    quickHealHealMode = 1
 
     if PlayerClass == "shaman" then
         FindSpellToUse = QuickHeal_Shaman_FindSpellToUse;
@@ -590,7 +591,7 @@ function QuickHeal_ToggleConfigurationPanel()
 end
 
 -- Toggle Healthy Threshold
-function QuickHeal_Toggle_Healthy_Threshold()
+function QuickHeal_Toggle_Healthy_Threshold() --hc05
     local _,PlayerClass = UnitClass('player');
 --    if string.lower(PlayerClass) == "druid" then 
 --        if QuickHealVariables.RatioHealthyDruid < 1 then 
@@ -1548,6 +1549,19 @@ function QuickHeal_Command(msg)
 			QuickHeal();
         return;
     end
+
+    if cmd == "healmode 1" or cmd == "hm 1" then
+      quickHealHealMode = 1
+        return;
+    end
+    if cmd == "healmode 2" or cmd == "hm 2" then
+			quickHealHealMode = 2
+        return;
+    end
+    if cmd == "healmode 3" or cmd == "hm 3" then
+			quickHealHealMode = 3
+        return;
+    end
 	
 
 
@@ -1563,7 +1577,8 @@ function QuickHeal_Command(msg)
     -- Print usage information
     writeLine(QuickHealData.name .. " Usage:");
     writeLine("/qh cfg - Opens up the configuration panel.");
-    writeLine("/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%).");
+    writeLine("/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%)."); --hc05
+    writeLine("/qh healmode [1,2,3]| hm [1,2,3] - Swich to healmode 1, 2 or 3. 1: default; 2: Flash Heal / Holy Light; 3: max HPS");
     writeLine("/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks.");
     writeLine("/qh - Heals the party/raid member that most need it with the best suited healing spell.");
     writeLine("/qh player - Forces the target of the healing to be yourself.");
