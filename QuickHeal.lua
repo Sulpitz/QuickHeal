@@ -6,7 +6,7 @@ HealComm = AceLibrary("HealComm-1.0")
 --[ Mod data ]--
 QuickHealData = {
     name = 'QuickHeal',
-    version = '1.13.4_hc04',
+    version = '1.13.4_hc05',
     releaseDate = 'September 6th, 2006',
     author = 'T. Thorsen, S. Geeding and K. Karachalios',
     website = 'http://ui.worldofwar.net/ui.php?id=1872',
@@ -81,6 +81,7 @@ BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target";
 BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target";
 BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%"
 BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Show/Hide Downrank Window"
+BINDING_NAME_QUICKHEAL_QUICKHEAL_SETHEALMODE3 = "Swich to Healmode 3"
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
@@ -441,7 +442,7 @@ function QuickHeal_OnEvent()
         Initialise();
     elseif (event == "CHAT_MSG_ADDON") then
         if arg1 == "QuickHeal" and arg2 == "versioncheck" then
-            SendAddonMessage("QuickHeal", QuickHealData.version, RAID)
+            SendAddonMessage("QuickHealVersionCheck", QuickHealData.version, RAID)
             
         end
     else
@@ -589,6 +590,8 @@ end
 function QuickHeal_ToggleConfigurationPanel()
     if QuickHealConfig:IsVisible() then QuickHealConfig:Hide() else QuickHealConfig:Show() end
 end
+
+
 
 -- Toggle Healthy Threshold
 function QuickHeal_Toggle_Healthy_Threshold() --hc05
@@ -1560,7 +1563,9 @@ function QuickHeal_Command(msg)
     end
     if cmd == "healmode 3" or cmd == "hm 3" then
 			quickHealHealMode = 3
-      DEFAULT_CHAT_FRAME:AddMessage("Activating maximum HPS mode only for glorious 8/8 Tier 2 Priests!",0.843, 0.376, 0.035)
+      --DEFAULT_CHAT_FRAME:AddMessage("Activating maximum HPS mode only for glorious 8/8 Tier 2 Priests!",0.843, 0.376, 0.035)
+      QuickHealDownrank_MarkerBot:Show()
+      QuickHealDownrank_MarkerTop:Show()
         return;
     end
 	

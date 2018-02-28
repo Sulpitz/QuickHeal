@@ -121,10 +121,10 @@ function QuickHeal_Priest_FindSpellToUse(Target)
     -- Compensation for health lost during combat
     local k=1.0;
     local K=1.0;
-    --if InCombat then
-    --    k=0.9;
-    --    K=0.8;
-    --end
+    if InCombat then
+        k=0.9;
+        K=0.8;
+    end
     
     if quickHealHealMode == 1 or quickHealHealMode == 2 then
       -- Find suitable SpellID based on the defined criteria
@@ -160,7 +160,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       end
     -- Healmode 3
     elseif quickHealHealMode == 3 then
-      writeLine("quickHealHealMode 3")
+      --writeLine("quickHealHealMode 3")
       local SpellIDNH = 0
       local SpellIDFH = 0
       local HealSizeNH = 0
@@ -180,7 +180,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       if healneed > (1902*shMod+healMod30)*K      and ManaLeft >= 655*ihMod and maxRankGH >=4 and downRankNH >= 11 then SpellIDNH = SpellIDsGH[4]; HealSizeNH = 1902*shMod+healMod30      end
       if healneed > (2080*shMod+healMod30)*K      and ManaLeft >= 710*ihMod and maxRankGH >=5 and downRankNH >= 12 then SpellIDNH = SpellIDsGH[5]; HealSizeNH = 2080*shMod+healMod30      end
 
-      writeLine("MaxRrank_FH: " .. downRankFH)
+      --writeLine("MaxRrank_FH: " .. downRankFH)
       SpellID = SpellIDsFH[1]; HealSize = 215*shMod+healMod15; -- Default to FH
       if healneed > (286*shMod+healMod15)*k and ManaLeft >= 155 and maxRankFH >=2 and downRankFH >= 2 then SpellIDFH = SpellIDsFH[2]; HealSizeFH = 286*shMod+healMod15 end
       if healneed > (360*shMod+healMod15)*k and ManaLeft >= 185 and maxRankFH >=3 and downRankFH >= 3 then SpellIDFH = SpellIDsFH[3]; HealSizeFH = 360*shMod+healMod15 end

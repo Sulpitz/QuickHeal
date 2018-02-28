@@ -24,7 +24,10 @@
         if QUICKHEAL_LOADED then QuickHeal('targettarget') end
 	</Binding>
     <Binding name="QUICKHEAL_TOGGLEHEALTHYTHRESHOLD">
-        if QUICKHEAL_LOADED then QuickHeal_Toggle_Healthy_Threshold() end
+        if QUICKHEAL_LOADED then QuickHeal_Toggle_Healthy_Threshold();quickHealHealMode = 1 end
+	</Binding>
+    <Binding name="QUICKHEAL_SETHEALMODE3">
+        if QUICKHEAL_LOADED then QuickHeal_Command("hm 3") end
 	</Binding>
     <Binding name="QUICKHEAL_SHOWDOWNRANKWINDOW">
         if QUICKHEAL_LOADED then ToggleDownrankWindow() end
