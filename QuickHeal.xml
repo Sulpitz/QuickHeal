@@ -1406,9 +1406,10 @@
                 </Anchors>
 				<Scripts>
 					<OnLoad>
-   						this:SetMinMaxValues(1,12);
+   					this:SetMinMaxValues(1,12);
 						this:SetValueStep(1);
-                        this:SetValue(12) 
+            this:SetValue(12) 
+            QuickHealVariables["DownrankValueNH"] = 12
 					</OnLoad>
 					<OnValueChanged>
                         QuickHealVariables["DownrankValueNH"] = this:GetValue();
@@ -1444,9 +1445,10 @@
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-50" /></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-   						this:SetMinMaxValues(1,7);
+            this:SetMinMaxValues(1,7);
 						this:SetValueStep(1);
-                        this:SetValue(7) 
+            this:SetValue(7) 
+            QuickHealVariables["DownrankValueFH"] = 7
 					</OnLoad>
 					<OnValueChanged>
                         QuickHealVariables["DownrankValueFH"] = this:GetValue();

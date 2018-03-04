@@ -129,8 +129,65 @@ function QuickHeal_Paladin_FindSpellToUse(Target)
 end
 
 
+--NEW
+	quickHealHealMode
+		1 flash
+		2noral
+		3 hps
+	InCombat
+		ooc Fllash
+	RatioFull 0
+		flash
 
-
+	if "flash" then
+		if maxRankFL >=1                                                                                         then SpellID = SpellIDsFL[1]; HealSize = 67 *hlMod+healMod15 else SpellID = SpellIDsHL[1]; HealSize = 43*hlMod+healMod25*PF1 end -- Default to rank 1 of FL or HL
+        if healneed     > (103*hlMod+healMod15)     *k and ManaLeft >= 50  and maxRankFL >=2 and downRankFH >= 2 then SpellID = SpellIDsFL[2]; HealSize = 103*hlMod+healMod15      end
+        if healneed     > (154*hlMod+healMod15)     *k and ManaLeft >= 70  and maxRankFL >=3 and downRankFH >= 3 then SpellID = SpellIDsFL[3]; HealSize = 154*hlMod+healMod15      end
+        if healneed     > (209*hlMod+healMod15)     *k and ManaLeft >= 90  and maxRankFL >=4 and downRankFH >= 4 then SpellID = SpellIDsFL[4]; HealSize = 209*hlMod+healMod15      end
+        if healneed     > (283*hlMod+healMod15)     *k and ManaLeft >= 115 and maxRankFL >=5 and downRankFH >= 5 then SpellID = SpellIDsFL[5]; HealSize = 283*hlMod+healMod15      end
+        if healneed     > (363*hlMod+healMod15)     *k and ManaLeft >= 140 and maxRankFL >=6 and downRankFH >= 6 then SpellID = SpellIDsFL[6]; HealSize = 363*hlMod+healMod15      end	
+	elseif "notmal" then
+																													  SpellID = SpellIDsHL[1]; HealSize =  43 *hlMod+healMod25*PF1
+		if healneed     > ( 83*hlMod+healMod25*PF6 )*K and ManaLeft >= 60  and maxRankHL >=2 and downRankNH >= 2 then SpellID = SpellIDsHL[2]; HealSize =  83 *hlMod+healMod25*PF6  end
+        if healneed     > (173*hlMod+healMod25*PF14)*K and ManaLeft >= 110 and maxRankHL >=3 and downRankNH >= 3 then SpellID = SpellIDsHL[3]; HealSize = 173 *hlMod+healMod25*PF14 end
+        if healneed     > (333*hlMod+healMod25)     *K and ManaLeft >= 190 and maxRankHL >=4 and downRankNH >= 4 then SpellID = SpellIDsHL[4]; HealSize = 333 *hlMod+healMod25      end
+        if healneed     > (522*hlMod+healMod25)     *K and ManaLeft >= 275 and maxRankHL >=5 and downRankNH >= 5 then SpellID = SpellIDsHL[5]; HealSize = 522 *hlMod+healMod25      end
+        if healneed     > (739*hlMod+healMod25)     *K and ManaLeft >= 365 and maxRankHL >=6 and downRankNH >= 6 then SpellID = SpellIDsHL[6]; HealSize = 739 *hlMod+healMod25      end
+        if healneed     > (999*hlMod+healMod25)     *K and ManaLeft >= 465 and maxRankHL >=7 and downRankNH >= 7 then SpellID = SpellIDsHL[7]; HealSize = 999 *hlMod+healMod25      end
+        if healneed     > (1317*hlMod+healMod25)    *K and ManaLeft >= 580 and maxRankHL >=8 and downRankNH >= 8 then SpellID = SpellIDsHL[8]; HealSize = 1317*hlMod+healMod25      end
+        if healneed     > (1680*hlMod+healMod25)    *K and ManaLeft >= 660 and maxRankHL >=9 and downRankNH >= 9 then SpellID = SpellIDsHL[9]; HealSize = 1680*hlMod+healMod25      end
+	    
+	elseif "HPS" then
+		local SpellIDNH = 0
+		local SpellIDFH = 0
+		local HealSizeNH = 0
+		local HealSizeFH = 0    
+		
+		if maxRankFL >=1                                                                                         then SpellIDFH = SpellIDsFL[1]; HealSizeFH = 67 *hlMod+healMod15 else SpellID = SpellIDsHL[1]; HealSize = 43*hlMod+healMod25*PF1 end -- Default to rank 1 of FL or HL
+        if healneed     > (103*hlMod+healMod15)     *k and ManaLeft >= 50  and maxRankFL >=2 and downRankFH >= 2 then SpellIDFH = SpellIDsFL[2]; HealSizeFH = 103*hlMod+healMod15      end
+        if healneed     > (154*hlMod+healMod15)     *k and ManaLeft >= 70  and maxRankFL >=3 and downRankFH >= 3 then SpellIDFH = SpellIDsFL[3]; HealSizeFH = 154*hlMod+healMod15      end
+        if healneed     > (209*hlMod+healMod15)     *k and ManaLeft >= 90  and maxRankFL >=4 and downRankFH >= 4 then SpellIDFH = SpellIDsFL[4]; HealSizeFH = 209*hlMod+healMod15      end
+        if healneed     > (283*hlMod+healMod15)     *k and ManaLeft >= 115 and maxRankFL >=5 and downRankFH >= 5 then SpellIDFH = SpellIDsFL[5]; HealSizeFH = 283*hlMod+healMod15      end
+        if healneed     > (363*hlMod+healMod15)     *k and ManaLeft >= 140 and maxRankFL >=6 and downRankFH >= 6 then SpellIDFH = SpellIDsFL[6]; HealSizeFH = 363*hlMod+healMod15      end	
+		
+																													  SpellIDNH = SpellIDsHL[1]; HealSizeNH =  43 *hlMod+healMod25*PF1
+		if healneed     > ( 83*hlMod+healMod25*PF6 )*K and ManaLeft >= 60  and maxRankHL >=2 and downRankNH >= 2 then SpellIDNH = SpellIDsHL[2]; HealSizeNH =  83 *hlMod+healMod25*PF6  end
+        if healneed     > (173*hlMod+healMod25*PF14)*K and ManaLeft >= 110 and maxRankHL >=3 and downRankNH >= 3 then SpellIDNH = SpellIDsHL[3]; HealSizeNH = 173 *hlMod+healMod25*PF14 end
+        if healneed     > (333*hlMod+healMod25)     *K and ManaLeft >= 190 and maxRankHL >=4 and downRankNH >= 4 then SpellIDNH = SpellIDsHL[4]; HealSizeNH = 333 *hlMod+healMod25      end
+        if healneed     > (522*hlMod+healMod25)     *K and ManaLeft >= 275 and maxRankHL >=5 and downRankNH >= 5 then SpellIDNH = SpellIDsHL[5]; HealSizeNH = 522 *hlMod+healMod25      end
+        if healneed     > (739*hlMod+healMod25)     *K and ManaLeft >= 365 and maxRankHL >=6 and downRankNH >= 6 then SpellIDNH = SpellIDsHL[6]; HealSizeNH = 739 *hlMod+healMod25      end
+        if healneed     > (999*hlMod+healMod25)     *K and ManaLeft >= 465 and maxRankHL >=7 and downRankNH >= 7 then SpellIDNH = SpellIDsHL[7]; HealSizeNH = 999 *hlMod+healMod25      end
+        if healneed     > (1317*hlMod+healMod25)    *K and ManaLeft >= 580 and maxRankHL >=8 and downRankNH >= 8 then SpellIDNH = SpellIDsHL[8]; HealSizeNH = 1317*hlMod+healMod25      end
+        if healneed     > (1680*hlMod+healMod25)    *K and ManaLeft >= 660 and maxRankHL >=9 and downRankNH >= 9 then SpellIDNH = SpellIDsHL[9]; HealSizeNH = 1680*hlMod+healMod25      end
+	
+		if (HealSizeFH / 1.5) > (HealSizeNH / 2.5) then
+			SpellID = SpellIDFH
+			HealSize = HealSizeFH
+		else
+			SpellID = SpellIDNH
+			HealSize = HealSizeNH
+		end	
+	end
 --Original Code
 --    -- Find suitable SpellID based on the defined criteria
 --    if InCombat then

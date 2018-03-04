@@ -443,7 +443,7 @@ function QuickHeal_OnEvent()
     elseif (event == "CHAT_MSG_ADDON") then
         if arg1 == "QuickHeal" and arg2 == "versioncheck" then
             SendAddonMessage("QuickHealVersionCheck", QuickHealData.version, RAID)
-            
+            writeLine("Sending Addon version")
         end
     else
         QuickHeal_debug((event or "Unknown Event"), (arg1 or "nil"))
