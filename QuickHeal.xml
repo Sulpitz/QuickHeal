@@ -1407,13 +1407,13 @@
 				<Scripts>
 					<OnLoad>
    					this:SetMinMaxValues(1,12);
-						this:SetValueStep(1);
-            this:SetValue(12) 
-            QuickHealVariables["DownrankValueNH"] = 12
+					this:SetValueStep(1);
+					this:SetValue(12) 
+					quickHealDownRankNH = 12
 					</OnLoad>
 					<OnValueChanged>
-                        QuickHealVariables["DownrankValueNH"] = this:GetValue();
-                        QuickHealDownrank_RankNumberTop:SetText(QuickHealVariables["DownrankValueNH"]);
+                        quickHealDownRankNH = this:GetValue();
+                        QuickHealDownrank_RankNumberTop:SetText(quickHealDownRankNH);
                     <!--
                         DEFAULT_CHAT_FRAME:AddMessage("DownrankValueNH: " .. QuickHealVariables["DownrankValueNH"], 1, 1, 0.5)
                         QuickHealConfig_TextRatioFull:SetText("General Healing Threshold: " .. this:GetValue() .. "%");
@@ -1448,19 +1448,11 @@
             this:SetMinMaxValues(1,7);
 						this:SetValueStep(1);
             this:SetValue(7) 
-            QuickHealVariables["DownrankValueFH"] = 7
+            quickHealDownRankFH = 7
 					</OnLoad>
 					<OnValueChanged>
-                        QuickHealVariables["DownrankValueFH"] = this:GetValue();
-                        QuickHealDownrank_RankNumberBot:SetText(QuickHealVariables["DownrankValueFH"]);
-                    <!--
-                        DEFAULT_CHAT_FRAME:AddMessage("DownrankValueFH: " .. QuickHealVariables["DownrankValueFH"], 1, 1, 0.5)
-                        QuickHealConfig_TextRatioFull:SetText("General Healing Threshold: " .. this:GetValue() .. "%");
-                        QuickHealConfig_Explanation:SetText(QuickHeal_GetExplanation("RatioHealthy"));
-                        if( this.tooltipShown ) then
-                            GameTooltip:SetText(QuickHeal_GetExplanation("RatioFull"));
-                        end
-                    -->
+                        quickHealDownRankFH = this:GetValue();
+                        QuickHealDownrank_RankNumberBot:SetText(quickHealDownRankFH);
 					</OnValueChanged>
 					<OnShow>
                     <!--

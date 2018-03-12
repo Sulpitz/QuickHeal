@@ -215,16 +215,7 @@ local function Initialise()
     elseif PlayerClass == "paladin" then
         FindSpellToUse = QuickHeal_Paladin_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Paladin_GetRatioHealthyExplanation;
-        -- convert default (priest) downrank window to Paladin with only FH Slider shown
-        QuickHealDownrank_Slider_NH:Hide();
-        QuickHealDownrank_RankNumberTop:Hide();
-        QuickHealDownrank_MarkerTop:Hide()
-        QuickHealDownrank_MarkerBot:Hide()
-        QuickHeal_DownrankSlider:SetHeight(40)
-        QuickHealDownrank_Slider_FH:SetPoint("TOPLEFT", 20, -10)
-        QuickHealDownrank_Slider_FH:SetMinMaxValues(1,6);
-        QuickHealDownrank_Slider_FH:SetValue(6)
-        QuickHealDownrank_RankNumberBot:SetPoint("CENTER", 108, 1)
+		QuickHeal_Paladin_SetDownrankGUI()        
     elseif PlayerClass == "druid" then
         FindSpellToUse = QuickHeal_Druid_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Druid_GetRatioHealthyExplanation;
@@ -591,47 +582,49 @@ function QuickHeal_ToggleConfigurationPanel()
     if QuickHealConfig:IsVisible() then QuickHealConfig:Hide() else QuickHealConfig:Show() end
 end
 
-
+-- Change HealMode
+function QuickHeal_SetHealMode(mode)
+local _,PlayerClass = UnitClass('player');
+  if mode == 3 then
+    quickHealHealMode = 3
+    --writeLine("Healmode 3")
+    QuickHealDownrank_MarkerBot:Show()
+    QuickHealDownrank_MarkerTop:Show()
+    return
+  elseif mode == 2 then  
+    quickHealHealMode = 2
+    --writeLine("Healmode 2")
+    if string.lower(PlayerClass) == "priest" then
+      --writeLine("priest")
+      QuickHealDownrank_MarkerTop:Hide()
+      QuickHealDownrank_MarkerBot:Show()
+      return
+    end
+    QuickHealDownrank_MarkerTop:Show()
+    QuickHealDownrank_MarkerBot:Hide()
+    return
+  elseif mode == 1 then 
+    quickHealHealMode = 1
+    --writeLine("Healmode 1")
+    if string.lower(PlayerClass) == "priest" then
+      --writeLine("priest")
+      QuickHealDownrank_MarkerTop:Show()
+      QuickHealDownrank_MarkerBot:Hide()
+      return
+    end
+    QuickHealDownrank_MarkerTop:Hide()
+    QuickHealDownrank_MarkerBot:Show()
+    return
+  end
+end
 
 -- Toggle Healthy Threshold
 function QuickHeal_Toggle_Healthy_Threshold() --hc05
-    local _,PlayerClass = UnitClass('player');
---    if string.lower(PlayerClass) == "druid" then 
---        if QuickHealVariables.RatioHealthyDruid < 1 then 
---            QuickHealVariables.RatioHealthyDruid = 1
---            writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
---        else
---            QuickHealVariables.RatioHealthyDruid = 0
---            writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
---        end
---    return
---    end
-   
-    if string.lower(PlayerClass) == "priest" then
-        if QuickHealVariables.RatioHealthyPriest < 1 then 
-            QuickHealVariables.RatioHealthyPriest = 1
-            --writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
-            QuickHealDownrank_MarkerTop:Hide()
-            QuickHealDownrank_MarkerBot:Show()
-        else
-            QuickHealVariables.RatioHealthyPriest = 0
-            --writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
-            QuickHealDownrank_MarkerTop:Show()
-            QuickHealDownrank_MarkerBot:Hide()
-        end        
-    return
-    end
-   
- --   if string.lower(PlayerClass) == "shaman" then
- --       if QuickHealVariables.RatioHealthyShaman < 1 then 
- --           QuickHealVariables.RatioHealthyShaman = 1
- --           writeLine("QuickHeal mode: FlashHeal", 0.9, 0.44, 0.05)
- --       else
- --           QuickHealVariables.RatioHealthyShaman = 0
- --           writeLine("QuickHeal mode: Normal", 0.05, 0.07, 0.80)
- --       end
- --   return
- --   end
+  if quickHealHealMode ~= 1 then
+    QuickHeal_SetHealMode(1)
+  else
+    QuickHeal_SetHealMode(2)
+  end
 end
 
 
@@ -1554,18 +1547,20 @@ function QuickHeal_Command(msg)
     end
 
     if cmd == "healmode 1" or cmd == "hm 1" then
-      quickHealHealMode = 1
-        return;
+      QuickHeal_SetHealMode(1)
+      return;
     end
     if cmd == "healmode 2" or cmd == "hm 2" then
-			quickHealHealMode = 2
-        return;
+      QuickHeal_SetHealMode(2)
+      return;
     end
     if cmd == "healmode 3" or cmd == "hm 3" then
-			quickHealHealMode = 3
-      --DEFAULT_CHAT_FRAME:AddMessage("Activating maximum HPS mode only for glorious 8/8 Tier 2 Priests!",0.843, 0.376, 0.035)
-      QuickHealDownrank_MarkerBot:Show()
-      QuickHealDownrank_MarkerTop:Show()
+      QuickHeal_SetHealMode(3)
+      return;
+    end
+
+    if cmd == "poh test" then
+        QuickHealPohTest()
         return;
     end
 	
