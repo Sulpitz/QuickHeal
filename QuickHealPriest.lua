@@ -1,6 +1,6 @@
-local function writeLine(s,r,g,b)
+local function writePriestLine(s,r,g,b)
    if DEFAULT_CHAT_FRAME then
-       DEFAULT_CHAT_FRAME:AddMessage(s, r or 1, g or 1, b or 1)
+       --DEFAULT_CHAT_FRAME:AddMessage(s, r or 1, g or 1, b or 0.5)
    end
 end
 
@@ -48,23 +48,23 @@ function QuickHealPohTest()
     unit = "raid" .. v
     if CheckInteractDistance(unit, 4) then
       partyPlayerPredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - HealComm:getHeal(UnitName(unit))
-      writeLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
-      writeLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
-      writeLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
-      writeLine("UnitHealthMax: " .. UnitHealthMax(unit))
-      writeLine("UnitHealth: " .. UnitHealth(unit))
+      writePriestLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
+      writePriestLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
+      writePriestLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
+      writePriestLine("UnitHealthMax: " .. UnitHealthMax(unit))
+      writePriestLine("UnitHealth: " .. UnitHealth(unit))
       if partyPlayerPredictedMissingHealth < partyPlayerPredictedLeastMissingHealth then
         partyPlayerPredictedLeastMissingHealth = partyPlayerPredictedMissingHealth
       end
       partyPlayersToHeal = partyPlayersToHeal + 1
       partyPredictedMissingHealth = partyPredictedMissingHealth + partyPlayerPredictedMissingHealth
     else
-      writeLine("NOT Range: " .. k)
+      writePriestLine("NOT Range: " .. k)
     end
 
   local SpellIDPoH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_PRAYER_OF_HEALING);
   for k, v in pairs(SpellIDPoH) do
-    writeLine(k .. " spellIDS: " .. v)
+    writePriestLine(k .. " spellIDS: " .. v)
   end 
   
   healneedGrp = partyPlayerPredictedLeastMissingHealth
@@ -89,8 +89,8 @@ function QuickHealPohTest()
 	end
   
   
-  writeLine("least missing Health: " .. partyPlayerPredictedLeastMissingHealth)
-  writeLine("All missing Health: " .. partyPredictedMissingHealth)
+  writePriestLine("least missing Health: " .. partyPlayerPredictedLeastMissingHealth)
+  writePriestLine("All missing Health: " .. partyPredictedMissingHealth)
 end
 
 
@@ -139,11 +139,6 @@ end
 
 
 
-local function writeLine(s,r,g,b)
-   if DEFAULT_CHAT_FRAME then
-       DEFAULT_CHAT_FRAME:AddMessage(s, r or 1, g or 1, b or 0.5)
-   end
-end
 
 function QuickHeal_Priest_GetRatioHealthyExplanation()
     if QuickHealVariables.RatioHealthyPriest >= QuickHealVariables.RatioFull then
@@ -258,7 +253,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
     local maxRankPoH = table.getn(SpellIDPoH);
     
     for k, v in pairs(SpellIDPoH) do
-      writeLine("SpellIDs: " .. k .. " " .. v)
+      writePriestLine("SpellIDs: " .. k .. " " .. v)
     end
     QuickHeal_debug(string.format("Found LH up to rank %d, H up top rank %d, GH up to rank %d, and FH up to rank %d", maxRankLH, maxRankH, maxRankGH, maxRankFH));
 
@@ -278,30 +273,30 @@ function QuickHeal_Priest_FindSpellToUse(Target)
         unit = "raid" .. v
         if CheckInteractDistance(unit, 4) then
           partyPlayerPredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - HealComm:getHeal(UnitName(unit))
-          writeLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
-          writeLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
-          writeLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
-          writeLine("UnitHealthMax: " .. UnitHealthMax(unit))
-          writeLine("UnitHealth: " .. UnitHealth(unit))
+          --writePriestLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
+          --writePriestLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
+          --writePriestLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
+          --writePriestLine("UnitHealthMax: " .. UnitHealthMax(unit))
+          --writePriestLine("UnitHealth: " .. UnitHealth(unit))
           if partyPlayerPredictedMissingHealth < partyPlayerPredictedLeastMissingHealth then
             partyPlayerPredictedLeastMissingHealth = partyPlayerPredictedMissingHealth
           end
           partyPlayersToHeal = partyPlayersToHeal + 1
-          writeLine("partyPlayersToHeal: " .. partyPlayersToHeal)
+          --writePriestLine("partyPlayersToHeal: " .. partyPlayersToHeal)
           partyPredictedMissingHealth = partyPredictedMissingHealth + partyPlayerPredictedMissingHealth
         else
-          writeLine("NOT Range: " .. k)
+          --writePriestLine("NOT Range: " .. k)
         end
       end
       
       healneedGrp = partyPlayerPredictedLeastMissingHealth
-      writeLine("healneedGrp = " .. healneedGrp)
-      
-      writeLine("PoH Rank 1 " .. math.floor(311*shMod+healMod30/2 ))
-      writeLine("PoH Rank 2 " .. math.floor(458*shMod+healMod30/2 ))
-      writeLine("PoH Rank 3 " .. math.floor(676*shMod+healMod30/2 ))
-      writeLine("PoH Rank 4 " .. math.floor(965*shMod+healMod30/2 ))
-      writeLine("PoH Rank 5 " .. math.floor(1070*shMod+healMod30/2))
+      --writePriestLine("healneedGrp = " .. healneedGrp)
+      --
+      --writePriestLine("PoH Rank 1 " .. math.floor(311*shMod+healMod30/2 ))
+      --writePriestLine("PoH Rank 2 " .. math.floor(458*shMod+healMod30/2 ))
+      --writePriestLine("PoH Rank 3 " .. math.floor(676*shMod+healMod30/2 ))
+      --writePriestLine("PoH Rank 4 " .. math.floor(965*shMod+healMod30/2 ))
+      --writePriestLine("PoH Rank 5 " .. math.floor(1070*shMod+healMod30/2))
     end
     
     
@@ -357,7 +352,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       
     -- Healmode 3
     elseif quickHealHealMode == 3 then
-      --writeLine("quickHealHealMode 3")
+      --writePriestLine("quickHealHealMode 3")
       local SpellIDNH = 0
       local SpellIDFH = 0
       local HealSizeNH = 0
@@ -389,45 +384,47 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       if healneed > (885*shMod+healMod15)*k and ManaLeft >= 380 and maxRankFH >=7 and quickHealDownRankFH >= 7 then SpellIDFH = SpellIDsFH[7]; HealSizeFH = 885*shMod+healMod15 end
       
       --Check Prayer of Heal
-      --if healneedGrp > (311*shMod+healMod30/2 ) *k and ManaLeft  >=  410  and maxRankPoH >=1 then 
-      SpellIDGrp = SpellIDPoH[1]; HealSizePoH =   311*shMod+healMod30/2 --end
+      SpellIDGrp = SpellIDPoH[1]; HealSizePoH = 0
+      if healneedGrp > (311*shMod+healMod30/2 ) *k and ManaLeft  >=  410  and maxRankPoH >=1 then SpellIDGrp = SpellIDPoH[1]; HealSizePoH =   311*shMod+healMod30/2 end
       if healneedGrp > (458*shMod+healMod30/2 ) *k and ManaLeft  >=  560  and maxRankPoH >=1 then SpellIDGrp = SpellIDPoH[2]; HealSizePoH =   458*shMod+healMod30/2 end
       if healneedGrp > (676*shMod+healMod30/2 ) *k and ManaLeft  >=  770  and maxRankPoH >=1 then SpellIDGrp = SpellIDPoH[3]; HealSizePoH =   676*shMod+healMod30/2 end
       if healneedGrp > (965*shMod+healMod30/2 ) *k and ManaLeft  >=  1030 and maxRankPoH >=1 then SpellIDGrp = SpellIDPoH[4]; HealSizePoH =   965*shMod+healMod30/2 end
       if healneedGrp > (1070*shMod+healMod30/2) *k and ManaLeft >=   1070 and maxRankPoH >=1 then SpellIDGrp = SpellIDPoH[5]; HealSizePoH =  1070*shMod+healMod30/2 end
       
       
-      writeLine("HealSize_FH " .. HealSizeFH)
-      writeLine("HealSize_NH " .. HealSizeNH)
-      writeLine("HealSize_PoH " .. HealSizePoH * partyPlayersToHeal)
-      writeLine("SpellIDNH: " .. SpellIDNH)
-      writeLine("SpellIDFH: " .. SpellIDFH)
-      writeLine("SpellIDPoH: " .. SpellIDGrp)
+      --writePriestLine("HealSize_FH " .. HealSizeFH)
+      --writePriestLine("HealSize_NH " .. HealSizeNH)
+      --writePriestLine("HealSize_PoH " .. HealSizePoH * partyPlayersToHeal)
+      --writePriestLine("SpellIDNH: " .. SpellIDNH)
+      --writePriestLine("SpellIDFH: " .. SpellIDFH)
+      --writePriestLine("SpellIDPoH: " .. SpellIDGrp)
       local HealHPS = (HealSizeNH / 2.5)
       local HPS_FH = HealSizeFH / 1.5
-      local HPS_PoH = (HealSizePoH * partyPlayersToHeal)
+      local HPS_PoH = ((HealSizePoH * partyPlayersToHeal)/3)
       if HealSizeNH then
         SpellID = SpellIDNH
-        writeLine("Set SpellID: " ..SpellID .. " from SpellIDNH " .. SpellIDNH)
+        --writePriestLine("Set SpellID: " ..SpellID .. " from SpellIDNH " .. SpellIDNH)
         HealSize = HealSizeNH
-        writeLine("HPS_NH: " .. (HealHPS))
-        writeLine("HPS_FH: " .. (HealSizeFH / 1.5))
-        writeLine("HPS_PoH: " .. (HealSizePoH * partyPlayersToHeal / 3))  
-        writeLine(HPS_FH .. " > " .. HealHPS)
+        writePriestLine("HealSizePoH: " .. HealSizePoH .. ", in PoH Range: " .. partyPlayersToHeal)
+        writePriestLine("HPS_NH: " .. HealHPS)
+        writePriestLine("HPS_FH: " .. HPS_FH)
+        writePriestLine("HPS_PoH: " .. HPS_PoH)  
+        --writePriestLine(HPS_FH .. " > " .. HealHPS)
       end
       if HPS_FH > HealHPS then
         SpellID = SpellIDFH
-        writeLine("Set SpellID: " .. SpellID .. " from SpellIDFH " .. SpellIDFH)
+        --writePriestLine("Set SpellID: " .. SpellID .. " from SpellIDFH " .. SpellIDFH)
+        writePriestLine("USING FH")
         HealSize = HealSizeFH
       end
       if HPS_PoH > HealHPS then
-        writeLine("USING POH")
+        writePriestLine("USING POH")
         SpellID = SpellIDGrp
-        writeLine("Set SpellID: " .. SpellID .. " from SpellIDGrp " .. SpellIDGrp)
+        writePriestLine("Set SpellID: " .. SpellID .. " from SpellIDGrp " .. SpellIDGrp)
         HealSize = HealSizePoH
       end
      
     end
-    writeLine("Final SpellID: " .. SpellID)
+    writePriestLine("Final SpellID: " .. SpellID)
     return SpellID,HealSize*HDB;
 end

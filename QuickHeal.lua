@@ -1289,6 +1289,9 @@ local function ExecuteHeal(Target,SpellID)
             -- Duels/unhealable NPC's etc.
 
     -- The spell is awaiting target selection, write to screen if the spell can actually be cast
+    if SpellName == QUICKHEAL_SPELL_PRAYER_OF_HEALING then
+      Message("Casting " .. QUICKHEAL_SPELL_PRAYER_OF_HEALING .. " (" .. SpellRank .. ")", "Healing", 3)
+    end
     if SpellCanTargetUnit(Target) or ((Target == 'target') and HealingTarget) then
 
         Notification(Target, SpellNameAndRank);
