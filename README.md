@@ -21,7 +21,8 @@ QuickHeal is now using the incomming heal information, broadcasted by HealComm (
 Also there is the option to downrank the spells being used, so healing can be more effitient.
 
 **How to use**
-![Keybind Quick Heal]https://www2.pic-upload.de/img/35189646/1.png)
+
+![Keybind Quick Heal](https://www2.pic-upload.de/img/35189646/1.png)
 
 
 # Changes:
