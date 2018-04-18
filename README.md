@@ -21,13 +21,42 @@ QuickHeal is now using the incomming heal information, broadcasted by HealComm (
 Also there is the option to downrank the spells being used, so healing can be more effitient.
 
 **How to use**
+- Help
+"/qh help" displays all a
 
+- Heal:
 To do a heal make a macro with "/qh" or set Keybind:
 
 ![Keybind Quick Heal](https://www2.pic-upload.de/img/35189646/1.png)
 
+- Downrank
+To conserve mana and heal more effitiently you can limit the max rank that Quick Heal will use. It is done by moving the slider. on the Downrank Window. "/qh dr" to open the Downrank Window.
+![Open Downrank Window](https://www2.pic-upload.de/img/35189791/2.png)
+![Downrank Window](https://www2.pic-upload.de/img/35189979/3.png)
+
+- Change Heal mode
+There are 3 modes for healing.
+
+"/qh hm 1" - Default
+Priest: Will only cast Greater Heal, Heal and Lesser Heal.
+Paladin: Will only use Flash of Light
+
+"/qh hm 2" 
+Priest: Will only cast Flash Heal
+Paladin: Will only cast Holy Light
+ 
+"/qh hm 3" - Most HPS
+Will cast the heal with the most HPS.
+Priest: Will cast Prayer of Healing if possible
+
+The Heal mode can tbe set with macro or Key bind. The ">" indicate the selected mode.
+![Keybinds Healmode](https://www2.pic-upload.de/img/35190067/4.png)
 
 # Changes:
+
+hc05
+- Healmodes for Paladins and Priests now controll the spells used. See How to Use
+- Priests: in healmode 3 Prayer of Heal is cast if possible
 
 hc04:
 - new command: /qh healpct - Will prioritise the player with the lowest percentage of health. (override changes of hc03, where priests heal the target with the most healing needed and paladins the lowest target)
