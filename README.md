@@ -22,6 +22,8 @@ Also there is the option to downrank the spells being used, so healing can be mo
 
 **How to use**
 
+To do a heal make a macro with "/qh" or set Keybind:
+
 ![Keybind Quick Heal](https://www2.pic-upload.de/img/35189646/1.png)
 
 
