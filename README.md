@@ -54,7 +54,7 @@ The Heal mode can tbe set with macro or Key bind. The ">" indicate the selected 
 
 # Changes:
 
-hc05
+hc05: (get from Branch)
 - Healmodes for Paladins and Priests now controll the spells used. See How to Use
 - Priests: in healmode 3 Prayer of Heal is cast if possible
 
