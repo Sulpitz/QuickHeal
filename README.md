@@ -17,10 +17,12 @@ I got the original version of QuickHeal from https://wow.curseforge.com/projects
 
 **Integration of HealComm**
 
-QuickHeal is now using the incomming heal information, broadcasted by HealComm (Luna unit Frames), through the addonchannel to reduce overhealing and making this addon used by multible raidmembers more effective.
-Also there is the option to downrank the spells being used, so healing can be more effitient.
+- QuickHeal is now using the incomming heal information, broadcasted by HealComm (Luna unit Frames), through the addonchannel to reduce overhealing and making this addon used by multible raidmembers more effective.
+- Also there is the option to downrank the spells being used, so healing can be more effitient.
 
 **How to use**
+- Find the original description here: https://wow.curseforge.com/projects/project-2800
+
 - Help
 "/qh help" displays all a
 
