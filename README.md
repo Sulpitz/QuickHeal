@@ -10,7 +10,7 @@ I got the original version of QuickHeal from https://wow.curseforge.com/projects
 
 # Installation
 - Download QuickHeal from this repository into your Interface folder and remove the "-master" in the folder name
-- Download HealComm or Luna unit Frames: https://github.com/Aviana/LunaUnitFrames
+- Download Libs2 or Luna unit Frames: https://github.com/Aviana/LunaUnitFrames
 - Download Bonusscanner (Makes QhickHeal and HealComm (Luna unit Frames) more accurate by taking gear and +Heal into account: http://www.vanilla-addons.com/dls/bonusscanner/
 
 # What this version of QuickHeal does:
