@@ -7,6 +7,7 @@ QUICKHEAL_SPELL_LESSER_HEAL = 'Малое исцеление';
 QUICKHEAL_SPELL_HEAL = 'Исцеление';
 QUICKHEAL_SPELL_GREATER_HEAL = 'Великое исцеление';
 QUICKHEAL_SPELL_FLASH_HEAL = 'Быстрое исцеление';
+QUICKHEAL_SPELL_PRAYER_OF_HEALING = 'Молитва исцеления';
 
 -- Паладин
 QUICKHEAL_SPELL_HOLY_LIGHT = 'Свет небес';
