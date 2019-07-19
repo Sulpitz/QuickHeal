@@ -42,7 +42,7 @@ To do a heal make a macro with "/qh" or set Keybind:
 To conserve mana and heal more effitiently you can limit the max rank that Quick Heal will use. It is done by moving the slider. on the Downrank Window. "/qh dr" to open the Downrank Window.
 Чтобы сохранить ману и лечить более эффективно, вы можете ограничить максимальный уровень, который будет использовать Quick Heal. Это делается путем перемещения ползунка. в окне понижения уровня. "/qh dr", чтобы открыть окно.
 ![Open Downrank Window](https://empty.link)
-![Downrank Window](https://empty.link)
+![Downrank Window](https://github.com/shikulja/QuickHeal/blob/rework-healmodes-and-max-HPS/screens/dr_Scrn.png?raw=true)
 
 - Смена режима лечения
 Есть 3 режима для лечения.
