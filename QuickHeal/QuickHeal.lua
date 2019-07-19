@@ -24,7 +24,7 @@ local OriginalUIErrorsFrame_OnEvent;
 QuickHealVariables = {};
 local QHV; -- Local alias
 local DQHV = { -- Default values
-    DebugMode = false,
+    DebugMode = true,
     PetPriority = 1,
     TargetPriority = false,
     RatioForceself = 0.4,
