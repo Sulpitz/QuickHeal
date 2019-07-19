@@ -84,7 +84,7 @@ BINDING_NAME_QUICKHEAL_HEALTARGET = L["Heal Target"];
 BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = L["Heal Target's Target"];
 BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = L["Toggle Healthy Threshold 0 / 100%"];
 BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = L["Show/Hide Downrank Window"];
-BINDING_NAME_QUICKHEAL_QUICKHEAL_SETHEALMODE3 = L["Swich to Healmode 3"];
+BINDING_NAME_QUICKHEAL_SETHEALMODE3 = L["Swich to Healmode 3"];
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
