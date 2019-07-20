@@ -1,15 +1,17 @@
+local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS                = AceLibrary("Babble-Spell-2.2")
 
 function QuickHeal_Paladin_GetRatioHealthyExplanation()
     local RatioHealthy = QuickHeal_GetRatioHealthy();
     local RatioFull = QuickHealVariables["RatioFull"];
 
     if RatioHealthy >= RatioFull then
-        return QUICKHEAL_SPELL_HOLY_LIGHT .. " will never be used in combat. ";
+        return BS['Holy Light'] .. L[" will never be used in combat. "];
     else
         if RatioHealthy > 0 then
-            return QUICKHEAL_SPELL_HOLY_LIGHT .. " will only be used in combat if the target has more than " .. RatioHealthy*100 .. "% life, and only if the healing done is greater than the greatest " .. QUICKHEAL_SPELL_FLASH_OF_LIGHT .. " available. ";          
+            return BS['Holy Light'] .. L[" will only be used in combat if the target has more than "] .. RatioHealthy*100 .. L["% life, and only if the healing done is greater than the greatest "] .. BS['Flash of Light'] .. L[" available. "];          
         else
-            return QUICKHEAL_SPELL_HOLY_LIGHT .. " will only be used in combat if the healing done is greater than the greatest " .. QUICKHEAL_SPELL_FLASH_OF_LIGHT .. " available. ";         
+            return BS['Holy Light'] .. L[" will only be used in combat if the healing done is greater than the greatest "] .. BS['Flash of Light'] .. L[" available. "];         
         end
     end
 end
@@ -73,26 +75,26 @@ function QuickHeal_Paladin_FindSpellToUse(Target)
     local Bonus = 0;
     if (BonusScanner) then
         Bonus = tonumber(BonusScanner:GetBonus("HEAL"));
-        debug(string.format("Equipment Healing Bonus: %d", Bonus));
+        debug(string.format(L["Equipment Healing Bonus: %d"], Bonus));
     end
 
     -- Calculate healing bonus
     local healMod15 = (1.5/3.5) * Bonus;
     local healMod25 = (2.5/3.5) * Bonus;
-    debug("Final Healing Bonus (1.5,2.5)", healMod15,healMod25);
+    debug(L["Final Healing Bonus (1.5,2.5)"], healMod15,healMod25);
 
     local InCombat = UnitAffectingCombat('player') or UnitAffectingCombat(Target);
 
     -- Healing Light Talent (increases healing by 4% per rank)
     local _,_,_,_,talentRank,_ = GetTalentInfo(1,5); 
     local hlMod = 4*talentRank/100 + 1;
-    debug(string.format("Healing Light talentmodification: %f", hlMod))
+    debug(string.format(L["Healing Light talentmodification: %f"], hlMod))
 
     local TargetIsHealthy = Health >= RatioHealthy;
     local ManaLeft = UnitMana('player');
 
     if TargetIsHealthy then
-        debug("Target is healthy",Health);
+        debug(L["Target is healthy"],Health);
     end
 
 	-- ** needs reimplementation
@@ -105,16 +107,16 @@ function QuickHeal_Paladin_FindSpellToUse(Target)
     
     -- Get total healing modifier (factor) caused by healing target debuffs
     local HDB = QuickHeal_GetHealModifier(Target);
-    debug("Target debuff healing modifier",HDB);
+    debug(L["Target debuff healing modifier"],HDB);
     healneed = healneed/HDB;
 
     -- Get a list of ranks available of 'Lesser Healing Wave' and 'Healing Wave'
-    local SpellIDsHL = GetSpellIDs(QUICKHEAL_SPELL_HOLY_LIGHT);
-    local SpellIDsFL = GetSpellIDs(QUICKHEAL_SPELL_FLASH_OF_LIGHT);
+    local SpellIDsHL = GetSpellIDs(BS['Holy Light']);
+    local SpellIDsFL = GetSpellIDs(BS['Flash of Light']);
     local maxRankHL = table.getn(SpellIDsHL);
     local maxRankFL = table.getn(SpellIDsFL);
     local NoFL = maxRankFL < 1;
-    debug(string.format("Found HL up to rank %d, and found FL up to rank %d", maxRankHL, maxRankFL))
+    debug(string.format(L["Found HL up to rank %d, and found FL up to rank %d"], maxRankHL, maxRankFL))
 
     
     
@@ -158,7 +160,7 @@ function QuickHeal_Paladin_FindSpellToUse(Target)
 			SpellID = SpellIDNH
 			HealSize = HealSizeNH
 		end
-    DEFAULT_CHAT_FRAME:AddMessage("Compare: FH " .. math.ceil(HealSizeFH / 1.5) .. " to NH " .. math.ceil(HealSizeNH / 2.5), r or 1, g or 1, b or 1)
+    DEFAULT_CHAT_FRAME:AddMessage(L["Compare: FH "] .. math.ceil(HealSizeFH / 1.5) .. L[" to NH "] .. math.ceil(HealSizeNH / 2.5), r or 1, g or 1, b or 1)
 		return SpellID,HealSize*HDB
 		
 	elseif quickHealHealMode == 1 or InCombat == false then --or Health < RatioFullthen then 164: attempt to compare number with nil

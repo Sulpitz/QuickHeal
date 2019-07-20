@@ -27,7 +27,7 @@
 
         <Layers>
             <Layer level="OVERLAY">
-                <FontString name="QuickHealHealingBarText" inherits="GameFontHighlightSmall" text="Healing Target">
+                <FontString name="QuickHealHealingBarText" inherits="GameFontHighlightSmall" text="HB_HEALING_TARGET">
                     <Size>
                         <AbsDimension x="196" y="16"/>
                     </Size>
@@ -136,7 +136,7 @@
             <OnEnter>
                 if QuickHealConfig:IsVisible() then
                     GameTooltip:SetOwner(this,"ANCHOR_TOPLEFT");
-                    GameTooltip:SetText("Healing Bar Configuration\nLeft-click to drag.\nRight-click to re-attach to Casting Bar.");
+                    GameTooltip:SetText(HB_CONFIGURATION);
                     this.tooltipShown = true;
                 end
             </OnEnter>

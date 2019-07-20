@@ -1,3 +1,6 @@
+local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS                = AceLibrary("Babble-Spell-2.2")
+
 QuickHeal = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0")
 
 -- other libs ----------------------------------------------------------------------------------
@@ -36,8 +39,8 @@ local DQHV = { -- Default values
     NotificationParty = false,
     NotificationRaid = false,
     NotificationChannel = false,
-    NotificationTextNormal = "Healing %s with %s",
-    NotificationTextWhisper = "Healing you with %s",
+    NotificationTextNormal = L["Healing %s with %s"],
+    NotificationTextWhisper = L["Healing you with %s"],
     MessageScreenCenterHealing = true,
     MessageScreenCenterInfo = true,
     MessageScreenCenterBlacklist = true,
@@ -70,18 +73,18 @@ local BlackList = {}; -- List of times were the players are no longer blackliste
 local LastBlackListTime = 0;
 
 --[ Keybinding ]--
-BINDING_HEADER_QUICKHEAL = "QuickHeal";
-BINDING_NAME_QUICKHEAL_HEAL = "Heal";
-BINDING_NAME_QUICKHEAL_HEALSUBGROUP = "Heal Subgroup";
-BINDING_NAME_QUICKHEAL_HEALPARTY = "Heal Party";
-BINDING_NAME_QUICKHEAL_HEALMT = "Heal MT";
-BINDING_NAME_QUICKHEAL_HEALNONMT = "Heal Non MT";
-BINDING_NAME_QUICKHEAL_HEALSELF = "Heal Player";
-BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target";
-BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target";
-BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%";
-BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Show/Hide Downrank Window";
-BINDING_NAME_QUICKHEAL_SETHEALMODE3 = "Swich to Healmode 3";
+BINDING_HEADER_QUICKHEAL = L["QuickHeal"];
+BINDING_NAME_QUICKHEAL_HEAL = L["Heal"];
+BINDING_NAME_QUICKHEAL_HEALSUBGROUP = L["Heal Subgroup"];
+BINDING_NAME_QUICKHEAL_HEALPARTY = L["Heal Party"];
+BINDING_NAME_QUICKHEAL_HEALMT = L["Heal MT"];
+BINDING_NAME_QUICKHEAL_HEALNONMT = L["Heal Non MT"];
+BINDING_NAME_QUICKHEAL_HEALSELF = L["Heal Player"];
+BINDING_NAME_QUICKHEAL_HEALTARGET = L["Heal Target"];
+BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = L["Heal Target's Target"];
+BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = L["Toggle Healthy Threshold 0 / 100%"];
+BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = L["Show/Hide Downrank Window"];
+BINDING_NAME_QUICKHEAL_SETHEALMODE3 = L["Swich to Healmode 3"];
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil;
@@ -100,7 +103,7 @@ function TitanPanelQuickHealButton_OnLoad()
         id = QuickHealData.name,
         menuText = QuickHealData.name,
         buttonTextFunction = nil,
-        tooltipTitle = QuickHealData.name .. " Configuration",
+        tooltipTitle = QuickHealData.name .. L[" Configuration"],
         tooltipTextFunction = "TitanPanelQuickHealButton_GetTooltipText",
         frequency = 0,
 	    icon = "Interface\\Icons\\Spell_Holy_GreaterHeal"
@@ -108,7 +111,7 @@ function TitanPanelQuickHealButton_OnLoad()
 end
 
 function TitanPanelQuickHealButton_GetTooltipText()
-    return "Click to toggle configuration panel";
+    return L["Click to toggle configuration panel"];
 end
 
 --[ Utilities ]--
@@ -143,21 +146,21 @@ end
 
 local function Message(text,kind,duration)
     -- Deliver message to center of screen
-    if kind == "Healing" and QHV.MessageScreenCenterHealing then UIErrorsFrame:AddMessage(text, 0.1, 1, 0.1, 1, duration or 2)
-    elseif kind == "Info" and QHV.MessageScreenCenterInfo then UIErrorsFrame:AddMessage(text, 0.1, 0.1, 1, 1, duration or 2)
-    elseif kind == "Blacklist" and QHV.MessageScreenCenterBlacklist then UIErrorsFrame:AddMessage(text, 1, 0.9, 0, 1, duration or 2)
-    elseif kind == "Error" and QHV.MessageScreenCenterError then UIErrorsFrame:AddMessage(text, 1, 0.1, 0.1, 1, duration or 2) end
+    if kind == L["Healing"] and QHV.MessageScreenCenterHealing then UIErrorsFrame:AddMessage(text, 0.1, 1, 0.1, 1, duration or 2)
+    elseif kind == L["Info"] and QHV.MessageScreenCenterInfo then UIErrorsFrame:AddMessage(text, 0.1, 0.1, 1, 1, duration or 2)
+    elseif kind == L["Blacklist"] and QHV.MessageScreenCenterBlacklist then UIErrorsFrame:AddMessage(text, 1, 0.9, 0, 1, duration or 2)
+    elseif kind == L["Error"] and QHV.MessageScreenCenterError then UIErrorsFrame:AddMessage(text, 1, 0.1, 0.1, 1, duration or 2) end
     -- Deliver message to chat window
-    if kind == "Healing" and QHV.MessageChatWindowHealing then writeLine(text, 0.1, 1, 0.1)
-    elseif kind == "Info" and QHV.MessageChatWindowInfo then writeLine(text, 0.1, 0.1, 1)
-    elseif kind == "Blacklist" and QHV.MessageChatWindowBlacklist then writeLine(text, 1, 0.9, 0.2)
-    elseif kind == "Error" and QHV.MessageChatWindowError then writeLine(text, 1, 0.1, 0.1) end
+    if kind == L["Healing"] and QHV.MessageChatWindowHealing then writeLine(text, 0.1, 1, 0.1)
+    elseif kind == L["Info"] and QHV.MessageChatWindowInfo then writeLine(text, 0.1, 0.1, 1)
+    elseif kind == L["Blacklist"] and QHV.MessageChatWindowBlacklist then writeLine(text, 1, 0.9, 0.2)
+    elseif kind == L["Error"] and QHV.MessageChatWindowError then writeLine(text, 1, 0.1, 0.1) end
 end
 
 function QuickHeal_ListUnitEffects(Target)
     if UnitExists(Target) then
         local i=1;
-        writeLine("|cffffff80******* Buffs on " .. (UnitFullName(Target) or "Unknown") .. " *******|r");
+        writeLine(L["|cffffff80******* Buffs on "] .. (UnitFullName(Target) or L["Unknown"]) .. L[" *******|r"]);
         while (UnitBuff(Target,i)) do
             local string;
             QuickHeal_ScanningTooltip:ClearLines();
@@ -172,7 +175,7 @@ function QuickHeal_ListUnitEffects(Target)
             i=i+1;
         end
         i=1;
-        writeLine("|cffffff80******* DeBuffs on " .. (UnitFullName(Target) or "Unknown") .. " *******|r");
+        writeLine(L["|cffffff80******* DeBuffs on "] .. (UnitFullName(Target) or L["Unknown"]) .. L[" *******|r"]);
         while (UnitDebuff(Target,i)) do
             local string;
             QuickHeal_ScanningTooltip:ClearLines();
@@ -196,11 +199,11 @@ local function Initialise()
 
     -- Register to myAddons
     if (myAddOnsFrame_Register) then
-        myAddOnsFrame_Register(QuickHealData,{"Important commands:\n'/qh cfg' to open configuration panel.\n'/qh help' to list available commands."});
+        myAddOnsFrame_Register(QuickHealData,{L["Important commands:\n'/qh cfg' to open configuration panel.\n'/qh help' to list available commands."]});
     end
     
     -- Update configuration panel with version information
-    QuickHealConfig_TextVersion:SetText("Version: " .. QuickHealData.version);
+    QuickHealConfig_TextVersion:SetText(L["Version: "] .. QuickHealData.version);
 
     local _,PlayerClass = UnitClass('player');
     PlayerClass = string.lower(PlayerClass);
@@ -220,7 +223,7 @@ local function Initialise()
         FindSpellToUse = QuickHeal_Druid_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Druid_GetRatioHealthyExplanation;
     else
-        writeLine(QuickHealData.name .. " " .. QuickHealData.version .. " does not support " .. UnitClass('player') .. ". " .. QuickHealData.name .. " not loaded.")
+        writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. UnitClass('player') .. ". " .. QuickHealData.name .. L[" not loaded."])
         return;
     end
 
@@ -248,7 +251,7 @@ local function Initialise()
     --table.insert(UnitPopupMenus["PARTY"],table.getn(UnitPopupMenus["PARTY"]),"DEDICATEDHEALINGTARGET");
     --UnitPopupButtons["DEDICATEDHEALINGTARGET"] = { text = TEXT("Designate Healing Target"), dist = 0 };
 
-    writeLine(QuickHealData.name .. " " .. QuickHealData.version .. " for " .. UnitClass('player') .. " Loaded. Usage: '/qh help'.")
+    writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" for "] .. UnitClass('player') .. L[" Loaded. Usage: '/qh help'."])
 
     -- Initialise QuickClick
     if QHV.QuickClickEnabled and (type(QuickClick_Load) == "function") then QuickClick_Load() end
@@ -336,7 +339,7 @@ local function UpdateQuickHealOverhealStatus()
     end
 
     -- Update the label
-    local txt = floor(waste) .. "% of heal will be wasted (" .. floor(overheal) .. " Health)";
+    local txt = floor(waste) .. L["% of heal will be wasted ("] .. floor(overheal) .. L[" Health)"];
     QuickHeal_debug(txt);
 
     if QHV.OverhealMessageCastingBar then
@@ -362,7 +365,7 @@ end
 local function StartMonitor(Target)
     MassiveOverhealInProgress = false;
     HealingTarget = Target;
-    QuickHeal_debug("*Starting Monitor",UnitFullName(Target));
+    QuickHeal_debug(L["*Starting Monitor"],UnitFullName(Target));
     QuickHealConfig:RegisterEvent("UNIT_HEALTH"); -- For detecting overheal situations
     QuickHealConfig:RegisterEvent("SPELLCAST_STOP"); -- For detecting spellcast stop
     QuickHealConfig:RegisterEvent("SPELLCAST_FAILED"); -- For detecting spellcast stop
@@ -381,7 +384,7 @@ local function StopMonitor(trigger)
     QuickHealConfig:UnregisterEvent("SPELLCAST_STOP");
     QuickHealConfig:UnregisterEvent("SPELLCAST_FAILED");
     QuickHealConfig:UnregisterEvent("SPELLCAST_INTERRUPTED");
-    QuickHeal_debug("*Stopping Monitor",trigger or "Unknown Trigger");
+    QuickHeal_debug(L["*Stopping Monitor"],trigger or L["Unknown Trigger"]);
     HealingTarget = nil;
     QuickHealBusy = false;
 end
@@ -392,13 +395,13 @@ function NewUIErrorsFrame_OnEvent(...)
     -- Catch only if monitor is running (HealingTarget ~= nil) and if event is UI_ERROR_MESSAGE
     if HealingTarget and event == "UI_ERROR_MESSAGE" and arg1 then
         if arg1 == ERR_SPELL_OUT_OF_RANGE then
-            Message(string.format(SPELL_FAILED_OUT_OF_RANGE .. ". %s blacklisted for 5 sec.", UnitFullName(HealingTarget)),"Blacklist",5)
+            Message(string.format(SPELL_FAILED_OUT_OF_RANGE .. L[". %s blacklisted for 5 sec."], UnitFullName(HealingTarget)),L["Blacklist"],5)
             LastBlackListTime = GetTime();
             BlackList[UnitFullName(HealingTarget)] = LastBlackListTime + 5;
             StopMonitor(arg1);
             return;
         elseif arg1 == SPELL_FAILED_LINE_OF_SIGHT then
-            Message(string.format(SPELL_FAILED_LINE_OF_SIGHT .. ". %s blacklisted for 2 sec.", UnitFullName(HealingTarget)),"Blacklist",2)
+            Message(string.format(SPELL_FAILED_LINE_OF_SIGHT .. L[". %s blacklisted for 2 sec."], UnitFullName(HealingTarget)),L["Blacklist"],2)
             LastBlackListTime = GetTime();
             BlackList[UnitFullName(HealingTarget)] = LastBlackListTime + 2;
             StopMonitor(arg1);
@@ -434,10 +437,10 @@ function QuickHeal_OnEvent()
     elseif (event == "CHAT_MSG_ADDON") then
         if arg1 == "QuickHeal" and arg2 == "versioncheck" then
             SendAddonMessage("QuickHealVersionCheck", QuickHealData.version, RAID)
-            writeLine("Sending Addon version")
+            writeLine(L["Sending Addon version"])
         end
     else
-        QuickHeal_debug((event or "Unknown Event"), (arg1 or "nil"))
+        QuickHeal_debug((event or L["Unknown Event"]), (arg1 or "nil"))
     end
 end
 
@@ -463,8 +466,8 @@ end
 
 -- Items in the NotificationStyle ComboBox
 function QuickHeal_ComboBoxNotificationStyle_Fill()
-    UIDropDownMenu_AddButton{ text = "Normal"; func = QuickHeal_ComboBoxNotificationStyle_Click; value = "NORMAL" };
-    UIDropDownMenu_AddButton{ text = "Role-Playing"; func = QuickHeal_ComboBoxNotificationStyle_Click; value = "RP" };
+    UIDropDownMenu_AddButton{ text = L["Normal"]; func = QuickHeal_ComboBoxNotificationStyle_Click; value = "NORMAL" };
+    UIDropDownMenu_AddButton{ text = L["Role-Playing"]; func = QuickHeal_ComboBoxNotificationStyle_Click; value = "RP" };
 end
 -- Function for handling clicks on the NotificationStyle ComboBox
 function QuickHeal_ComboBoxNotificationStyle_Click()
@@ -474,10 +477,10 @@ end
 
 -- Items in the MessageConfigure ComboBox
 function QuickHeal_ComboBoxMessageConfigure_Fill()
-    UIDropDownMenu_AddButton{ text = "Healing (Green)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Healing" };
-    UIDropDownMenu_AddButton{ text = "Info (Blue)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Info" };
-    UIDropDownMenu_AddButton{ text = "Blacklist (Yellow)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Blacklist" };
-    UIDropDownMenu_AddButton{ text = "Error (Red)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Error" };
+    UIDropDownMenu_AddButton{ text = L["Healing (Green)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Healing" };
+    UIDropDownMenu_AddButton{ text = L["Info (Blue)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Info" };
+    UIDropDownMenu_AddButton{ text = L["Blacklist (Yellow)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Blacklist" };
+    UIDropDownMenu_AddButton{ text = L["Error (Red)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Error" };
 end
 -- Function for handling clicks on the MessageConfigure ComboBox
 function QuickHeal_ComboBoxMessageConfigure_Click()
@@ -500,29 +503,29 @@ function QuickHeal_GetExplanation(Parameter)
    
     if Parameter == "RatioFull" then
         if QHV.RatioFull > 0 then
-            return "Will only heal targets with less than " .. QHV.RatioFull*100 .. "% health.";
+            return L["Will only heal targets with less than "] .. QHV.RatioFull*100 .. L["% health."];
         else
-            return QuickHealData.name .. " is disabled.";
+            return QuickHealData.name .. L[" is disabled."];
         end
     end
 
     if Parameter == "RatioForceself" then
         if QHV.RatioForceself > 0 then
-            return "If you have less than " .. QHV.RatioForceself*100 .. "% health, you will become the target of the heal.";
+            return L["If you have less than "] .. QHV.RatioForceself*100 .. L["% health, you will become the target of the heal."];
         else
-            return "Self preservation disabled."
+            return L["Self preservation disabled."];
         end
     end
 
     if Parameter == "PetPriority" then
         if QHV.PetPriority == 0 then
-            return "Pets will never be healed.";
+            return L["Pets will never be healed."];
         end
         if QHV.PetPriority == 1 then
-            return "Pets will only be healed if no players need healing.";
+            return L["Pets will only be healed if no players need healing."];
         end
         if QHV.PetPriority == 2 then
-            return "Pets will be considered equal to players.";
+            return L["Pets will be considered equal to players."];
         end
     end
 
@@ -532,37 +535,37 @@ function QuickHeal_GetExplanation(Parameter)
 
     if Parameter == "NotificationWhisper" then
         if QHV.NotificationWhisper then
-            return "Healing target will receive notification by whisper."
+            return L["Healing target will receive notification by whisper."];
         else
-            return "Healing target will not receive notification by whisper."
+            return L["Healing target will not receive notification by whisper."];
         end
     end
 
     if Parameter == "NotificationChannel" then
         if QHV.NotificationChannel then
             if QHV.NotificationChannelName and (QHV.NotificationChannelName ~= "") then
-                return "Notification will be delivered to channel '" .. QHV.NotificationChannelName .. "' if it exists.";
+                return L["Notification will be delivered to channel '"] .. QHV.NotificationChannelName .. L["' if it exists."];
             else
-                return "Enter a channel name to deliver notification to a channel.";
+                return L["Enter a channel name to deliver notification to a channel."];
             end
         else
-            return "Notification will not be delivered to a channel.";
+            return L["Notification will not be delivered to a channel."];
         end
     end
 
     if Parameter == "NotificationRaid" then
         if QHV.NotificationRaid then
-            return "Notification will be delivered to raid chat when in a raid";
+            return L["Notification will be delivered to raid chat when in a raid"];
         else
-            return "Notification will not be delivered to raid chat.";
+            return L["Notification will not be delivered to raid chat."];
         end
     end
 
     if Parameter == "NotificationParty" then
         if QHV.NotificationParty then
-            return "Notification will be delivered to party chat when in a party";
+            return L["Notification will be delivered to party chat when in a party"];
         else
-            return "Notification will not be delivered to party chat.";
+            return L["Notification will not be delivered to party chat."];
         end
     end
 
@@ -805,12 +808,12 @@ end
 -- Return true if the unit is healable by player
 local function UnitIsHealable(unit,explain)
     if UnitExists(unit) then
-        if EvaluateUnitCondition(unit, UnitIsFriend('player', unit), "is not a friend",explain) then return false end
-        if EvaluateUnitCondition(unit, not UnitIsEnemy(unit, 'player'), "is an enemy",explain) then return false end
-        if EvaluateUnitCondition(unit, not UnitCanAttack('player', unit), "can be attacked by player",explain) then return false end
-        if EvaluateUnitCondition(unit, UnitIsConnected(unit), "is not connected",explain) then return false end
-        if EvaluateUnitCondition(unit, not UnitIsDeadOrGhost(unit), "is dead or ghost",explain) then return false end
-        if EvaluateUnitCondition(unit, UnitIsVisible(unit), "is not visible to client",explain) then return false end
+        if EvaluateUnitCondition(unit, UnitIsFriend('player', unit), L["is not a friend"],explain) then return false end
+        if EvaluateUnitCondition(unit, not UnitIsEnemy(unit, 'player'), L["is an enemy"],explain) then return false end
+        if EvaluateUnitCondition(unit, not UnitCanAttack('player', unit), L["can be attacked by player"],explain) then return false end
+        if EvaluateUnitCondition(unit, UnitIsConnected(unit), L["is not connected"],explain) then return false end
+        if EvaluateUnitCondition(unit, not UnitIsDeadOrGhost(unit), L["is dead or ghost"],explain) then return false end
+        if EvaluateUnitCondition(unit, UnitIsVisible(unit), L["is not visible to client"],explain) then return false end
     else return false
     end
     return true
@@ -911,7 +914,7 @@ function QuickHeal_EstimateUnitHealNeed(unit,report)
     local MaxHealth = MaxHealthTab[string.lower(Class)] or 4000;
     local Level = UnitLevel(unit) or 60;
     local HealNeed = (1-HealthPercentage)*MaxHealth*Level/60;
-    if report then QuickHeal_debug("Health deficit estimate (" .. Level .. " " .. string.lower(Class) .. " @ " .. HealthPercentage*100 .. "%)",HealNeed) end
+    if report then QuickHeal_debug(L["Health deficit estimate ("] .. Level .. " " .. string.lower(Class) .. " @ " .. HealthPercentage*100 .. "%)",HealNeed) end
     return HealNeed;
 end
 
@@ -919,13 +922,13 @@ local function CastCheckSpell()
     local _,class = UnitClass('player');
     class = string.lower(class);
     if class == "druid" then
-        CastSpell(QuickHeal_GetSpellInfo(QUICKHEAL_SPELL_HEALING_TOUCH)[1].SpellID, BOOKTYPE_SPELL);
+        CastSpell(QuickHeal_GetSpellInfo(BS['Healing Touch'])[1].SpellID, BOOKTYPE_SPELL);
     elseif class == "paladin" then
-        CastSpell(QuickHeal_GetSpellInfo(QUICKHEAL_SPELL_HOLY_LIGHT)[1].SpellID, BOOKTYPE_SPELL);
+        CastSpell(QuickHeal_GetSpellInfo(BS['Holy Light'])[1].SpellID, BOOKTYPE_SPELL);
     elseif class == "priest" then
-        CastSpell(QuickHeal_GetSpellInfo(QUICKHEAL_SPELL_LESSER_HEAL)[1].SpellID, BOOKTYPE_SPELL);
+        CastSpell(QuickHeal_GetSpellInfo(BS['Lesser Heal'])[1].SpellID, BOOKTYPE_SPELL);
     elseif class == "shaman" then
-        CastSpell(QuickHeal_GetSpellInfo(QUICKHEAL_SPELL_HEALING_WAVE)[1].SpellID, BOOKTYPE_SPELL);
+        CastSpell(QuickHeal_GetSpellInfo(BS["Healing Wave"])[1].SpellID, BOOKTYPE_SPELL);
     end
 end
 
@@ -939,14 +942,14 @@ local function FindWhoToHeal(Restrict,extParam)
     -- Self Preservation
     local selfPercentage = (UnitHealth('player') + HealComm:getHeal('player')) / UnitHealthMax('player');
     if (selfPercentage < QHV.RatioForceself) and (selfPercentage < QHV.RatioFull) then
-        QuickHeal_debug("********** Self Preservation **********");
+        QuickHeal_debug(L["********** Self Preservation **********"]);
         return 'player';
     end
 
     -- Target Priority
     if QHV.TargetPriority and QuickHeal_UnitHasHealthInfo('target') then
         if (UnitHealth('target') / UnitHealthMax('target')) < QHV.RatioFull then
-        QuickHeal_debug("********** Target Priority **********");
+        QuickHeal_debug(L["********** Target Priority **********"]);
         return 'target';
         end
     end
@@ -957,19 +960,19 @@ local function FindWhoToHeal(Restrict,extParam)
     local RestrictMT = false;
     local RestrictNonMT = false;
     if Restrict == "subgroup" then
-        QuickHeal_debug("********** Heal Subgroup **********");
+        QuickHeal_debug(L["********** Heal Subgroup **********"]);
         RestrictSubgroup = true;
     elseif Restrict == "party" then
-        QuickHeal_debug("********** Heal Party **********");
+        QuickHeal_debug(L["********** Heal Party **********"]);
         RestrictParty = true;
     elseif Restrict == "mt" then
-        QuickHeal_debug("********** Heal MT **********");
+        QuickHeal_debug(L["********** Heal MT **********"]);
         RestrictMT = true;
     elseif Restrict == "nonmt" then
-        QuickHeal_debug("********** Heal Non MT **********");
+        QuickHeal_debug(L["********** Heal Non MT **********"]);
         RestrictNonMT = true;
     else
-        QuickHeal_debug("********** Heal **********");
+        QuickHeal_debug(L["********** Heal **********"]);
     end
 
     -- Fill playerIds and petIds with healable targets
@@ -1091,7 +1094,7 @@ local function FindWhoToHeal(Restrict,extParam)
                                 AllPlayersAreFull = false;
                             end                  
                         else
-                            writeLine(QuickHealData.name .. " " .. QuickHealData.version .. " does not support " .. UnitClass('player') .. ". " .. QuickHealData.name .. " not loaded.")
+                            writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. UnitClass('player') .. ". " .. QuickHealData.name .. L[" not loaded."])
                             return;
                         end
                     end
@@ -1100,10 +1103,10 @@ local function FindWhoToHeal(Restrict,extParam)
                     --writeLine("Values for "..UnitName(unit)..":")
                     --writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealthPct: "..PredictedHealthPct) --Edelete
                 else
-                    QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")","is out-of-range or unhealable");
+                    QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")",L["is out-of-range or unhealable"]);
                 end
             else
-                QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")","is blacklisted");
+                QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")",L["is blacklisted"]);
             end
         end
     end
@@ -1130,10 +1133,10 @@ local function FindWhoToHeal(Restrict,extParam)
                             end
                         end
                     else
-                        QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")","is out-of-range or unhealable");
+                        QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")",L["is out-of-range or unhealable"]);
                     end
                 else
-                    QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")","is blacklisted");
+                    QuickHeal_debug(UnitFullName(unit) .. " (" .. unit .. ")",L["is blacklisted"]);
                 end
             end
         end
@@ -1186,32 +1189,32 @@ local function Notification(unit, spellName)
     end
 
     if rand == 0 then read = string.format(QHV.NotificationTextNormal, unitName, spellName) end
-    if rand == 1 then read = string.format("%s is looking pale, gonna heal you with %s.", unitName, spellName) end
-    if rand == 2 then read = string.format("%s doesn't look so hot, healing with %s.", unitName, spellName) end
-    if rand == 3 then read = string.format("I know it's just a flesh wound %s, but I'm healing you with %s.", unitName, spellName) end
-    if rand == 4 then read = string.format("Oh great, %s is bleeding all over, %s should take care of that.", unitName, spellName) end
-    if rand == 5 then read = string.format("Death is near %s... or is it? Perhaps a heal with %s will keep you with us.", unitName, spellName) end
-    if rand == 6 then read = string.format("%s, lack of health got you down? %s to the rescue!", unitName, spellName) end
-    if rand == 7 then read = string.format("%s is being healed with %s.", unitName, spellName) end
+    if rand == 1 then read = string.format(L["%s is looking pale, gonna heal you with %s."], unitName, spellName) end
+    if rand == 2 then read = string.format(L["%s doesn't look so hot, healing with %s."], unitName, spellName) end
+    if rand == 3 then read = string.format(L["I know it's just a flesh wound %s, but I'm healing you with %s."], unitName, spellName) end
+    if rand == 4 then read = string.format(L["Oh great, %s is bleeding all over, %s should take care of that."], unitName, spellName) end
+    if rand == 5 then read = string.format(L["Death is near %s... or is it? Perhaps a heal with %s will keep you with us."], unitName, spellName) end
+    if rand == 6 then read = string.format(L["%s, lack of health got you down? %s to the rescue!"], unitName, spellName) end
+    if rand == 7 then read = string.format(L["%s is being healed with %s."], unitName, spellName) end
     if race == "orc" then
-        if rand == 8 then read = string.format("Zug Zug %s with %s.", unitName, spellName) end
-        if rand == 9 then read = string.format("Loktar! %s is being healed with %s.", unitName, spellName) end
-        if rand == 10 then read = string.format("Health gud %s, %s make you healthy again!", unitName, spellName) end
+        if rand == 8 then read = string.format(L["Zug Zug %s with %s."], unitName, spellName) end
+        if rand == 9 then read = string.format(L["Loktar! %s is being healed with %s."], unitName, spellName) end
+        if rand == 10 then read = string.format(L["Health gud %s, %s make you healthy again!"], unitName, spellName) end
     end
     if race == "tauren" then
-        if rand == 8 then read = string.format("By the spirits, %s be healed with %s.", unitName, spellName) end
-        if rand == 9 then read = string.format("Ancestors, save %s with %s.", unitName, spellName) end
-        if rand == 10 then read = string.format("Your noble sacrifice is not in vain %s, %s will keep you in the fight!", unitName, spellName) end
+        if rand == 8 then read = string.format(L["By the spirits, %s be healed with %s."], unitName, spellName) end
+        if rand == 9 then read = string.format(L["Ancestors, save %s with %s."], unitName, spellName) end
+        if rand == 10 then read = string.format(L["Your noble sacrifice is not in vain %s, %s will keep you in the fight!"], unitName, spellName) end
     end
     if race == "troll" then
-        if rand == 8 then read = string.format("Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd.", unitName, spellName) end
-        if rand == 9 then read = string.format("Haha! %s keeps dyin' an da %s voodoo, keeps bringin' em back!.", unitName, spellName) end
-        if rand == 10 then read = string.format("Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!", unitName, spellName) end
+        if rand == 8 then read = string.format(L["Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd."], unitName, spellName) end
+        if rand == 9 then read = string.format(L["Haha! %s keeps dyin' an da %s voodoo, keeps bringin' em back!."], unitName, spellName) end
+        if rand == 10 then read = string.format(L["Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!"], unitName, spellName) end
     end
     if race == "night elf" then
-        if rand == 8 then read = string.format("Asht'velanon, %s! Elune sends you the gift of %s.", unitName, spellName) end
-        if rand == 9 then read = string.format("Remain vigilent %s, the Goddess' %s shall revitalize you!", unitName, spellName) end
-        if rand == 10 then read = string.format("By Elune's grace I grant you this %s, %s.", spellName, unitName) end
+        if rand == 8 then read = string.format(L["Asht'velanon, %s! Elune sends you the gift of %s."], unitName, spellName) end
+        if rand == 9 then read = string.format(L["Remain vigilent %s, the Goddess' %s shall revitalize you!"], unitName, spellName) end
+        if rand == 10 then read = string.format(L["By Elune's grace I grant you this %s, %s."], spellName, unitName) end
     end
 
     -- Check if NotificationChannelName exists as a channel
@@ -1250,11 +1253,11 @@ local function ExecuteHeal(Target,SpellID)
             TargetUnit('targettarget');
             Target = 'target';
             TargetWasChanged = true;
-            QuickHeal_debug("Healable target preventing healing, temporarily switching target to target's target",old,'-->',UnitFullName('target'));
+            QuickHeal_debug(L["Healable target preventing healing, temporarily switching target to target's target"],old,'-->',UnitFullName('target'));
         end
         -- If healing target is not the current healable target clear the healable target
         if not (Target == 'target') then
-            QuickHeal_debug("Healable target preventing healing, temporarily clearing target",UnitFullName('target'));
+            QuickHeal_debug(L["Healable target preventing healing, temporarily clearing target"],UnitFullName('target'));
             ClearTarget();
             TargetWasChanged = true;
         end
@@ -1265,7 +1268,7 @@ local function ExecuteHeal(Target,SpellID)
     if SpellRank == "" then SpellRank = nil end
     local SpellNameAndRank = SpellName .. (SpellRank and " (" .. SpellRank .. ")" or "");
 
-    QuickHeal_debug("  Casting: " .. SpellNameAndRank .. " on " .. UnitFullName(Target) .. " (" .. Target .. ")" .. ", ID: " .. SpellID);
+    QuickHeal_debug(L["  Casting: "] .. SpellNameAndRank .. L[" on "] .. UnitFullName(Target) .. " (" .. Target .. ")" .. L[", ID: "] .. SpellID);
 
     -- Clear any pending spells
     if SpellIsTargeting() then SpellStopTargeting() end
@@ -1289,8 +1292,8 @@ local function ExecuteHeal(Target,SpellID)
             -- Duels/unhealable NPC's etc.
 
     -- The spell is awaiting target selection, write to screen if the spell can actually be cast
-    if SpellName == QUICKHEAL_SPELL_PRAYER_OF_HEALING then
-      Message("Casting " .. QUICKHEAL_SPELL_PRAYER_OF_HEALING .. " (" .. SpellRank .. ")", "Healing", 3)
+    if SpellName == BS['Prayer of Healing'] then
+      Message(L["Casting "] .. BS['Prayer of Healing'] .. " (" .. SpellRank .. ")", "Healing", 3)
     end
     if SpellCanTargetUnit(Target) or ((Target == 'target') and HealingTarget) then
 
@@ -1298,9 +1301,9 @@ local function ExecuteHeal(Target,SpellID)
 
         -- Write to center of screen
         if UnitIsUnit(Target,'player') then
-            Message(string.format("Casting %s on yourself", SpellNameAndRank),"Healing",3)
+            Message(string.format(L["Casting %s on yourself"], SpellNameAndRank),"Healing",3)
         else
-            Message(string.format("Casting %s on %s",SpellNameAndRank,UnitFullName(Target)),"Healing",3)
+            Message(string.format(L["Casting %s on %s"],SpellNameAndRank,UnitFullName(Target)),"Healing",3)
         end
     end
 
@@ -1309,7 +1312,7 @@ local function ExecuteHeal(Target,SpellID)
 
     -- just in case something went wrong here (Healing people in duels!)
     if SpellIsTargeting() then 
-        StopMonitor("Spell cannot target " .. (UnitFullName(Target) or "unit"));
+        StopMonitor(L["Spell cannot target "] .. (UnitFullName(Target) or "unit"));
         SpellStopTargeting() 
     end
 
@@ -1317,7 +1320,7 @@ local function ExecuteHeal(Target,SpellID)
     if TargetWasChanged then
         local old = UnitFullName('target') or "None";
         TargetLastTarget();
-        QuickHeal_debug("Reacquired previous target",old,'-->',UnitFullName('target'));
+        QuickHeal_debug(L["Reacquired previous target"],old,'-->',UnitFullName('target'));
     end
 
     -- Enable sound again
@@ -1332,10 +1335,10 @@ function QuickHeal(Target,SpellID,extParam)
     -- Only one instance of QuickHeal allowed at a time
     if QuickHealBusy then
         if HealingTarget and MassiveOverhealInProgress then
-            QuickHeal_debug("Massive overheal aborted.");
+            QuickHeal_debug(L["Massive overheal aborted."]);
             SpellStopCasting();
         else
-            QuickHeal_debug("Healing in progress, command ignored");
+            QuickHeal_debug(L["Healing in progress, command ignored"]);
         end
         return;
     end
@@ -1358,7 +1361,7 @@ function QuickHeal(Target,SpellID,extParam)
             Restrict = Target;
             Target = nil;
         else
-            Message("You are not in a raid","Error",2);            
+            Message(L["You are not in a raid"],"Error",2);            
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
             return;
@@ -1366,7 +1369,7 @@ function QuickHeal(Target,SpellID,extParam)
     end
 
     if Target then -- Target is specified, check it
-        QuickHeal_debug("********** Heal "..Target.." **********");
+        QuickHeal_debug(L["********** Heal "]..Target..L[" **********"]);
         if UnitIsHealable(Target,true) then
             QuickHeal_debug(string.format("%s (%s) : %d/%d",UnitFullName(Target),Target,UnitHealth(Target),UnitHealthMax(Target)));
             local targetPercentage;
@@ -1380,13 +1383,13 @@ function QuickHeal(Target,SpellID,extParam)
             else
                 -- Does not need healing
                 if UnitIsUnit(Target,'player') then
-                    Message("You don't need healing","Info",2);
+                    Message(L["You don't need healing"],"Info",2);
                 elseif Target == 'target' then
-                    Message(UnitFullName('target') .. " doesn't need healing","Info",2);
+                    Message(UnitFullName('target') .. L[" doesn't need healing"],"Info",2);
                 elseif Target == "targettarget" then
-                    Message(UnitFullName('target') .. "'s Target (" .. UnitFullName('targettarget') .. ") doesn't need healing","Info",2);
+                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") doesn't need healing"],"Info",2);
                 else
-                    Message(UnitFullName(Target) .. " doesn't need healing","Info",2);
+                    Message(UnitFullName(Target) .. L[" doesn't need healing"],"Info",2);
                 end
                 SetCVar("autoSelfCast",AutoSelfCast);
                 QuickHealBusy = false;
@@ -1394,24 +1397,24 @@ function QuickHeal(Target,SpellID,extParam)
             end
         else -- Unit is not healable, report reason and return
             if Target == 'target' and not UnitExists('target') then
-                Message("You don't have a target","Error",2);
+                Message(L["You don't have a target"],"Error",2);
             elseif Target == 'targettarget' then
                 if not UnitExists('target') then
-                    Message("You don't have a target","Error",2);
+                    Message(L["You don't have a target"],"Error",2);
                 elseif not UnitExists('targettarget') then
-                    Message((UnitFullName('target') or "Target") .. " doesn't have a target","Error",2);
+                    Message((UnitFullName('target') or L["Target"]) .. L[" doesn't have a target"],"Error",2);
                 else
-                    Message(UnitFullName('target') .. "'s Target (" .. UnitFullName('targettarget') .. ") cannot be healed","Error",2);
+                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") cannot be healed"],"Error",2);
                 end
             elseif UnitExists(Target) then
                 -- Unit exists but cannot be healed
                 if UnitIsUnit(Target,'player') then
-                    Message("You cannot be healed","Error",2);
+                    Message(L["You cannot be healed"],"Error",2);
                 else
-                    Message(UnitFullName(Target) .. " cannot be healed","Error",2);
+                    Message(UnitFullName(Target) .. L[" cannot be healed"],"Error",2);
                 end
             else
-                Message("Unit does not exist","Error",2);
+                Message(L["Unit does not exist"],"Error",2);
             end
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
@@ -1431,14 +1434,14 @@ function QuickHeal(Target,SpellID,extParam)
                         break;
                     end
                     if not tanks then
-                        Message("No players assigned as Main Tank by Raid Leader","Error",2);
+                        Message(L["No players assigned as Main Tank by Raid Leader"],"Error",2);
                     else
-                        Message("No Main Tank to heal","Info",2);
+                        Message(L["No Main Tank to heal"],"Info",2);
                     end
                 elseif InParty() or InRaid() then
-                    Message("No one to heal","Info",2);
+                    Message(L["No one to heal"],"Info",2);
                 else
-                    Message("You don't need healing","Info",2);
+                    Message(L["You don't need healing"],"Info",2);
                 end
             end
             SetCVar("autoSelfCast",AutoSelfCast);
@@ -1448,7 +1451,7 @@ function QuickHeal(Target,SpellID,extParam)
     end
 
     -- Target acquired
-    QuickHeal_debug(string.format("  Healing target: %s (%s)", UnitFullName(Target), Target));
+    QuickHeal_debug(string.format(L["  Healing target: %s (%s)"], UnitFullName(Target), Target));
 
     HealingSpellSize = 0;
 
@@ -1484,7 +1487,7 @@ function QuickHeal(Target,SpellID,extParam)
         end
         if not SpellID then
             -- Failed to decode the string
-            Message("Spell not found","Error",2);
+            Message(L["Spell not found"],"Error",2);
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
             return;
@@ -1494,7 +1497,7 @@ function QuickHeal(Target,SpellID,extParam)
     if SpellID then
         ExecuteHeal(Target,SpellID);
     else
-        Message("You have no healing spells to cast","Error",2);
+        Message(L["You have no healing spells to cast"],"Error",2);
     end
 
     SetCVar("autoSelfCast",AutoSelfCast);
@@ -1525,19 +1528,19 @@ function QuickHeal_Command(msg)
     
     if cmd == "debug on" then
         QHV.DebugMode = true;
-        writeLine(QuickHealData.name .. " debug mode enabled",0,0,1);
+        writeLine(QuickHealData.name .. L[" debug mode enabled"],0,0,1);
         return;
     end
 
     if cmd == "debug off" then
         QHV.DebugMode = false;
-        writeLine(QuickHealData.name .. " debug mode disabled",0,0,1);
+        writeLine(QuickHealData.name .. L[" debug mode disabled"],0,0,1);
         return;
     end
 
     if cmd == "reset" then
         QuickHeal_SetDefaultParameters();
-        writeLine(QuickHealData.name .. " reset to default configuration",0,0,1);
+        writeLine(QuickHealData.name .. L[" reset to default configuration"],0,0,1);
         QuickHeal_ToggleConfigurationPanel();
         QuickHeal_ToggleConfigurationPanel();
         return;
@@ -1579,19 +1582,19 @@ function QuickHeal_Command(msg)
     end
 
     -- Print usage information
-    writeLine(QuickHealData.name .. " Usage:");
-    writeLine("/qh cfg - Opens up the configuration panel.");
-    writeLine("/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%)."); --hc05
-    writeLine("/qh healmode [1,2,3]| hm [1,2,3] - Swich to healmode 1, 2 or 3. 1: default; 2: Flash Heal / Holy Light; 3: max HPS");
-    writeLine("/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks.");
-    writeLine("/qh - Heals the party/raid member that most need it with the best suited healing spell.");
-    writeLine("/qh player - Forces the target of the healing to be yourself.");
-    writeLine("/qh target - Forces the target of the healing to be your current target.");
-    writeLine("/qh targettarget - Forces the target of the healing to be your current target's target.");
-    writeLine("/qh party - Restricts the healing to the party when in a raid.");
-    writeLine("/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA.");
-    writeLine("/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA.");
-    writeLine("/qh subgroup - Forces the healing to the groups selected in the configuration panel.");
-    writeLine("/qh reset - Reset configuration to default parameters for all classes.");
-    writeLine("/qh healpct - Will prioritise the player with the lowest percentage of health.");
+    writeLine(QuickHealData.name .. L[" Usage:"]);
+    writeLine(L["/qh cfg - Opens up the configuration panel."]);
+    writeLine(L["/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%)."]); --hc05
+    writeLine(L["/qh healmode [1,2,3]| hm [1,2,3] - Swich to healmode 1, 2 or 3. 1: default; 2: Flash Heal / Holy Light; 3: max HPS"]);
+    writeLine(L["/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks."]);
+    writeLine(L["/qh - Heals the party/raid member that most need it with the best suited healing spell."]);
+    writeLine(L["/qh player - Forces the target of the healing to be yourself."]);
+    writeLine(L["/qh target - Forces the target of the healing to be your current target."]);
+    writeLine(L["/qh targettarget - Forces the target of the healing to be your current target's target."]);
+    writeLine(L["/qh party - Restricts the healing to the party when in a raid."]);
+    writeLine(L["/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA."]);
+    writeLine(L["/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA."]);
+    writeLine(L["/qh subgroup - Forces the healing to the groups selected in the configuration panel."]);
+    writeLine(L["/qh reset - Reset configuration to default parameters for all classes."]);
+    writeLine(L["/qh healpct - Will prioritise the player with the lowest percentage of health."]);
 end

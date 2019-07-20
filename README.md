@@ -1,74 +1,83 @@
+# QuickHeal  Translation Fork
+Автор оригинальной версии https://github.com/Sulpitz/QuickHeal
+
+Этот форк, является полной пеработкой аддона, для упрощения полного перевода аддона на другие языки, а так же для перевода на русский.
+Так же были добавлены случайно замеченные, некоторые незначительные - пропущенные символы в коде.
+
+Особая благодарность, за помощь и наставления - Lichery
+
 # QuickHeal
-QuickHeal for Vanilla WoW 1.12. with integration for HealComm (Luna unit Frames).
+QuickHeal для Vanilla WoW 1.12. с интеграцией HealComm (Luna unit Frames).
 
-I'm not the author of QuickHeal.
+Я не автор QuickHeal.
 
-I just did the implementation for QuckHeal to use Healcom to heal smarter.
-I also did some other additions and improvements.
+Я только сделал реализацию для QuckHeal, чтобы использовать Healcom для лечения умнее.
+Я также сделал некоторые другие дополнения и улучшения.
 
-I got the original version of QuickHeal from https://wow.curseforge.com/projects/project-2800.
+Я выбрал оригинальную версию QuickHeal здесь https://wow.curseforge.com/projects/project-2800.
 
-# Installation
-- Download QuickHeal from this repository into your Interface folder and remove the "-master" in the folder name
-- Download HealComm or Luna unit Frames: https://github.com/Aviana/LunaUnitFrames
-- Download Bonusscanner (Makes QhickHeal and HealComm (Luna unit Frames) more accurate by taking gear and +Heal into account: http://www.vanilla-addons.com/dls/bonusscanner/
+# Установка
+- Скачать QuickHeal их этого репозитария в вашу папку Interface и удалите "-master" в имени папки
+- Скачать HealComm или Luna unit Frames: https://github.com/Aviana/LunaUnitFrames
+- Скачать Bonusscanner (Делает QuickHeal и HealComm (Luna unit Frames) более аккуратным с учетом снаряжения и +исцеления: http://www.vanilla-addons.com/dls/bonusscanner/
 
-# What this version of QuickHeal does:
+# Что делает эта версия QuickHeal:
 
-**Integration of HealComm**
+**Интеграция HealComm**
 
-QuickHeal is now using the incomming heal information, broadcasted by HealComm (Luna unit Frames), through the addonchannel to reduce overhealing and making this addon used by multible raidmembers more effective.
-Also there is the option to downrank the spells being used, so healing can be more effitient.
+Quick Heal теперь использует информацию поступающего исцеления, транслируемую HealComm (LunaunitFrames), через addonchannel, чтобы уменьшить избыточное исцеление и сделать этот аддон, используемый участниками рейда более эффективным.
+Также есть возможность понизить уровень используемых заклинаний, поэтому исцеление может быть более эффективным.
 
-**How to use**
-- Help
-"/qh help" displays all a
+**Как использовать**
+- Помощь
+"/qh help" отобразить все команды
 
-- Heal:
+- Лечение:
 To do a heal make a macro with "/qh" or set Keybind:
+Чтобы начать исцеление, сделайте макрос с "/qh " или назначьте клавишу в настройках:
 
-![Keybind Quick Heal](https://www2.pic-upload.de/img/35189646/1.png)
+![Keybind Quick Heal](https://empty.link)
 
-- Downrank
+- Понижение уровня
 To conserve mana and heal more effitiently you can limit the max rank that Quick Heal will use. It is done by moving the slider. on the Downrank Window. "/qh dr" to open the Downrank Window.
-![Open Downrank Window](https://www2.pic-upload.de/img/35189791/2.png)
-![Downrank Window](https://www2.pic-upload.de/img/35189979/3.png)
+Чтобы сохранить ману и лечить более эффективно, вы можете ограничить максимальный уровень, который будет использовать Quick Heal. Это делается путем перемещения ползунка. в окне понижения уровня. "/qh dr", чтобы открыть окно.
+![Open Downrank Window](https://empty.link)
+![Downrank Window](https://github.com/shikulja/QuickHeal/blob/rework-healmodes-and-max-HPS/screens/dr_Scrn.png?raw=true)
 
-- Change Heal mode
-There are 3 modes for healing.
+- Смена режима лечения
+Есть 3 режима для лечения.
 
-"/qh hm 1" - Default
-Priest: Will only cast Greater Heal, Heal and Lesser Heal.
-Paladin: Will only use Flash of Light
+"/qh hm 1" - Стандартный
+Жрец: Произносит только Великое исцеление, Исцеление и Малое исцеление.
+Паладин: Будет использоваться только Вспышка света.
 
 "/qh hm 2" 
-Priest: Will only cast Flash Heal
-Paladin: Will only cast Holy Light
+Жрец: Будет использоваться только Быстрое исцеление
+Паладин: Будет использоваться только Свет небес
  
-"/qh hm 3" - Most HPS
-Will cast the heal with the most HPS.
-Priest: Will cast Prayer of Healing if possible
+"/qh hm 3" - Большой ХПС
+Будет проиводить лечение с большим ХПС.
+Жрец: произносит молитву исцеления, если это возможно
 
-The Heal mode can tbe set with macro or Key bind. The ">" indicate the selected mode.
-![Keybinds Healmode](https://www2.pic-upload.de/img/35190067/4.png)
+Режим лечения можно установить с помощью макроса или привязки клавиш. ">" Обозначает выбранный режим.
+![Keybinds Healmode](https://empty.link)
 
-# Changes:
+# Изменения:
 
-hc05: (get from Branch)
-- Healmodes for Paladins and Priests now controll the spells used. See How to Use
-- Priests: in healmode 3 Prayer of Heal is cast if possible
+hc05: (брать из Ветки)
+- Режимы исцеления для Паладинов и Жрецов теперь контролируются используемые заклинания. Смотреть как использовать
+- Жрецы: в Режиме исцеления 3 Молитвая исцеления произносится если возможно
 
 hc04:
-- new command: /qh healpct - Will prioritise the player with the lowest percentage of health. (override changes of hc03, where priests heal the target with the most healing needed and paladins the lowest target)
-
+- новая команда: /qh healpct - Приоритет будет отдаваться игроку с наименьшим процентом здоровья. (переопределяет изменения hc03, Жрецы исцеляют цель - наибольшим количеством необходимых исцелений, а Паладины - самую низкую по здаровью цель)
 
 hc03:
-- /qh downrank or /qh dr toggles a window where the maximum spell rank to be used for healspells can be set. (hold rightclick on frame to drag the window)
-- Keybind for toggeling downrank window
-- /qh toggle will change between Flash heals and Normal heals on Priest
-- Keybind to toggle between Flash heals and Normal heals on Priest
-- Heal sent from other players via HealComm will now be considered in selv preservation
-- Heal sent from other players via HealComm will now be considered for player that is target of target prioity healing
-- Priests will now heal the player with the most health missing
-- Paladin will now heal the player with the lowest amount of health
-- For Paladins healing out of fight will now use the same spells as infight
+- /qh downrank or /qh dr переключает окно, в котором можно установить максимальный ранг заклинания для заклинаний исцеления. (удерживайте правую кнопку мыши на рамке, чтобы перетащить окно)
+- Назначение клавиш для переключения окна понижения уровня
+- /qh toggle переключает Быстрое исцеление и Нормальное лечение у Жреца
+- Назначение клавиш для переключения Быстрое исцеление и Нормальное лечение у Жреца
+- Лечение, отправленное от других игроков через HealComm теперь будет рассматриваться в самосохранении 
+- Лечение, отправленное от других игроков через HealComm, теперь будет рассматриваться для игрока, который является целью-цели для приоритетного лечения
+- Жрецы теперь лечат игрока с наименьшим здоровьем
+- Паладины теперь лечат игрока с наименьшим здоровьем
+- Для Паладинов лечение вне боя теперь будут использовать те же заклинания что и в бою

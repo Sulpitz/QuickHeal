@@ -1,15 +1,17 @@
+local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS                = AceLibrary("Babble-Spell-2.2")
 
 function QuickHeal_Druid_GetRatioHealthyExplanation()
     local RatioHealthy = QuickHeal_GetRatioHealthy();
     local RatioFull = QuickHealVariables["RatioFull"];
 
     if RatioHealthy >= RatioFull then
-        return QUICKHEAL_SPELL_REGROWTH .. " will always be used in combat, and "  .. QUICKHEAL_SPELL_HEALING_TOUCH .. " will be used when out of combat. ";
+        return BS['Regrowth'] .. L[" will always be used in combat, and "]  .. BS['Healing Touch'] .. L[" will be used when out of combat. "];
     else
         if RatioHealthy > 0 then
-            return QUICKHEAL_SPELL_REGROWTH .. " will be used in combat if the target has less than " .. RatioHealthy*100 .. "% life, and " .. QUICKHEAL_SPELL_HEALING_TOUCH .. " will be used otherwise. ";
+            return BS['Regrowth'] .. L[" will be used in combat if the target has less than "] .. RatioHealthy*100 .. L["% life, and "] .. BS['Healing Touch'] .. L[" will be used otherwise. "];
         else
-            return QUICKHEAL_SPELL_REGROWTH .. " will never be used. " .. QUICKHEAL_SPELL_HEALING_TOUCH .. " will always be used in and out of combat. ";
+            return BS['Regrowth'] .. L[" will never be used. "] .. BS['Healing Touch'] .. L[" will always be used in and out of combat. "];
         end
     end
 end
@@ -55,7 +57,7 @@ function QuickHeal_Druid_FindSpellToUse(Target)
     local Bonus = 0;
     if (BonusScanner) then
         Bonus = tonumber(BonusScanner:GetBonus("HEAL"));
-        debug(string.format("Equipment Healing Bonus: %d", Bonus));
+        debug(string.format(L["Equipment Healing Bonus: %d"], Bonus));
     end
 
     -- Calculate healing bonus
@@ -65,24 +67,24 @@ function QuickHeal_Druid_FindSpellToUse(Target)
     local healMod30 = (3.0/3.5) * Bonus;
     local healMod35 = Bonus;
     local healModRG = (2.0/3.5) * Bonus * 0.5; -- The 0.5 factor is calculated as DirectHeal/(DirectHeal+HoT)
-    debug("Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)", healMod15,healMod20,healMod25,healMod30,healMod35,healModRG);
+    debug(L["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"], healMod15,healMod20,healMod25,healMod30,healMod35,healModRG);
 
     local InCombat = UnitAffectingCombat('player') or UnitAffectingCombat(Target);
 
     -- Gift of Nature - Increases healing by 2% per rank
     local _,_,_,_,talentRank,_ = GetTalentInfo(3,12); 
     local gnMod = 2*talentRank/100 + 1;
-    debug(string.format("Gift of Nature modifier: %f", gnMod));
+    debug(string.format(L["Gift of Nature modifier: %f"], gnMod));
 
     -- Tranquil Spirit - Decreases mana usage by 2% per rank on HT only
     local _,_,_,_,talentRank,_ = GetTalentInfo(3,9); 
     local tsMod = 1 - 2*talentRank/100;
-    debug(string.format("Tranquil Spirit modifier: %f", tsMod));
+    debug(string.format(L["Tranquil Spirit modifier: %f"], tsMod));
 
     -- Moonglow - Decrease mana usage by 3% per rank
     local _,_,_,_,talentRank,_ = GetTalentInfo(1,14); 
     local mgMod = 1 - 3*talentRank/100;
-    debug(string.format("Moonglow modifier: %f", mgMod));
+    debug(string.format(L["Moonglow modifier: %f"], mgMod));
    
     -- Improved Rejuvenation -- Increases Rejuvenation effects by 5% per rank
     --local _,_,_,_,talentRank,_ = GetTalentInfo(3,10); 
@@ -93,43 +95,43 @@ function QuickHeal_Druid_FindSpellToUse(Target)
     local ManaLeft = UnitMana('player');
 
     if TargetIsHealthy then
-        debug("Target is healthy ",Health);
+        debug(L["Target is healthy "],Health);
     end
     
     -- Detect Clearcasting (from Omen of Clarity, talent(1,9))
     if QuickHeal_DetectBuff('player',"Spell_Shadow_ManaBurn",1) then -- Spell_Shadow_ManaBurn (1)
         ManaLeft = UnitManaMax('player');  -- set to max mana so max spell rank will be cast
         healneed = 10^6; -- deliberate overheal (mana is free)
-        debug("BUFF: Clearcasting (Omen of Clarity)");
+        debug(L["BUFF: Clearcasting (Omen of Clarity)"]);
     end
 
     -- Detect Nature's Swiftness (next nature spell is instant cast)
     if QuickHeal_DetectBuff('player',"Spell_Nature_RavenForm") then
-        debug("BUFF: Nature's Swiftness (out of combat healing forced)");
+        debug(L["BUFF: Nature's Swiftness (out of combat healing forced)"]);
         InCombat = false;
     end
 
     -- Detect proc of 'Hand of Edward the Odd' mace (next spell is instant cast)
     if QuickHeal_DetectBuff('player',"Spell_Holy_SearingLight") then
-        debug("BUFF: Hand of Edward the Odd (out of combat healing forced)");
+        debug(L["BUFF: Hand of Edward the Odd (out of combat healing forced)"]);
         InCombat = false;
     end
     
     -- Get total healing modifier (factor) caused by healing target debuffs
     local HDB = QuickHeal_GetHealModifier(Target);
-    debug("Target debuff healing modifier",HDB);
+    debug(L["Target debuff healing modifier"],HDB);
     healneed = healneed/HDB;
 
     -- Get a list of ranks available for all spells
-    local SpellIDsHT = GetSpellIDs(QUICKHEAL_SPELL_HEALING_TOUCH);
-    local SpellIDsRG = GetSpellIDs(QUICKHEAL_SPELL_REGROWTH);
+    local SpellIDsHT = GetSpellIDs(BS['Healing Touch']);
+    local SpellIDsRG = GetSpellIDs(BS['Regrowth']);
     --local SpellIDsRJ = GetSpellIDs(QUICKHEAL_SPELL_REJUVENATION);
 
     local maxRankHT = table.getn(SpellIDsHT);
     local maxRankRG = table.getn(SpellIDsRG);
     --local maxRankRJ = table.getn(SpellIDsRJ);
     
-    debug(string.format("Found HT up to rank %d, RG up to rank %d", maxRankHT, maxRankRG));
+    debug(string.format(L["Found HT up to rank %d, RG up to rank %d"], maxRankHT, maxRankRG));
 
     -- Compensation for health lost during combat
     local k=1.0;
@@ -142,7 +144,7 @@ function QuickHeal_Druid_FindSpellToUse(Target)
     -- Find suitable SpellID based on the defined criteria
     if not InCombat or TargetIsHealthy or maxRankRG<1 then
         -- Not in combat or target is healthy so use the closest available mana efficient healing
-        debug(string.format("Not in combat or target healthy or no Regrowth available, will use Healing Touch"))
+        debug(string.format(L["Not in combat or target healthy or no Regrowth available, will use Healing Touch"]))
         if Health < RatioFull then
             SpellID = SpellIDsHT[1]; HealSize = 44*gnMod+healMod15*PF1; -- Default to rank 1
             if healneed > ( 100*gnMod+healMod20*PF8 )*k and ManaLeft >=  55*tsMod*mgMod and maxRankHT >=  2 then SpellID =  SpellIDsHT[2]; HealSize =  100*gnMod+healMod20*PF8 end
@@ -158,7 +160,7 @@ function QuickHeal_Druid_FindSpellToUse(Target)
         end         
     else
         -- In combat and target is unhealthy and player has Regrowth
-        debug(string.format("In combat and target unhealthy and Regrowth available, will use Regrowth"));
+        debug(string.format(L["In combat and target unhealthy and Regrowth available, will use Regrowth"]));
         if Health < RatioFull then
             SpellID = SpellIDsRG[1]; HealSize = 91*gnMod+healModRG*PFRG1; -- Default to rank 1
             if healneed > ( 176*gnMod+healModRG*PFRG2)*k and ManaLeft >= 205*mgMod and maxRankRG >= 2 then SpellID = SpellIDsRG[2]; HealSize =  176*gnMod+healModRG*PFRG2 end

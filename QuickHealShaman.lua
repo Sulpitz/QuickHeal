@@ -1,15 +1,17 @@
+local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS                = AceLibrary("Babble-Spell-2.2")
 
 function QuickHeal_Shaman_GetRatioHealthyExplanation()
     local RatioHealthy = QuickHeal_GetRatioHealthy();
     local RatioFull = QuickHealVariables["RatioFull"];
 
     if RatioHealthy >= RatioFull then
-        return QUICKHEAL_SPELL_HEALING_WAVE .. " will never be used in combat. ";
+        return BS["Healing Wave"] .. L[" will never be used in combat. "];
     else
         if RatioHealthy > 0 then
-            return QUICKHEAL_SPELL_HEALING_WAVE .. " will only be used in combat if the target has more than " .. RatioHealthy*100 .. "% life, and only if the healing done is greater than the greatest " .. QUICKHEAL_SPELL_LESSER_HEALING_WAVE .. " available. ";          
+            return BS["Healing Wave"] .. L[" will only be used in combat if the target has more than "] .. RatioHealthy*100 .. L["% life, and only if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];          
         else
-            return QUICKHEAL_SPELL_HEALING_WAVE .. " will only be used in combat if the healing done is greater than the greatest " .. QUICKHEAL_SPELL_LESSER_HEALING_WAVE .. " available. ";         
+            return BS["Healing Wave"] .. L[" will only be used in combat if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];         
         end
     end
 end
@@ -54,7 +56,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
     local Bonus = 0;
     if (BonusScanner) then
         Bonus = tonumber(BonusScanner:GetBonus("HEAL"));
-        debug(string.format("Equipment Healing Bonus: %d", Bonus));
+        debug(string.format(L["Equipment Healing Bonus: %d"], Bonus));
     end
 
     -- Calculate healing bonus
@@ -63,56 +65,56 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
     local healMod20 = (2.0/3.5) * Bonus;
     local healMod25 = (2.5/3.5) * Bonus;
     local healMod30 = (3.0/3.5) * Bonus;
-    debug("Final Healing Bonus (1.5,2.0,2.5,3.0,LHW)", healMod15,healMod20,healMod25,healMod30,healModLHW);
+    debug(L["Final Healing Bonus (1.5,2.0,2.5,3.0,LHW)"], healMod15,healMod20,healMod25,healMod30,healModLHW);
 
     local InCombat = UnitAffectingCombat('player') or UnitAffectingCombat(Target);
 
     -- Purification Talent (increases healing by 2% per rank)
     local _,_,_,_,talentRank,_ = GetTalentInfo(3,14);
     local pMod = 2*talentRank/100 + 1;
-    debug(string.format("Purification modifier: %f", pMod))
+    debug(string.format(L["Purification modifier: %f"], pMod))
 
     -- Tidal Focus - Decreases mana usage by 1% per rank on healing
     local _,_,_,_,talentRank,_ = GetTalentInfo(3,2);
     local tfMod = 1 - talentRank/100;
-    debug(string.format("Improved Healing modifier: %f", tfMod));
+    debug(string.format(L["Improved Healing modifier: %f"], tfMod));
 
     local TargetIsHealthy = Health >= RatioHealthy;
     local ManaLeft = UnitMana('player');
 
     if TargetIsHealthy then
-        debug("Target is healthy",Health)
+        debug(L["Target is healthy"],Health)
     end
 
     -- Detect Nature's Swiftness (next nature spell is instant cast)
     if QuickHeal_DetectBuff('player',"Spell_Nature_RavenForm") then
-        debug("BUFF: Nature's Swiftness (out of combat healing forced)");
+        debug(L["BUFF: Nature's Swiftness (out of combat healing forced)"]);
         InCombat = false;
     end
 
     -- Detect proc of 'Hand of Edward the Odd' mace (next spell is instant cast)
     if QuickHeal_DetectBuff('player',"Spell_Holy_SearingLight") then
-        debug("BUFF: Hand of Edward the Odd (out of combat healing forced)");
+        debug(L["BUFF: Hand of Edward the Odd (out of combat healing forced)"]);
         InCombat = false;
     end
     
     -- Get total healing modifier (factor) caused by healing target debuffs
     local HDB = QuickHeal_GetHealModifier(Target);
-    debug("Target debuff healing modifier",HDB);
+    debug(L["Target debuff healing modifier"],HDB);
     healneed = healneed/HDB;
 
     -- Detect healing way on target
     local hwMod = QuickHeal_DetectBuff(Target,"Spell_Nature_HealingWay");
     if hwMod then hwMod = 1+0.06*hwMod else hwMod = 1 end;
-    debug("Healing Way healing modifier",hwMod);
+    debug(L["Healing Way healing modifier"],hwMod);
 
     -- Get a list of ranks available of 'Lesser Healing Wave' and 'Healing Wave'
-    local SpellIDsHW = GetSpellIDs(QUICKHEAL_SPELL_HEALING_WAVE);
-    local SpellIDsLHW = GetSpellIDs(QUICKHEAL_SPELL_LESSER_HEALING_WAVE);
+    local SpellIDsHW = GetSpellIDs(BS["Healing Wave"]);
+    local SpellIDsLHW = GetSpellIDs(BS["Lesser Healing Wave"]);
     local maxRankHW = table.getn(SpellIDsHW);
     local maxRankLHW = table.getn(SpellIDsLHW);
     local NoLHW = maxRankLHW < 1;
-    debug(string.format("Found HW up to rank %d, and found LHW up to rank %d", maxRankHW, maxRankLHW))
+    debug(string.format(L["Found HW up to rank %d, and found LHW up to rank %d"], maxRankHW, maxRankLHW))
 
     -- Find suitable SpellID based on the defined criteria
     if InCombat then
@@ -120,7 +122,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
             -- Target is healthy (health > RatioHealthy)
             -- AND The HW in question is larger than any available LHW
             -- OR LHW is unavailable (sub level 20 characters)
-        debug(string.format("In combat, will prefer LHW"))
+        debug(string.format(L["In combat, will prefer LHW"]))
         if Health < RatioFull then
             local k = 0.9; -- In combat means that target is losing life while casting, so compensate           
             local K = 0.8; -- k for fast spells (LHW and HW Rank 1 and 2) and K for slow spells (HW)
@@ -143,7 +145,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
         end
     else
         -- Not in combat so use the closest available healing
-        debug(string.format("Not in combat, will use closest available HW or LHW"))
+        debug(string.format(L["Not in combat, will use closest available HW or LHW"]))
         if Health < RatioFull then
             SpellID = SpellIDsHW[1]; HealSize = 39*pMod*hwMod+healMod15*PF1; 
                 if healneed > ( 71*pMod*hwMod+healMod20*PF6 ) and ManaLeft >= 45*tfMod and maxRankHW >=2 then SpellID = SpellIDsHW[2]; HealSize = 71*pMod*hwMod+healMod20*PF6 end

@@ -1,3 +1,6 @@
+local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS                = AceLibrary("Babble-Spell-2.2")
+
 local function writePriestLine(s,r,g,b)
    if DEFAULT_CHAT_FRAME then
        --DEFAULT_CHAT_FRAME:AddMessage(s, r or 1, g or 1, b or 0.5)
@@ -65,20 +68,20 @@ if false then
     if CheckInteractDistance(unit, 4) then
       partyPlayerPredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - HealComm:getHeal(UnitName(unit))
       writePriestLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
-      writePriestLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
-      writePriestLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
-      writePriestLine("UnitHealthMax: " .. UnitHealthMax(unit))
-      writePriestLine("UnitHealth: " .. UnitHealth(unit))
+      writePriestLine(L["Player: "] .. k .. L[" ID: "] .. v .. L[" unit: "] .. unit)
+      writePriestLine(L["partyPlayerPredictedMissingHealth: "] .. partyPlayerPredictedMissingHealth)
+      writePriestLine(L["UnitHealthMax: "] .. UnitHealthMax(unit))
+      writePriestLine(L["UnitHealth: "] .. UnitHealth(unit))
       if partyPlayerPredictedMissingHealth < partyPlayerPredictedLeastMissingHealth then
         partyPlayerPredictedLeastMissingHealth = partyPlayerPredictedMissingHealth
       end
       partyPlayersToHeal = partyPlayersToHeal + 1
       partyPredictedMissingHealth = partyPredictedMissingHealth + partyPlayerPredictedMissingHealth
     else
-      writePriestLine("NOT Range: " .. k)
+      writePriestLine(L["NOT Range: "] .. k)
     end
 
-  local SpellIDPoH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_PRAYER_OF_HEALING);
+  local SpellIDPoH = QuickHeal_GetSpellIDs(BS['Prayer of Healing']);
   for k, v in pairs(SpellIDPoH) do
     writePriestLine(k .. " spellIDS: " .. v)
   end 
@@ -88,8 +91,8 @@ if false then
 	end
   
   
-  writePriestLine("least missing Health: " .. partyPlayerPredictedLeastMissingHealth)
-  writePriestLine("All missing Health: " .. partyPredictedMissingHealth)
+  writePriestLine(L["least missing Health: "] .. partyPlayerPredictedLeastMissingHealth)
+  writePriestLine(L["All missing Health: "] .. partyPredictedMissingHealth)
 end
 end
 
@@ -143,12 +146,12 @@ end
 
 function QuickHeal_Priest_GetRatioHealthyExplanation()
     if QuickHealVariables.RatioHealthyPriest >= QuickHealVariables.RatioFull then
-        return QUICKHEAL_SPELL_FLASH_HEAL .. " will always be used in combat, and "  .. QUICKHEAL_SPELL_LESSER_HEAL .. ", " .. QUICKHEAL_SPELL_HEAL .. " or " .. QUICKHEAL_SPELL_GREATER_HEAL .. " will be used when out of combat. ";
+        return BS['Flash Heal'] .. L[" will always be used in combat, and "]  .. BS['Lesser Heal'] .. ", " .. BS['Heal'] .. L[" or "] .. BS['Greater Heal'] .. L[" will be used when out of combat. "];
     else
         if QuickHealVariables.RatioHealthyPriest > 0 then
-            return QUICKHEAL_SPELL_FLASH_HEAL .. " will be used in combat if the target has less than " .. QuickHealVariables.RatioHealthyPriest*100 .. "% life, and " .. QUICKHEAL_SPELL_LESSER_HEAL .. ", " .. QUICKHEAL_SPELL_HEAL .. " or " .. QUICKHEAL_SPELL_GREATER_HEAL .. " will be used otherwise. ";
+            return BS['Flash Heal'] .. L[" will be used in combat if the target has less than "] .. QuickHealVariables.RatioHealthyPriest*100 .. L["% life, and "] .. BS['Lesser Heal'] .. ", " .. BS['Heal'] .. L[" or "] .. BS['Greater Heal'] .. L[" will be used otherwise. "];
         else
-            return QUICKHEAL_SPELL_FLASH_HEAL .. " will never be used. " .. QUICKHEAL_SPELL_LESSER_HEAL .. ", " .. QUICKHEAL_SPELL_HEAL .. " or " .. QUICKHEAL_SPELL_GREATER_HEAL .. " will always be used in and out of combat. ";
+            return BS['Flash Heal'] .. L[" will never be used. "] .. BS['Lesser Heal'] .. ", " .. BS['Heal'] .. L[" or "] .. BS['Greater Heal'] .. L[" will always be used in and out of combat. "];
         end
     end
 end
@@ -187,65 +190,65 @@ function QuickHeal_Priest_FindSpellToUse(Target)
     local Bonus = 0;
     if (BonusScanner) then
         Bonus = tonumber(BonusScanner:GetBonus("HEAL"));
-        QuickHeal_debug(string.format("Equipment Healing Bonus: %d", Bonus));
+        QuickHeal_debug(string.format(L["Equipment Healing Bonus: %d"], Bonus));
     end
 
     -- Spiritual Guidance - Increases spell damage and healing by up to 5% (per rank) of your total Spirit.
     local _,_,_,_,talentRank,_ = GetTalentInfo(2,14);
     local _,Spirit,_,_ = UnitStat('player',5);
     local sgMod = Spirit * 5*talentRank/100;
-    QuickHeal_debug(string.format("Spiritual Guidance Bonus: %f", sgMod));
+    QuickHeal_debug(string.format(L["Spiritual Guidance Bonus: %f"], sgMod));
 
     -- Calculate healing bonus
     local healMod15 = (1.5/3.5) * (sgMod + Bonus);
     local healMod20 = (2.0/3.5) * (sgMod + Bonus);
     local healMod25 = (2.5/3.5) * (sgMod + Bonus);
     local healMod30 = (3.0/3.5) * (sgMod + Bonus);
-    QuickHeal_debug("Final Healing Bonus (1.5,2.0,2.5,3.0)", healMod15,healMod20,healMod25,healMod30);
+    QuickHeal_debug(L["Final Healing Bonus (1.5,2.0,2.5,3.0)"], healMod15,healMod20,healMod25,healMod30);
 
     local InCombat = UnitAffectingCombat('player') or UnitAffectingCombat(Target);
   
     -- Spiritual Healing - Increases healing by 2% per rank on all spells
     local _,_,_,_,talentRank,_ = GetTalentInfo(2,15);
     local shMod = 2*talentRank/100 + 1;
-    QuickHeal_debug(string.format("Spiritual Healing modifier: %f", shMod));
+    QuickHeal_debug(string.format(L["Spiritual Healing modifier: %f"], shMod));
     
     -- Improved Healing - Decreases mana usage by 5% per rank on LH,H and GH
     local _,_,_,_,talentRank,_ = GetTalentInfo(2,10); 
     local ihMod = 1 - 5*talentRank/100;
-    QuickHeal_debug(string.format("Improved Healing modifier: %f", ihMod));
+    QuickHeal_debug(string.format(L["Improved Healing modifier: %f"], ihMod));
 
     local TargetIsHealthy = Health >= QuickHealVariables.RatioHealthyPriest;
     local ManaLeft = UnitMana('player');
 
     if TargetIsHealthy then
-        QuickHeal_debug("Target is healthy",Health);
+        QuickHeal_debug(L["Target is healthy"],Health);
     end
 
     -- Detect proc of 'Hand of Edward the Odd' mace (next spell is instant cast)
     if QuickHeal_DetectBuff('player',"Spell_Holy_SearingLight") then
-        QuickHeal_debug("BUFF: Hand of Edward the Odd (out of combat healing forced)");
+        QuickHeal_debug(L["BUFF: Hand of Edward the Odd (out of combat healing forced)"]);
         InCombat = false;
     end
 
     -- Detect Inner Focus or Spirit of Redemption (hack ManaLeft and healneed)
     if QuickHeal_DetectBuff('player',"Spell_Frost_WindWalkOn",1) or QuickHeal_DetectBuff('player',"Spell_Holy_GreaterHeal") then
-        QuickHeal_debug("Inner Focus or Spirit of Redemption active");
+        QuickHeal_debug(L["Inner Focus or Spirit of Redemption active"]);
         ManaLeft = UnitManaMax('player'); -- Infinite mana
         healneed = 10^6; -- Deliberate overheal (mana is free)
     end
 
     -- Get total healing modifier (factor) caused by healing target debuffs
     local HDB = QuickHeal_GetHealModifier(Target);
-    QuickHeal_debug("Target debuff healing modifier",HDB);
+    QuickHeal_debug(L["Target debuff healing modifier"],HDB);
     healneed = healneed/HDB;
 
     -- Get a list of ranks available for all spells
-    local SpellIDsLH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_LESSER_HEAL);
-    local SpellIDsH  = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_HEAL);
-    local SpellIDsGH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_GREATER_HEAL);
-    local SpellIDsFH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_FLASH_HEAL);
-    local SpellIDPoH = QuickHeal_GetSpellIDs(QUICKHEAL_SPELL_PRAYER_OF_HEALING);
+    local SpellIDsLH = QuickHeal_GetSpellIDs(BS['Lesser Heal']);
+    local SpellIDsH  = QuickHeal_GetSpellIDs(BS['Heal']);
+    local SpellIDsGH = QuickHeal_GetSpellIDs(BS['Greater Heal']);
+    local SpellIDsFH = QuickHeal_GetSpellIDs(BS['Flash Heal']);
+    local SpellIDPoH = QuickHeal_GetSpellIDs(BS['Prayer of Healing']);
 
     local maxRankLH = table.getn(SpellIDsLH);
     local maxRankH  = table.getn(SpellIDsH);
@@ -254,9 +257,9 @@ function QuickHeal_Priest_FindSpellToUse(Target)
     local maxRankPoH = table.getn(SpellIDPoH);
     
     for k, v in pairs(SpellIDPoH) do
-      writePriestLine("SpellIDs: " .. k .. " " .. v)
+      writePriestLine(L["SpellIDs: "] .. k .. " " .. v)
     end
-    QuickHeal_debug(string.format("Found LH up to rank %d, H up top rank %d, GH up to rank %d, and FH up to rank %d", maxRankLH, maxRankH, maxRankGH, maxRankFH));
+    QuickHeal_debug(string.format(L["Found LH up to rank %d, H up top rank %d, GH up to rank %d, and FH up to rank %d"], maxRankLH, maxRankH, maxRankGH, maxRankFH));
 
     
     local partyPlayersToHeal = 0 --why out of scope?
@@ -275,18 +278,18 @@ function QuickHeal_Priest_FindSpellToUse(Target)
         if CheckInteractDistance(unit, 4) then
           partyPlayerPredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - HealComm:getHeal(UnitName(unit))
           writePriestLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")
-          writePriestLine("Player: " .. k .. " ID: " .. v .. " unit: " .. unit)
-          writePriestLine("partyPlayerPredictedMissingHealth: " .. partyPlayerPredictedMissingHealth)
-          writePriestLine("UnitHealthMax: " .. UnitHealthMax(unit))
-          writePriestLine("UnitHealth: " .. UnitHealth(unit))
+          writePriestLine(L["Player: "] .. k .. L[" ID: "] .. v .. L[" unit: "] .. unit)
+          writePriestLine(L["partyPlayerPredictedMissingHealth: "] .. partyPlayerPredictedMissingHealth)
+          writePriestLine(L["UnitHealthMax: "] .. UnitHealthMax(unit))
+          writePriestLine(L["UnitHealth: "] .. UnitHealth(unit))
           if partyPlayerPredictedMissingHealth < partyPlayerPredictedLeastMissingHealth then
             partyPlayerPredictedLeastMissingHealth = partyPlayerPredictedMissingHealth
           end
           partyPlayersToHeal = partyPlayersToHeal + 1
-          writePriestLine("partyPlayersToHeal: " .. partyPlayersToHeal)
+          writePriestLine(L["partyPlayersToHeal: "] .. partyPlayersToHeal)
           partyPredictedMissingHealth = partyPredictedMissingHealth + partyPlayerPredictedMissingHealth
         else
-          writePriestLine("NOT Range: " .. k)
+          writePriestLine(L["NOT Range: "] .. k)
         end
       end
       
@@ -312,7 +315,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       -- Find suitable SpellID based on the defined criteria
       if not InCombat or TargetIsHealthy or maxRankFH<1 then
           -- Not in combat or target is healthy so use the closest available mana efficient healing
-          QuickHeal_debug(string.format("Not in combat or target healthy or no flash heal available, will use closest available LH, H or GH (not FH)"))
+          QuickHeal_debug(string.format(L["Not in combat or target healthy or no flash heal available, will use closest available LH, H or GH (not FH)"]))
           if Health < QuickHealVariables.RatioFull then
               SpellID = SpellIDsLH[1]; HealSize = 53*shMod+healMod15*PF1; -- Default to LH
               if healneed > (  84*shMod+healMod20*PF4) *k and ManaLeft >=  45*ihMod and maxRankLH >=2 and quickHealDownRankNH >= 2  then SpellID = SpellIDsLH[2]; HealSize =   84*shMod+healMod20*PF4  end
@@ -329,7 +332,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
           end                                                                                                          
       else
           -- In combat and target is unhealthy and player has flash heal
-          QuickHeal_debug(string.format("In combat and target unhealthy and player has flash heal, will only use FH"));
+          QuickHeal_debug(string.format(L["In combat and target unhealthy and player has flash heal, will only use FH"]));
           if Health < QuickHealVariables.RatioFull then
               SpellID = SpellIDsFH[1]; HealSize = 215*shMod+healMod15; -- Default to FH
               if healneed > (286*shMod+healMod15)*k and ManaLeft >= 155 and maxRankFH >=2 and quickHealDownRankFH >= 2 then SpellID = SpellIDsFH[2]; HealSize = 286*shMod+healMod15 end
@@ -384,7 +387,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
       if healneed > (885*shMod+healMod15)*k and ManaLeft >= 380 and maxRankFH >=7 and quickHealDownRankFH >= 7 then SpellIDFH = SpellIDsFH[7]; HealSizeFH = 885*shMod+healMod15 end
       
       --Check Prayer of Heal
-      writePriestLine("healneedGrp: " .. healneedGrp)
+      writePriestLine(L["healneedGrp: "] .. healneedGrp)
       SpellIDGrp = SpellIDPoH[1]; HealSizePoH = 0
       if healneedGrp > (311*shMod+healMod30/2 ) *k and ManaLeft  >=  410  and maxRankPoH >=1 and quickHealDownRankNH >= 8  then SpellIDGrp = SpellIDPoH[1]; HealSizePoH =   311*shMod+healMod30/2 end
       if healneedGrp > (458*shMod+healMod30/2 ) *k and ManaLeft  >=  560  and maxRankPoH >=1 and quickHealDownRankNH >= 9  then SpellIDGrp = SpellIDPoH[2]; HealSizePoH =   458*shMod+healMod30/2 end
@@ -406,27 +409,27 @@ function QuickHeal_Priest_FindSpellToUse(Target)
         SpellID = SpellIDNH
         --writePriestLine("Set SpellID: " ..SpellID .. " from SpellIDNH " .. SpellIDNH)
         HealSize = HealSizeNH
-        writePriestLine("HealSizePoH: " .. HealSizePoH .. ", in PoH Range: " .. partyPlayersToHeal)
-        writePriestLine("HPS_NH: " .. HealHPS)
-        writePriestLine("HPS_FH: " .. HPS_FH)
-        writePriestLine("HPS_PoH: " .. HPS_PoH)  
+        writePriestLine(L["HealSizePoH: "] .. HealSizePoH .. L[", in PoH Range: "] .. partyPlayersToHeal)
+        writePriestLine(L["HPS_NH: "] .. HealHPS)
+        writePriestLine(L["HPS_FH: "] .. HPS_FH)
+        writePriestLine(L["HPS_PoH: "] .. HPS_PoH)  
         --writePriestLine(HPS_FH .. " > " .. HealHPS)
       end
       if HPS_FH > HealHPS then
         SpellID = SpellIDFH
         --writePriestLine("Set SpellID: " .. SpellID .. " from SpellIDFH " .. SpellIDFH)
-        writePriestLine("USING FH")
+        writePriestLine(L["USING FH"])
         HealSize = HealSizeFH
       end
       if HPS_PoH > HealHPS then
-        writePriestLine("USING POH")
+        writePriestLine(L["USING POH"])
         SpellID = SpellIDGrp
-        writePriestLine("Set SpellID: " .. SpellID .. " from SpellIDGrp " .. SpellIDGrp)
+        writePriestLine(L["Set SpellID: "] .. SpellID .. L[" from SpellIDGrp "] .. SpellIDGrp)
         HealSize = HealSizePoH
       end
      
     --QuickHealHealInfoFrameFontstring:SetText("HPS_NH: " .. math.floor(HealHPS) .. " | HPS_FH: " .. math.floor(HPS_FH) .. " | HPS_PoH: " .. math.floor(HPS_PoH))
     end
-    writePriestLine("Final SpellID: " .. SpellID)
+    writePriestLine(L["Final SpellID: "] .. SpellID)
     return SpellID,HealSize*HDB;
 end
