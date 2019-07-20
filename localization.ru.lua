@@ -345,3 +345,4 @@ L:RegisterTranslations("ruRU", function() return {
     ["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
     
 } end)
+
