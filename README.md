@@ -59,6 +59,7 @@ The Heal mode can tbe set with macro or Key bind. The ">" indicate the selected 
 hc05: (get from Branch)
 - Healmodes for Paladins and Priests now controll the spells used. See How to Use
 - Priests: in healmode 3 Prayer of Heal is cast if possible
+- Finalization of the addon, for the possibility of localization. shikulja, Special thanks, for the help and instructions Lichery.
 
 hc04:
 - new command: /qh healpct - Will prioritise the player with the lowest percentage of health. (override changes of hc03, where priests heal the target with the most healing needed and paladins the lowest target)
