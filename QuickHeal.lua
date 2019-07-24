@@ -477,10 +477,10 @@ end
 
 -- Items in the MessageConfigure ComboBox
 function QuickHeal_ComboBoxMessageConfigure_Fill()
-    UIDropDownMenu_AddButton{ text = L["Healing (Green)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Healing" };
-    UIDropDownMenu_AddButton{ text = L["Info (Blue)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Info" };
-    UIDropDownMenu_AddButton{ text = L["Blacklist (Yellow)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Blacklist" };
-    UIDropDownMenu_AddButton{ text = L["Error (Red)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Error" };
+    UIDropDownMenu_AddButton{ text = L["Healing (Green)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = L["Healing"] };
+    UIDropDownMenu_AddButton{ text = L["Info (Blue)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = L["Info"] };
+    UIDropDownMenu_AddButton{ text = L["Blacklist (Yellow)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = L["Blacklist"] };
+    UIDropDownMenu_AddButton{ text = L["Error (Red)"]; func = QuickHeal_ComboBoxMessageConfigure_Click; value = L["Error"] };
 end
 -- Function for handling clicks on the MessageConfigure ComboBox
 function QuickHeal_ComboBoxMessageConfigure_Click()
@@ -1293,7 +1293,7 @@ local function ExecuteHeal(Target,SpellID)
 
     -- The spell is awaiting target selection, write to screen if the spell can actually be cast
     if SpellName == BS['Prayer of Healing'] then
-      Message(L["Casting "] .. BS['Prayer of Healing'] .. " (" .. SpellRank .. ")", "Healing", 3)
+      Message(L["Casting "] .. BS['Prayer of Healing'] .. " (" .. SpellRank .. ")", L["Healing"], 3)
     end
     if SpellCanTargetUnit(Target) or ((Target == 'target') and HealingTarget) then
 
@@ -1301,9 +1301,9 @@ local function ExecuteHeal(Target,SpellID)
 
         -- Write to center of screen
         if UnitIsUnit(Target,'player') then
-            Message(string.format(L["Casting %s on yourself"], SpellNameAndRank),"Healing",3)
+            Message(string.format(L["Casting %s on yourself"], SpellNameAndRank),L["Healing"],3)
         else
-            Message(string.format(L["Casting %s on %s"],SpellNameAndRank,UnitFullName(Target)),"Healing",3)
+            Message(string.format(L["Casting %s on %s"],SpellNameAndRank,UnitFullName(Target)),L["Healing"],3)
         end
     end
 
@@ -1361,7 +1361,7 @@ function QuickHeal(Target,SpellID,extParam)
             Restrict = Target;
             Target = nil;
         else
-            Message(L["You are not in a raid"],"Error",2);            
+            Message(L["You are not in a raid"],L["Error"],2);            
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
             return;
@@ -1383,13 +1383,13 @@ function QuickHeal(Target,SpellID,extParam)
             else
                 -- Does not need healing
                 if UnitIsUnit(Target,'player') then
-                    Message(L["You don't need healing"],"Info",2);
+                    Message(L["You don't need healing"],L["Info"],2);
                 elseif Target == 'target' then
-                    Message(UnitFullName('target') .. L[" doesn't need healing"],"Info",2);
+                    Message(UnitFullName('target') .. L[" doesn't need healing"],L["Info"],2);
                 elseif Target == "targettarget" then
-                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") doesn't need healing"],"Info",2);
+                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") doesn't need healing"],L["Info"],2);
                 else
-                    Message(UnitFullName(Target) .. L[" doesn't need healing"],"Info",2);
+                    Message(UnitFullName(Target) .. L[" doesn't need healing"],L["Info"],2);
                 end
                 SetCVar("autoSelfCast",AutoSelfCast);
                 QuickHealBusy = false;
@@ -1397,24 +1397,24 @@ function QuickHeal(Target,SpellID,extParam)
             end
         else -- Unit is not healable, report reason and return
             if Target == 'target' and not UnitExists('target') then
-                Message(L["You don't have a target"],"Error",2);
+                Message(L["You don't have a target"],L["Error"],2);
             elseif Target == 'targettarget' then
                 if not UnitExists('target') then
-                    Message(L["You don't have a target"],"Error",2);
+                    Message(L["You don't have a target"],L["Error"],2);
                 elseif not UnitExists('targettarget') then
-                    Message((UnitFullName('target') or L["Target"]) .. L[" doesn't have a target"],"Error",2);
+                    Message((UnitFullName('target') or L["Target"]) .. L[" doesn't have a target"],L["Error"],2);
                 else
-                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") cannot be healed"],"Error",2);
+                    Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") cannot be healed"],L["Error"],2);
                 end
             elseif UnitExists(Target) then
                 -- Unit exists but cannot be healed
                 if UnitIsUnit(Target,'player') then
-                    Message(L["You cannot be healed"],"Error",2);
+                    Message(L["You cannot be healed"],L["Error"],2);
                 else
-                    Message(UnitFullName(Target) .. L[" cannot be healed"],"Error",2);
+                    Message(UnitFullName(Target) .. L[" cannot be healed"],L["Error"],2);
                 end
             else
-                Message(L["Unit does not exist"],"Error",2);
+                Message(L["Unit does not exist"],L["Error"],2);
             end
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
@@ -1434,14 +1434,14 @@ function QuickHeal(Target,SpellID,extParam)
                         break;
                     end
                     if not tanks then
-                        Message(L["No players assigned as Main Tank by Raid Leader"],"Error",2);
+                        Message(L["No players assigned as Main Tank by Raid Leader"],L["Error"],2);
                     else
-                        Message(L["No Main Tank to heal"],"Info",2);
+                        Message(L["No Main Tank to heal"],L["Info"],2);
                     end
                 elseif InParty() or InRaid() then
-                    Message(L["No one to heal"],"Info",2);
+                    Message(L["No one to heal"],L["Info"],2);
                 else
-                    Message(L["You don't need healing"],"Info",2);
+                    Message(L["You don't need healing"],L["Info"],2);
                 end
             end
             SetCVar("autoSelfCast",AutoSelfCast);
@@ -1487,7 +1487,7 @@ function QuickHeal(Target,SpellID,extParam)
         end
         if not SpellID then
             -- Failed to decode the string
-            Message(L["Spell not found"],"Error",2);
+            Message(L["Spell not found"],L["Error"],2);
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
             return;
@@ -1497,7 +1497,7 @@ function QuickHeal(Target,SpellID,extParam)
     if SpellID then
         ExecuteHeal(Target,SpellID);
     else
-        Message(L["You have no healing spells to cast"],"Error",2);
+        Message(L["You have no healing spells to cast"],L["Error"],2);
     end
 
     SetCVar("autoSelfCast",AutoSelfCast);

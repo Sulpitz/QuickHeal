@@ -51,7 +51,7 @@ if GetLocale() == "ruRU" then
     QH_HEALING_BAR = "Полоса лечения";
     QH_NOT = " не ";
     QH_DISPLAYED = "отображается.";
-    QH_HEALING = "Healing"; -- not translate XML-827, need add to main lua     UIDropDownMenu_SetSelectedValue(this,"Healing");
+    QH_HEALING = "Healing"; -- XML-827, depends on - Deliver message ["Healing"] = (translate exactly the same)
     QH_MESSAGES = " - сообщения";
     QH_DELIVERED_CENTER_SCREEN = "будут показаны по центру экрана";
     QH_DELIVERED_CHAT_WINDOW = "будут доставлены в чат.";
@@ -179,10 +179,10 @@ L:RegisterTranslations("ruRU", function() return {
     [" Configuration"] = " Настройки",
     ["Click to toggle configuration panel"] = "Нажмите, чтобы открыть панель настроек",
     -- Deliver message
-    ["Healing"] = "Healing",     -- Надо проверять
-    ["Info"] = "Info",
-    ["Blacklist"] = "Blacklist",
-    ["Error"] = "Error",
+    ["Healing"] = "Healing",     -- Ломает Сообщения на экране, не переводить.
+    ["Info"] = "Info",											--
+    ["Blacklist"] = "Blacklist", --
+    ["Error"] = "Error",									--
     -- QuickHeal_ListUnitEffects
     ["|cffffff80******* Buffs on "] = "|cffffff80******* Баффы на ",
     ["Unknown"]= "Неизвестно",
@@ -345,4 +345,3 @@ L:RegisterTranslations("ruRU", function() return {
     ["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
     
 } end)
-

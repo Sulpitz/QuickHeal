@@ -49,7 +49,7 @@ QH_CHECK_HEALING_MOUSE = "Check this option to enable healing with the mouse";
 QH_HEALING_BAR = "Healing bar is";
 QH_NOT = " not ";
 QH_DISPLAYED = "displayed.";
-QH_HEALING = "Healing"; -- not translate XML-827, need add to main lua
+QH_HEALING = "Healing"; -- XML-827, depends on - Deliver message ["Healing"] = (translate exactly the same)
 QH_MESSAGES = " messages are";
 QH_DELIVERED_CENTER_SCREEN = "delivered to center of screen.";
 QH_DELIVERED_CHAT_WINDOW = "delivered to chat window.";
@@ -175,10 +175,10 @@ L:RegisterTranslations("enUS", function() return {
     [" Configuration"] = true,
     ["Click to toggle configuration panel"] = true,
     -- Deliver message
-    ["Healing"] = true,     -- Надо проверять
-    ["Info"] = true,
-    ["Blacklist"] = true,
-    ["Error"] = true,
+    ["Healing"] = true,     -- Breaks messages on the screen, do not translate.
+    ["Info"] = true,								--
+    ["Blacklist"] = true,			--
+    ["Error"] = true,							--
     -- QuickHeal_ListUnitEffects
     ["|cffffff80******* Buffs on "] = true,
     ["Unknown"]= true,
@@ -206,7 +206,7 @@ L:RegisterTranslations("enUS", function() return {
     ["Normal"] = true,
     ["Role-Playing"] = true,
     -- Items in the MessageConfigure ComboBox
-    ["Healing (Green)"] = true,         -- Значения переменных типа Blacklist не менялись
+    ["Healing (Green)"] = true,
     ["Info (Blue)"] = true,
     ["Blacklist (Yellow)"] = true,
     ["Error (Red)"] = true,
