@@ -1402,7 +1402,7 @@ function QuickHeal(Target,SpellID,extParam)
                 if not UnitExists('target') then
                     Message(L["You don't have a target"],L["Error"],2);
                 elseif not UnitExists('targettarget') then
-                    Message((UnitFullName('target') or L["Target"]) .. L[" doesn't have a target"],L["Error"],2);
+                    Message((UnitFullName('target') or "Target") .. L[" doesn't have a target"],L["Error"],2);
                 else
                     Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") cannot be healed"],L["Error"],2);
                 end
