@@ -303,19 +303,18 @@ L:RegisterTranslations("ruRU", function() return {
     -- Does not need healing
     ["You don't need healing"] = "Тебе не нужно лечение",
     [" doesn't need healing"] = " не нужно лечение",
-    ["'s Target ("] = "'s Цель (",
+    ["'s Target ("] = " - Цель (",
     [") doesn't need healing"] = ") не нуждается в лечении",
     -- Unit is not healable, report reason and return
     ["You don't have a target"] = "У вас нет цели",
     [" doesn't have a target"] = " нет цели",
     [") cannot be healed"] = ") не может быть вылечена",
     -- Unit exists but cannot be healed
-    ["Target"] = "Target", -- ??
     ["You cannot be healed"] = "Ты не можешь быть вылечен",
     ["Unit does not exist"] = "Единица не существует",
     -- Means that FindWhoToHeal couldn't cast the CheckSpell
     ["No players assigned as Main Tank by Raid Leader"] = "Нет игроков назначеных Главными Танками Рейд Лидером",
-    ["No Main Tank to heal"] = "Нет главного Танка для лечения",
+    ["No Main Tank to heal"] = "Нет Главного танка для лечения",
     ["No one to heal"] = "Не кого лечить",
     ["You don't need healing"] = "Вам не нужно лечение",
     -- Target acquired
@@ -338,8 +337,8 @@ L:RegisterTranslations("ruRU", function() return {
     ["/qh target - Forces the target of the healing to be your current target."] = "/qh target - Принудительно цель исцеления - ваша цель.",
     ["/qh targettarget - Forces the target of the healing to be your current target's target."] = "/qh targettarget - Принудительно цель исцеления - цель вашей цели.",
     ["/qh party - Restricts the healing to the party when in a raid."] = "/qh party - Ограничение лечения рейда, для вашей группы.",
-    ["/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA."] = "/qh mt - Ограничение лечения, для Главных Танков назначенных РЛ в CTRaidAssist или oRA.",
-    ["/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA."] = "/qh nonmt - Ограничение лечения, для лечения игроков не назначенных как главные Танки РЛ в CTRaidAssist или oRA.",
+    ["/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA."] = "/qh mt - Ограничение лечения, для Главных танков назначенных РЛ в CTRaidAssist или oRA.",
+    ["/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA."] = "/qh nonmt - Ограничение лечения, для лечения игроков не назначенных как Главные танки РЛ в CTRaidAssist или oRA.",
     ["/qh subgroup - Forces the healing to the groups selected in the configuration panel."] = "/qh subgroup - Принудительно лечение группы выбранной в панели настройки.",
     ["/qh reset - Reset configuration to default parameters for all classes."] = "/qh reset - Сброс настроек до стандартных значений.",
     ["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
