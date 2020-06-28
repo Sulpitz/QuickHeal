@@ -306,7 +306,6 @@ L:RegisterTranslations("enUS", function() return {
     [" doesn't have a target"] = true,
     [") cannot be healed"] = true,
     -- Unit exists but cannot be healed
-    ["Target"] = true, -- ??
     ["You cannot be healed"] = true,
     ["Unit does not exist"] = true,
     -- Means that FindWhoToHeal couldn't cast the CheckSpell
