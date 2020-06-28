@@ -9,7 +9,7 @@ QuickHeal для Vanilla WoW 1.12. с интеграцией HealComm (Luna unit
 Я выбрал оригинальную версию QuickHeal здесь https://wow.curseforge.com/projects/project-2800.
 
 # Установка
-- Скачать QuickHeal их этого репозитария в вашу папку Interface и удалите "-master" в имени папки
+- Скачать QuickHeal из этого репозитария в вашу папку Interface и удалите "-master" в имени папки
 - Скачать HealComm или Luna unit Frames: https://github.com/Aviana/LunaUnitFrames
 - Скачать Bonusscanner (Делает QuickHeal и HealComm (Luna unit Frames) более аккуратным с учетом снаряжения и +исцеления: http://www.vanilla-addons.com/dls/bonusscanner/
 
@@ -30,7 +30,6 @@ Quick Heal теперь использует информацию поступа
 ![Keybind Quick Heal](https://empty.link)
 
 - Понижение уровня
-To conserve mana and heal more effitiently you can limit the max rank that Quick Heal will use. It is done by moving the slider. on the Downrank Window. "/qh dr" to open the Downrank Window.
 Чтобы сохранить ману и лечить более эффективно, вы можете ограничить максимальный уровень, который будет использовать Quick Heal. Это делается путем перемещения ползунка. в окне понижения уровня. "/qh dr", чтобы открыть окно.
 ![Open Downrank Window](https://empty.link)
 ![Downrank Window](https://github.com/shikulja/QuickHeal/blob/rework-healmodes-and-max-HPS/screens/dr_Scrn.png?raw=true)
@@ -47,7 +46,7 @@ To conserve mana and heal more effitiently you can limit the max rank that Quick
 Паладин: Будет использоваться только Свет небес
  
 "/qh hm 3" - Большой ХПС
-Будет проиводить лечение с большим ХПС.
+Будет производить лечение с большим ХПС.
 Жрец: произносит молитву исцеления, если это возможно
 
 Режим лечения можно установить с помощью макроса или привязки клавиш. ">" Обозначает выбранный режим.
@@ -57,11 +56,11 @@ To conserve mana and heal more effitiently you can limit the max rank that Quick
 
 hc05: (брать из Ветки)
 - Режимы исцеления для Паладинов и Жрецов теперь контролируются используемые заклинания. Смотреть как использовать
-- Жрецы: в Режиме исцеления 3 Молитвая исцеления произносится если возможно
+- Жрецы: в Режиме исцеления 3 произносится Молитва исцеления если возможно
 - Переработка аддона, для возможности локализации. shikulja, Особая благодарность, за помощь и наставления Lichery.
 
 hc04:
-- новая команда: /qh healpct - Приоритет будет отдаваться игроку с наименьшим процентом здоровья. (переопределяет изменения hc03, Жрецы исцеляют цель - наибольшим количеством необходимых исцелений, а Паладины - самую низкую по здаровью цель)
+- новая команда: /qh healpct - Приоритет будет отдаваться игроку с наименьшим процентом здоровья. (переопределяет изменения hc03, Жрецы исцеляют цель - наибольшим количеством необходимых исцелений, а Паладины - самую низкую по здоровью цель)
 
 hc03:
 - /qh downrank or /qh dr переключает окно, в котором можно установить максимальный ранг заклинания для заклинаний исцеления. (удерживайте правую кнопку мыши на рамке, чтобы перетащить окно)
