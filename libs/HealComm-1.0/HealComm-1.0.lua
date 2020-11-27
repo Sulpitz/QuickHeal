@@ -1,216 +1,361 @@
 --[[
 Name: HealComm-1.0
-Revision: $Rev: 11430 $
+Revision: $Rev: 11732 $
 Author(s): aviana
 Website: https://github.com/Aviana
 Description: A library to provide communication of heals and resurrections.
-Dependencies: AceLibrary, AceEvent-2.0, RosterLib-2.0
+Dependencies: AceLibrary, AceEvent-2.0, RosterLib-2.0, ItemBonusLib-1.0
 ]]
 
 local MAJOR_VERSION = "HealComm-1.0"
-local MINOR_VERSION = "$Revision: 11430 $"
+local MINOR_VERSION = "$Revision: 11732 $"
 
 if not AceLibrary then error(MAJOR_VERSION .. " requires AceLibrary") end
 if not AceLibrary:IsNewVersion(MAJOR_VERSION, MINOR_VERSION) then return end
 if not AceLibrary:HasInstance("RosterLib-2.0") then error(MAJOR_VERSION .. " requires RosterLib-2.0") end
 if not AceLibrary:HasInstance("AceEvent-2.0") then error(MAJOR_VERSION .. " requires AceEvent-2.0") end
 if not AceLibrary:HasInstance("AceHook-2.1") then error(MAJOR_VERSION .. " requires AceHook-2.1") end
+if not AceLibrary:HasInstance("ItemBonusLib-1.0") then error(MAJOR_VERSION .. " requires ItemBonusLib-1.0") end
 
 local roster = AceLibrary("RosterLib-2.0")
-local console = AceLibrary("AceConsole-2.0") --HCSpy
+local itemBonus = AceLibrary("ItemBonusLib-1.0")
+local L = AceLibrary("AceLocale-2.2"):new("HealComm-1.0")
 local HealComm = {}
 
 ------------------------------------------------
 -- Locales
 ------------------------------------------------
 
-local L = {}
-if( GetLocale() == "deDE" ) then
-	L["Renew"] = "Erneuerung"
-	L["Rejuvenation"] = "Verj\195\188ngung"
-	L["Holy Light"] = "Heiliges Licht"
-	L["Flash of Light"] = "Lichtblitz"
-	L["Healing Wave"] = "Welle der Heilung"
-	L["Lesser Healing Wave"] = "Geringe Welle der Heilung"
-	L["Chain Heal"] = "Kettenheilung"
-	L["Lesser Heal"] = "Geringes Heilen"
-	L["Heal"] = "Heilen"
-	L["Flash Heal"] = "Blitzheilung"
-	L["Greater Heal"] = "Große Heilung"
-	L["Prayer of Healing"] = "Gebet der Heilung"
-	L["Healing Touch"] = "Heilende Ber\195\188hrung"
-	L["Regrowth"] = "Nachwachsen"
-	L["Resurrection"] = "Wiederbelebung"
-	L["Rebirth"] = "Wiedergeburt"
-	L["Redemption"] = "Erl\195\182sung"
-	L["Ancestral Spirit"] = "Geist der Ahnen"
-	L["Libram of Divinity"] = "Buchband der Offenbarung"
-	L["Libram of Light"] = "Buchband des Lichts"
-	L["Totem of Sustaining"] = "Totem der Erhaltung"
-	L["Totem of Life"] = "Totem des Lebens"
-	L["Power Infusion"] = "Seele der Macht"
-	L["Divine Favor"] = "G\195\182ttliche Gunst"
-	L["Nature Aligned"] = "Naturverbundenheit"
-	L["Crusader's Wrath"] = "Zorn des Kreuzfahrers"
-	L["The Furious Storm"] = "Der wilde Sturm"
-	L["Holy Power"] = "Heilige Kraft"
-	L["Prayer Beads Blessing"] = "Segen der Gebetsperlen"
-	L["Chromatic Infusion"] = "Erf\195\188llt mit chromatischer Macht"
-	L["Ascendance"] = "\154berlegenheit"
-	L["Ephemeral Power"] = "Ephemere Macht"
-	L["Unstable Power"] = "Instabile Macht"
-	L["Healing of the Ages"] = "Heilung der Urzeiten"
-	L["Essence of Sapphiron"] = "Essenz Saphirons"
-	L["The Eye of the Dead"] = "Das Auge des Todes"
-	L["Mortal Strike"] = "T\195\182dlicher Stoß"
-	L["Wound Poison"] = "Wundgift"
-	L["Curse of the Deadwood"] = "Fluch der Totenwaldfelle"
-	L["Veil of Shadow"] = "Schattenschleier"
-	L["Gehennas' Curse"] = "Gehennas' Fluch"
-	L["Mortal Wound"] = "Trauma"
-	L["Necrotic Poison"] = "Nekrotisches Gift"
-	L["Necrotic Aura"] = "Nekrotische Aura"
-	L["Healing Way"] = "Pfad der Heilung"
-	L["Warsong Gulch"] = "Kriegshymnenschlucht"
-	L["Arathi Basin"] = "Arathibecken"
-	L["Alterac Valley"] = "Alteractal"
-	L["Blessing of Light"] = "Segen des Lichts"
-	L["Blood Fury"] = "Kochendes Blut"
-	L["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Set: Erh\195\182ht die Dauer Eures Zaubers \'Verj\195\188ngung\' um 3 Sek."
-	L["Set: Increases the duration of your Renew spell by 3 sec."] = "Set: Erh\195\182ht die Dauer Eures Zaubers 'Erneuerung' um 3 Sek."
-	L["^Corpse of (.+)$"] = "^Leichnam von (.+)$"
-elseif ( GetLocale() == "frFR" ) then
-	L["Renew"] = "R\195\169novation"
-	L["Rejuvenation"] = "R\195\169cup\195\169ration"
-	L["Holy Light"] = "Lumi\195\168re sacr\195\169e"
-	L["Flash of Light"] = "Eclair lumineux"
-	L["Healing Wave"] = "Vague de soins"
-	L["Lesser Healing Wave"] = "Vague de soins inf\195\169rieurs"
-	L["Chain Heal"] = "Salve de gu\195\169rison"
-	L["Lesser Heal"] = "Soins inf\195\169rieurs"
-	L["Heal"] = "Soins"
-	L["Flash Heal"] = "Soins rapides"
-	L["Greater Heal"] = "Soins sup\195\169rieurs"
-	L["Prayer of Healing"] = "Pri\195\168re de soins"
-	L["Healing Touch"] = "Toucher gu\195\169risseur"
-	L["Regrowth"] = "R\195\169tablissement"
-	L["Resurrection"] = "R\195\169surrection"
-	L["Rebirth"] = "Renaissance"
-	L["Redemption"] = "R\195\169demption"
-	L["Ancestral Spirit"] = "Esprit ancestral"
-	L["Libram of Divinity"] = "Libram de divinit\195\169"
-	L["Libram of Light"] = "Libram de lumi\195\168re"
-	L["Totem of Sustaining"] = "Totem de soutien"
-	L["Totem of Life"] = "Totem de vie"
-	L["Power Infusion"] = "Infusion de puissance"
-	L["Divine Favor"] = "Faveur divine"
-	L["Nature Aligned"] = "Alignement sur la nature"
-	L["Crusader's Wrath"] = "Col\195\168re du crois\195\169"
-	L["The Furious Storm"] = "La temp\195\170te furieuse"
-	L["Holy Power"] = "Puissance sacr\195\169e"
-	L["Prayer Beads Blessing"] = "B\195\169n\195\169diction du chapelet"
-	L["Chromatic Infusion"] = "Infusion chromatique"
-	L["Ascendance"] = "Ascendance"
-	L["Ephemeral Power"] = "Puissance \195\169ph\195\169m\195\168re"
-	L["Unstable Power"] = "Puissance instable"
-	L["Healing of the Ages"] = "Soins des \195\162ges"
-	L["Essence of Sapphiron"] = "Essence de Saphiron"
-	L["The Eye of the Dead"] = "L'Oeil du mort"
-	L["Mortal Strike"] = "Frappe mortelle"
-	L["Wound Poison"] = "Poison douloureux"
-	L["Curse of the Deadwood"] = "Mal\195\169diction des Mort-bois"
-	L["Veil of Shadow"] = "Voile de l'ombre"
-	L["Gehennas' Curse"] = "Mal\195\169diction de Gehennas"
-	L["Mortal Wound"] = "Blessures mortelles"
-	L["Necrotic Poison"] = "Poison n\195\169crotique"
-	L["Necrotic Aura"] = "Aura n\195\169crotique"
-	L["Healing Way"] = "Flots de soins"
-	L["Warsong Gulch"] = "Goulet des Warsong"
-	L["Arathi Basin"] = "Bassin d'Arathi"
-	L["Alterac Valley"] = "Vall\195\169e d'Alterac"
-	L["Blood Fury"] = "Fureur sanguinaire"
-	L["Blessing of Light"] = "B\195\169n\195\169diction de lumi\195\168re"
-	L["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Set: Augmente la dur\195\169e de votre sort R\195\169cup\195\169ration de 3 s."
-	L["Set: Increases the duration of your Renew spell by 3 sec."] = "Set: Augmente la dur\195\169e de votre sort R\195\169novation de 3 s."
-	L["^Corpse of (.+)$"] = "^Cadavre |2 (.+)$"
-elseif GetLocale() == "zhCN" then
-	if AceLibrary:HasInstance("Babble-Spell-2.2") then
-		L.BS = AceLibrary("Babble-Spell-2.2")
-	end
-	if AceLibrary:HasInstance("Babble-Zone-2.2") then
-		L.BZ = AceLibrary("Babble-Zone-2.2")
-	end
-	setmetatable(L, {__index = function(table, key)
-		if table.BS and table.BS:HasTranslation(key) then
-			return table.BS[key]
-		elseif table.BZ and table.BZ:HasTranslation(key) then
-			return table.BZ[key]
-		end
-	end})
-	L["Libram of Divinity"] = "神性圣契"
-	L["Libram of Light"] = "光明圣契"
-	L["Necrotic Aura"] = "死灵光环"  -- 这个技能不知道是否存在
-	L["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "套装：使你的回春术的持续时间延长3秒。" -- T2
-	L["Set: Increases the duration of your Renew spell by 3 sec."] = "套装：使你的恢复术的持续时间延长3秒。" -- T2.5
-	L["Totem of Life"] = "生命图腾"
-	L["Totem of Sustaining"] = "持久图腾"
-	L["^Corpse of (.+)$"] = "(.+)的尸体"
-else
-	L["Renew"] = "Renew"
-	L["Rejuvenation"] = "Rejuvenation"
-	L["Holy Light"] = "Holy Light"
-	L["Flash of Light"] = "Flash of Light"
-	L["Healing Wave"] = "Healing Wave"
-	L["Lesser Healing Wave"] = "Lesser Healing Wave"
-	L["Chain Heal"] = "Chain Heal"
-	L["Lesser Heal"] = "Lesser Heal"
-	L["Heal"] = "Heal"
-	L["Flash Heal"] = "Flash Heal"
-	L["Greater Heal"] = "Greater Heal"
-	L["Prayer of Healing"] = "Prayer of Healing"
-	L["Healing Touch"] = "Healing Touch"
-	L["Regrowth"] = "Regrowth"
-	L["Resurrection"] = "Resurrection"
-	L["Rebirth"] = "Rebirth"
-	L["Redemption"] = "Redemption"
-	L["Ancestral Spirit"] = "Ancestral Spirit"
-	L["Libram of Divinity"] = "Libram of Divinity"
-	L["Libram of Light"] = "Libram of Light"
-	L["Totem of Sustaining"] = "Totem of Sustaining"
-	L["Totem of Life"] = "Totem of Life"
-	L["Power Infusion"] = "Power Infusion"
-	L["Divine Favor"] = "Divine Favor"
-	L["Nature Aligned"] = "Nature Aligned"
-	L["Crusader's Wrath"] = "Crusader's Wrath"
-	L["The Furious Storm"] = "The Furious Storm"
-	L["Holy Power"] = "Holy Power"
-	L["Prayer Beads Blessing"] = "Prayer Beads Blessing"
-	L["Chromatic Infusion"] = "Chromatic Infusion"
-	L["Ascendance"] = "Ascendance"
-	L["Ephemeral Power"] = "Ephemeral Power"
-	L["Unstable Power"] = "Unstable Power"
-	L["Healing of the Ages"] = "Healing of the Ages"
-	L["Essence of Sapphiron"] = "Essence of Sapphiron"
-	L["The Eye of the Dead"] = "The Eye of the Dead"
-	L["Mortal Strike"] = "Mortal Strike"
-	L["Wound Poison"] = "Wound Poison"
-	L["Curse of the Deadwood"] = "Curse of the Deadwood"
-	L["Veil of Shadow"] = "Veil of Shadow"
-	L["Gehennas' Curse"] = "Gehennas' Curse"
-	L["Mortal Wound"] = "Mortal Wound"
-	L["Necrotic Poison"] = "Necrotic Poison"
-	L["Necrotic Aura"] = "Necrotic Aura"
-	L["Healing Way"] = "Healing Way"
-	L["Warsong Gulch"] = "Warsong Gulch"
-	L["Arathi Basin"] = "Arathi Basin"
-	L["Alterac Valley"] = "Alterac Valley"
-	L["Blessing of Light"] = "Blessing of Light"
-	L["Blood Fury"] = "Blood Fury"
-	L["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Set: Increases the duration of your Rejuvenation spell by 3 sec."
-	L["Set: Increases the duration of your Renew spell by 3 sec."] = "Set: Increases the duration of your Renew spell by 3 sec."
-	L["^Corpse of (.+)$"] = "^Corpse of (.+)$"
-end
-	
+L:RegisterTranslations("enUS", function() return {
+	["Libram of Divinity"] = true,
+	["Libram of Light"] = true,
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = true,
+	["Set: Increases the duration of your Renew spell by 3 sec."] = true,
+	["Totem of Life"] = true,
+	["Totem of Sustaining"] = true,
+	["^Corpse of (.+)$"] = true,
+	["Holy Light"] = true,
+	["Flash of Light"] = true,
+	["Lesser Heal"] = true,
+	["Heal"] = true,
+	["Greater Heal"] = true,
+	["Flash Heal"] = true,
+	["Prayer of Healing"] = true,
+	["Lesser Healing Wave"] = true,
+	["Healing Wave"] = true,
+	["Chain Heal"] = true,
+	["Healing Touch"] = true,
+	["Regrowth"] = true,
+	["Resurrection"] = true;
+	["Rebirth"] = true;
+	["Redemption"] = true;
+	["Ancestral Spirit"] = true;
+	["Renew"] = true;
+	["Rejuvenation"] = true;
+	["Power Infusion"] = true,
+	["Divine Favor"] = true,
+	["Nature Aligned"] = true,
+	["Crusader's Wrath"] = true,
+	["The Furious Storm"] = true,
+	["Holy Power"] = true,
+	["Prayer Beads Blessing"] = true,
+	["Chromatic Infusion"] = true,
+	["Ascendance"] = true,
+	["Ephemeral Power"] = true,
+	["Unstable Power"] = true,
+	["Healing of the Ages"] = true,
+	["Essence of Sapphiron"] = true,
+	["The Eye of the Dead"] = true,
+	["Mortal Strike"] = true,
+	["Wound Poison"] = true,
+	["Curse of the Deadwood"] = true,
+	["Veil of Shadow"] = true,
+	["Gehennas' Curse"] = true,
+	["Mortal Wound"] = true,
+	["Necrotic Poison"] = true,
+	["Blood Fury"] = true,
+	["Necrotic Aura"] = true,
+	["Blessing of Light"] = true,
+	["Healing Way"] = true,
+	["Warsong Gulch"] = true,
+	["Arathi Basin"] = true,
+	["Alterac Valley"] = true,
+} end)
+L:RegisterTranslations("ruRU", function() return {
+	["Libram of Divinity"] = "Манускрипт божественности",
+	["Libram of Light"] = "Манускрипт света",
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Комплект: Увеличение длительности заклинания \"Омоложение\" на 3 сек.", -- T2
+	["Set: Increases the duration of your Renew spell by 3 sec."] = "Комплект: Увеличение длительности заклинания \"Обновление\" на 3 сек.", -- T2.5
+	["Totem of Life"] = "Тотем жизни",
+	["Totem of Sustaining"] = "Тотем воодушевления",
+	["^Corpse of (.+)$"] = "^Труп (.+)$",
+	["Holy Light"] = "Свет небес",
+	["Flash of Light"] = "Улучшенная вспышка света",
+	["Lesser Heal"] = "Малое исцеление",
+	["Heal"] = "Исцеление",
+	["Greater Heal"] = "Великое исцеление",
+	["Flash Heal"] = "Быстрое исцеление",
+	["Prayer of Healing"] = "Молитва исцеления",
+	["Lesser Healing Wave"] = "Малая волна исцеления",
+	["Healing Wave"] = "Волна исцеления",
+	["Chain Heal"] = "Цепное исцеление",
+	["Healing Touch"] = "Целительное прикосновение",
+	["Regrowth"] = "Восстановление",
+	["Resurrection"] = "Воскрешение",
+	["Rebirth"] = "Возрождение",
+	["Redemption"] = "Искупление",
+	["Ancestral Spirit"] = "Дух предков",
+	["Renew"] = "Обновление",
+	["Rejuvenation"] = "Омоложение",
+	["Power Infusion"] = "Придание сил",
+	["Divine Favor"] = "Божественное одобрение",
+	["Nature Aligned"] = "Упорядочение Природы",
+	["Crusader's Wrath"] = "Гнев рыцаря Света",
+	["The Furious Storm"] = "Яростный шторм",
+	["Holy Power"] = "Священная сила",
+	["Prayer Beads Blessing"] = "Благословение четок",
+	["Chromatic Infusion"] = "Цветной настой",
+	["Ascendance"] = "Господство",
+	["Ephemeral Power"] = "Эфемерная Власть",
+	["Unstable Power"] = "Изменчивая сила",
+	["Healing of the Ages"] = "Исцеление Эпох",
+	["Essence of Sapphiron"] = "Сущность Сапфирона",
+	["The Eye of the Dead"] = "Глаз Мертвого",
+	["Mortal Strike"] = "Смертельный удар",
+	["Wound Poison"] = "Нейтрализующий яд",
+	["Curse of the Deadwood"] = "Проклятие Мертвого Леса",
+	["Veil of Shadow"] = "Пелена Тени",
+	["Gehennas' Curse"] = "Проклятие Гееннаса",
+	["Mortal Wound"] = "Смертоносная рана",
+	["Necrotic Poison"] = "Некротический яд",
+	["Blood Fury"] = "Кровавое неистовство",
+	["Necrotic Aura"] = "Мертвенная аура",
+	["Blessing of Light"] = "Благословение Света",
+	["Healing Way"] = "Путь исцеления",
+	["Warsong Gulch"] = "Ущелье Песни Войны",
+	["Arathi Basin"] = "Низина Арати",
+	["Alterac Valley"] = "Альтеракская долина",
+} end)
+L:RegisterTranslations("deDE", function() return {
+	["Libram of Divinity"] = "Buchband der Offenbarung",
+	["Libram of Light"] = "Buchband des Lichts",
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Set: Erh\195\182ht die Dauer Eures Zaubers \'Verj\195\188ngung\' um 3 Sek.",
+	["Set: Increases the duration of your Renew spell by 3 sec."] = "Set: Erh\195\182ht die Dauer Eures Zaubers 'Erneuerung' um 3 Sek.",
+	["Totem of Life"] = "Totem des Lebens",
+	["Totem of Sustaining"] = "Totem der Erhaltung",
+	["^Corpse of (.+)$"] = "^Leichnam von (.+)$",
+	["Holy Light"] = "Heiliges Licht",
+	["Flash of Light"] = "Lichtblitz",
+	["Lesser Heal"] = "Geringes Heilen",
+	["Heal"] = "Heilen",
+	["Greater Heal"] = "Große Heilung",
+	["Flash Heal"] = "Blitzheilung",
+	["Prayer of Healing"] = "Gebet der Heilung",
+	["Lesser Healing Wave"] = "Geringe Welle der Heilung",
+	["Healing Wave"] = "Welle der Heilung",
+	["Chain Heal"] = "Kettenheilung",
+	["Healing Touch"] = "Heilende Ber\195\188hrung",
+	["Regrowth"] = "Nachwachsen",
+	["Resurrection"] = "Auferstehung",
+	["Rebirth"] = "Wiedergeburt",
+	["Redemption"] = "Erl\195\182sung",
+	["Ancestral Spirit"] = "Geist der Ahnen",
+	["Renew"] = "Erneuerung",
+	["Rejuvenation"] = "Verj\195\188ngung",
+	["Power Infusion"] = "Seele der Macht",
+	["Divine Favor"] = "G\195\182ttliche Gunst",
+	["Nature Aligned"] = "Naturverbundenheit",
+	["Crusader's Wrath"] = "Zorn des Kreuzfahrers",
+	["The Furious Storm"] = "Der wilde Sturm",
+	["Holy Power"] = "Heilige Kraft",
+	["Prayer Beads Blessing"] = "Segen der Gebetsperlen",
+	["Chromatic Infusion"] = "Erf\195\188llt mit chromatischer Macht",
+	["Ascendance"] = "Überlegenheit",
+	["Ephemeral Power"] = "Ephemere Macht",
+	["Unstable Power"] = "Instabile Macht",
+	["Healing of the Ages"] = "Heilung der Urzeiten",
+	["Essence of Sapphiron"] = "Essenz Saphirons",
+	["The Eye of the Dead"] = "Das Auge des Todes",
+	["Mortal Strike"] = "T\195\182dlicher Stoß",
+	["Wound Poison"] = "Wundgift",
+	["Curse of the Deadwood"] = "Fluch der Totenwaldfelle",
+	["Veil of Shadow"] = "Schattenschleier",
+	["Gehennas' Curse"] = "Gehennas' Fluch",
+	["Mortal Wound"] = "Trauma",
+	["Necrotic Poison"] = "Nekrotisches Gift",
+	["Blood Fury"] = "Kochendes Blut",
+	["Necrotic Aura"] = "Nekrotische Aura",
+	["Blessing of Light"] = "Segen des Lichts",
+	["Healing Way"] = "Pfad der Heilung",
+	["Warsong Gulch"] = "Warsongschlucht",
+	["Arathi Basin"] = "Arathibecken",
+	["Alterac Valley"] = "Alteractal",
+} end)
+L:RegisterTranslations("frFR", function() return {
+	["Libram of Divinity"] = "Libram de divinit\195\169",
+	["Libram of Light"] = "Libram de lumi\195\168re",
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "Set: Augmente la dur\195\169e de votre sort R\195\169cup\195\169ration de 3 s.",
+	["Set: Increases the duration of your Renew spell by 3 sec."] = "Set: Augmente la dur\195\169e de votre sort R\195\169novation de 3 s.",	
+	["Totem of Life"] = "Totem de vie",
+	["Totem of Sustaining"] = "Totem de soutien",
+	["^Corpse of (.+)$"] = "^Cadavre |2 (.+)$",
+	["Holy Light"] = "Lumi\195\168re sacr\195\169e",
+	["Flash of Light"] = "Eclair lumineux",
+	["Lesser Heal"] = "Soins inf\195\169rieurs",
+	["Heal"] = "Soins",
+	["Greater Heal"] = "Soins sup\195\169rieurs",
+	["Flash Heal"] = "Soins rapides",
+	["Prayer of Healing"] = "Pri\195\168re de soins",
+	["Lesser Healing Wave"] = "Vague de soins inf\195\169rieurs",
+	["Healing Wave"] = "Vague de soins",
+	["Chain Heal"] = "Salve de gu\195\169rison",
+	["Healing Touch"] = "Toucher gu\195\169risseur",
+	["Regrowth"] = "R\195\169tablissement",
+	["Resurrection"] = "R\195\169surrection",
+	["Rebirth"] = "Renaissance",
+	["Redemption"] = "R\195\169demption",
+	["Ancestral Spirit"] = "Esprit ancestral",
+	["Renew"] = "R\195\169novation",
+	["Rejuvenation"] = "R\195\169cup\195\169ration",
+	["Power Infusion"] = "Infusion de puissance",
+	["Divine Favor"] = "Faveur divine",
+	["Nature Aligned"] = "Alignement sur la nature",
+	["Crusader's Wrath"] = "Col\195\168re du crois\195\169",
+	["The Furious Storm"] = "La temp\195\170te furieuse",
+	["Holy Power"] = "Puissance sacr\195\169e",
+	["Prayer Beads Blessing"] = "B\195\169n\195\169diction du chapelet",
+	["Chromatic Infusion"] = "Infusion chromatique",
+	["Ascendance"] = "Ascendance",
+	["Ephemeral Power"] = "Puissance \195\169ph\195\169m\195\168re",
+	["Unstable Power"] = "Puissance instable",
+	["Healing of the Ages"] = "Soins des \195\162ges",
+	["Essence of Sapphiron"] = "Essence de Saphiron",
+	["The Eye of the Dead"] = "L'Oeil du mort",
+	["Mortal Strike"] = "Frappe mortelle",
+	["Wound Poison"] = "Poison douloureux",
+	["Curse of the Deadwood"] = "Mal\195\169diction des Mort-bois",
+	["Veil of Shadow"] = "Voile de l'ombre",
+	["Gehennas' Curse"] = "Mal\195\169diction de Gehennas",
+	["Mortal Wound"] = "Blessures mortelles",
+	["Necrotic Poison"] = "Poison n\195\169crotique",
+	["Blood Fury"] = "Fureur sanguinaire",
+	["Necrotic Aura"] = "Aura n\195\169crotique",
+	["Blessing of Light"] = "B\195\169n\195\169diction de lumi\195\168re",
+	["Healing Way"] = "Flots de soins",
+	["Warsong Gulch"] = "Goulet des Warsong",
+	["Arathi Basin"] = "Bassin d'Arathi",
+	["Alterac Valley"] = "Vall\195\169e d'Alterac",
+} end)
+L:RegisterTranslations("zhCN", function() return {
+	["Libram of Divinity"] = "神性圣契",
+	["Libram of Light"] = "光明圣契",
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = "套装：使你的回春术的持续时间延长3秒。", -- T2
+	["Set: Increases the duration of your Renew spell by 3 sec."] = "套装：使你的恢复术的持续时间延长3秒。", -- T2.5
+	["Totem of Life"] = "生命图腾",
+	["Totem of Sustaining"] = "持久图腾",
+	["^Corpse of (.+)$"] = "(.+)的尸体",
+	["Holy Light"] = "圣光术",
+	["Flash of Light"] = "圣光闪现",
+	["Lesser Heal"] = "次级治疗术",
+	["Heal"] = "治疗术",
+	["Greater Heal"] = "强效治疗术",
+	["Flash Heal"] = "快速治疗",
+	["Prayer of Healing"] = "治疗祷言",
+	["Lesser Healing Wave"] = "次级治疗波",
+	["Healing Wave"] = "治疗波",
+	["Chain Heal"] = "治疗链",
+	["Healing Touch"] = "治疗之触",
+	["Regrowth"] = "愈合",
+	["Resurrection"] = "复活",
+	["Rebirth"] = "复生",
+	["Redemption"] = "救赎",
+	["Ancestral Spirit"] = "先祖之魂",
+	["Renew"] = "恢复",
+	["Rejuvenation"] = "回春术",
+	["Power Infusion"] = "能量灌注",
+	["Divine Favor"] = "神恩术",
+	["Nature Aligned"] = "自然之盟",
+	["Crusader's Wrath"] = "十字军之怒",
+	["The Furious Storm"] = "狂野风暴",
+	["Holy Power"] = "神圣强化",
+	["Prayer Beads Blessing"] = "祈祷之珠",
+	["Chromatic Infusion"] = "多彩能量",
+	["Ascendance"] = "优越",
+	["Ephemeral Power"] = "短暂强力",
+	["Unstable Power"] = "能量无常",
+	["Healing of the Ages"] = "远古治疗",
+	["Essence of Sapphiron"] = "萨菲隆的精华",
+	["The Eye of the Dead"] = "亡者之眼",
+	["Mortal Strike"] = "致死打击",
+	["Wound Poison"] = "致伤毒药",
+	["Curse of the Deadwood"] = "死木诅咒",
+	["Veil of Shadow"] = "暗影之雾", -- 存在多个不同名技能，暗影之雾/暗影迷雾/幽影之雾
+	["Gehennas' Curse"] = "基赫纳斯的诅咒",
+	["Mortal Wound"] = "重伤",
+	["Necrotic Poison"] = "死灵之毒",
+	["Blood Fury"] = "血性狂暴",
+	["Necrotic Aura"] = "死灵光环",
+	["Blessing of Light"] = "光明祝福",
+	["Healing Way"] = "治疗之道",
+	["Warsong Gulch"] = "战歌峡谷",
+	["Arathi Basin"] = "阿拉希盆地",
+	["Alterac Valley"] = "奥特兰克山谷",
+} end)
+L:RegisterTranslations("koKR", function() return {
+	["Libram of Divinity"] = "신앙의 성서",
+	["Libram of Light"] = "빛의 성서",
+	["Set: Increases the duration of your Rejuvenation spell by 3 sec."] = true, --needs translation
+	["Set: Increases the duration of your Renew spell by 3 sec."] = true, --needs translation
+	["Totem of Life"] = "생명의 토템",
+	["Totem of Sustaining"] = "지탱의 토템",
+	["^Corpse of (.+)$"] = true, --needs translation
+	["Holy Light"] = "성스러운 빛",
+	["Flash of Light"] = "빛의 섬광",
+	["Lesser Heal"] = "하급 치유",
+	["Heal"] = "치유",
+	["Greater Heal"] = "상급 치유",
+	["Flash Heal"] = "순간 치유",
+	["Prayer of Healing"] = "치유의 기원",
+	["Lesser Healing Wave"] = "하급 치유의 물결",
+	["Healing Wave"] = "치유의 물결",
+	["Chain Heal"] = "연쇄 치유",
+	["Healing Touch"] = "치유의 손길",
+	["Regrowth"] = "재생",
+	["Resurrection"] = "부활",
+	["Rebirth"] = "환생",
+	["Redemption"] = "구원",
+	["Ancestral Spirit"] = "고대의 영혼",
+	["Renew"] = "소생",
+	["Rejuvenation"] = "회복",
+	["Power Infusion"] = "마력 주입",
+	["Divine Favor"] = "신의 은총",
+	["Nature Aligned"] = "자연 동화",
+	["Crusader's Wrath"] = "성전사의 격노",
+	["The Furious Storm"] = "휘몰아치는 폭풍",
+	["Holy Power"] = "신성 마법 강화",
+	["Prayer Beads Blessing"] = "기원의 묵주의 축복",
+	["Chromatic Infusion"] = "오색 용력",
+	["Ascendance"] = "승리의 기세",
+	["Ephemeral Power"] = "마력의 힘",
+	["Unstable Power"] = "불안정한 마력",
+	["Healing of the Ages"] = "세월의 치유",
+	["Essence of Sapphiron"] = "사피론의 정수",
+	["The Eye of the Dead"] = "사자의 눈",
+	["Mortal Strike"] = "죽음의 일격",
+	["Wound Poison"] = "상처 감염 독",
+	["Curse of the Deadwood"] = "마른가지의 저주",
+	["Veil of Shadow"] = "암흑의 장막",
+	["Gehennas' Curse"] = "게헨나스의 저주",
+	["Mortal Wound"] = "죽음의 상처",
+	["Necrotic Poison"] = "부패의 독",
+	["Blood Fury"] = "피의 격노",
+	["Necrotic Aura"] = "괴저 오라",
+	["Blessing of Light"] = "빛의 축복",
+	["Healing Way"] = "치유의 길",
+	["Warsong Gulch"] = "전쟁노래 협곡",
+	["Arathi Basin"] = "아라시 분지",
+	["Alterac Valley"] = "알터랙 계곡",
+} end)
 ------------------------------------------------
 -- activate, enable, disable
 ------------------------------------------------
@@ -221,7 +366,7 @@ local function activate(self, oldLib, oldDeactivate)
 		self.Heals = oldLib.Heals
 		self.GrpHeals = oldLib.GrpHeals
 		self.Lookup = oldLib.Lookup
-		self.pendingResurrections = oldlib.pendingResurrections
+		self.pendingResurrections = oldLib.pendingResurrections
 		self.Hots = oldLib.Hots
 		self.SpellCastInfo = oldLib.SpellCastInfo
 		oldLib:UnregisterAllEvents()
@@ -253,7 +398,7 @@ local function external(self, major, instance)
 		local AceEvent = instance
 		AceEvent:embed(self)
 		self:RegisterEvent("SPELLCAST_START")
-		self:RegisterEvent("SPELLCAST_INTERRUPTED", "SPELLCAST_FAILED")
+		self:RegisterEvent("SPELLCAST_INTERRUPTED")
 		self:RegisterEvent("SPELLCAST_FAILED")
 		self:RegisterEvent("SPELLCAST_DELAYED")
 		self:RegisterEvent("SPELLCAST_STOP")
@@ -351,9 +496,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -366,9 +511,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -381,9 +526,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -396,9 +541,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -411,9 +556,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -426,9 +571,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -441,9 +586,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Libram of Divinity" then
+				if name == 	L["Libram of Divinity"] then
 					lp = 53
-				elseif name == "Libram of Light" then
+				elseif name == L["Libram of Light"] then
 					lp = 83
 				end
 			end
@@ -510,9 +655,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -525,9 +670,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -540,9 +685,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -555,9 +700,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -570,9 +715,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -585,9 +730,9 @@ HealComm.Spells = {
 			if GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")) then
 				local _,_,itemstring = string.find(GetInventoryItemLink("player",GetInventorySlotInfo("RangedSlot")), "|H(.+)|h")
 				local name = GetItemInfo(itemstring)
-				if name == "Totem of Sustaining" then
+				if name == L["Totem of Sustaining"] then
 					tp = 53
-				elseif name == "Totem of Life" then
+				elseif name == L["Totem of Life"] then
 					tp = 80
 				end
 			end
@@ -928,6 +1073,11 @@ local Resurrections = {
 	[L["Ancestral Spirit"]] = true;
 }
 
+local Hots = {
+	[L["Renew"]] = true;
+	[L["Rejuvenation"]] = true;
+}
+
 local function strsplit(pString, pPattern)
 	local Table = {}
 	local fpat = "(.-)" .. pPattern
@@ -981,7 +1131,13 @@ HealComm.Debuffs = {
 	
 local function getSetBonus()
 	healcommTip:SetInventoryItem("player", 1)
-	local text = getglobal("healcommTipTextLeft"..healcommTip:NumLines()):GetText()
+	local text = "healcommTipTextLeft"..(healcommTip:NumLines() or 1)
+	local text = getglobal(text)
+	if text then
+		text = text:GetText()
+	else
+		return nil
+	end
 	if text == L["Set: Increases the duration of your Rejuvenation spell by 3 sec."] or text == L["Set: Increases the duration of your Renew spell by 3 sec."] then
 		return true
 	else
@@ -992,7 +1148,7 @@ end
 function HealComm:GetBuffSpellPower()
 	local Spellpower = 0
 	local healmod = 1
-	for i=1, 16 do
+	for i=1, 32 do
 		local buffTexture, buffApplications = UnitBuff("player", i)
 		if not buffTexture then
 			return Spellpower, healmod
@@ -1007,15 +1163,16 @@ function HealComm:GetBuffSpellPower()
 	return Spellpower, healmod
 end
 
-function HealComm:GetTargetSpellPower(spell)
+function HealComm:GetUnitSpellPower(unit, spell)
 	local targetpower = 0
 	local targetmod = 1
 	local buffTexture, buffApplications
 	local debuffTexture, debuffApplications
-	for i=1, 16 do
-		if UnitIsVisible("target") and UnitIsConnected("target") and UnitReaction("target", "player") > 4 then
-			buffTexture, buffApplications = UnitBuff("target", i)
-			healcommTip:SetUnitBuff("target", i)
+	local buffName
+	for i=1, 32 do
+		if UnitIsVisible(unit) and UnitIsConnected(unit) and UnitCanAssist("player", unit) then
+			buffTexture, buffApplications = UnitBuff(unit, i)
+			healcommTip:SetUnitBuff(unit, i)
 		else
 			buffTexture, buffApplications = UnitBuff("player", i)
 			healcommTip:SetUnitBuff("player", i)
@@ -1023,7 +1180,7 @@ function HealComm:GetTargetSpellPower(spell)
 		if not buffTexture then
 			break
 		end
-		local buffName = healcommTipTextLeft1:GetText()
+		buffName = healcommTipTextLeft1:GetText()
 		if buffName == L["Blessing of Light"] then
 			local HLBonus, FoLBonus = strmatch(healcommTipTextLeft2:GetText(),"(%d+).-(%d+)")
 			if (spell == L["Flash of Light"]) then
@@ -1037,9 +1194,9 @@ function HealComm:GetTargetSpellPower(spell)
 		end
 	end
 	for i=1, 16 do
-		if UnitIsVisible("target") and UnitIsConnected("target") and UnitReaction("target", "player") > 4 then
-			debuffTexture, debuffApplications = UnitDebuff("target", i)
-			healcommTip:SetUnitDebuff("target", i)
+		if UnitIsVisible(unit) and UnitIsConnected(unit) and UnitCanAssist("player", unit) then
+			debuffTexture, debuffApplications = UnitDebuff(unit, i)
+			healcommTip:SetUnitDebuff(unit, i)
 		else
 			debuffTexture, debuffApplications = UnitDebuff("player", i)
 			healcommTip:SetUnitDebuff("player", i)
@@ -1078,14 +1235,6 @@ function HealComm:stopHeal(caster)
 end
 
 function HealComm:startHeal(caster, target, size, casttime)
-
--- HCSpy
-	--console:Print(caster)
-	
-	
-	
-	
-	
 	self:ScheduleEvent("Healcomm_"..caster, self.stopHeal, (casttime/1000), self, caster)
 	if not self.Heals[target] then
 		self.Heals[target] = {}
@@ -1094,7 +1243,7 @@ function HealComm:startHeal(caster, target, size, casttime)
 		self.Heals[self.Lookup[caster]][caster] = nil
 		self.Lookup[caster] = nil
 	end
-	self.Heals[target][caster] = {amount = size, ctime = (casttime/1000)+GetTime()}
+	self.Heals[target][caster] = {amount = math.floor(size), ctime = (casttime/1000)+GetTime()}
 	self.Lookup[caster] = target
 	self:TriggerEvent("HealComm_Healupdate", target)
 end
@@ -1109,7 +1258,7 @@ end
 
 function HealComm:startGrpHeal(caster, size, casttime, party1, party2, party3, party4, party5)
 	self:ScheduleEvent("Healcomm_"..caster, self.stopGrpHeal, (casttime/1000), self, caster)
-	self.GrpHeals[caster] = {amount = size, ctime = (casttime/1000)+GetTime(), targets = {party1, party2, party3, party4, party5}}
+	self.GrpHeals[caster] = {amount = math.floor(size), ctime = (casttime/1000)+GetTime(), targets = {party1, party2, party3, party4, party5}}
 	for i=1,getn(self.GrpHeals[caster].targets) do
 		self:TriggerEvent("HealComm_Healupdate", self.GrpHeals[caster].targets[i])
 	end
@@ -1172,12 +1321,8 @@ function HealComm:SendAddonMessage(msg)
 end
 
 function HealComm:SPELLCAST_START()
-
 	if ( self.SpellCastInfo and self.SpellCastInfo[1] == arg1 and self.Spells[arg1] ) then
-		local Bonus = 0
-		if BonusScanner then
-			Bonus = tonumber(BonusScanner:GetBonus("HEAL"))
-		end
+		local Bonus = itemBonus:GetBonus("HEAL")
 		local buffpower, buffmod = self:GetBuffSpellPower()
 		local targetpower, targetmod = self.SpellCastInfo[4], self.SpellCastInfo[5]
 		local Bonus = Bonus + buffpower
@@ -1204,8 +1349,7 @@ function HealComm:SPELLCAST_START()
 	self.spellIsCasting = arg1
 end
 
-function HealComm:SPELLCAST_FAILED()
-	
+function HealComm:SPELLCAST_INTERRUPTED()
 	if self:IsEventScheduled("TriggerRegrowthHot") then
 		self:CancelScheduledEvent("TriggerRegrowthHot")
 	end
@@ -1228,6 +1372,10 @@ function HealComm:SPELLCAST_FAILED()
 	for key in pairs(self.SpellCastInfo) do
 		self.SpellCastInfo[key] = nil
 	end
+end
+
+function HealComm:SPELLCAST_FAILED()
+	self.failed = true
 end
 
 function HealComm:SPELLCAST_DELAYED()
@@ -1297,9 +1445,8 @@ end
 function HealComm:CHAT_MSG_ADDON()
 	if arg1 == "HealComm" and arg4 ~= UnitName("player") then
 		local result = strsplit(arg2,"/")
-		--console:Print("HealComm user has Startet casting: "..UnitName("player")) --HCSpy
 		if result[1] == "Heal" then
-			self:startHeal(arg4, result[2], result[3], result[4])			
+			self:startHeal(arg4, result[2], result[3], result[4])
 		elseif arg2 == "Healstop" then
 			self:stopHeal(arg4)
 		elseif result[1] == "Healdelay" then
@@ -1473,73 +1620,95 @@ end
 
 function HealComm:CastSpell(spellId, spellbookTabNum)
 	self.hooks.CastSpell(spellId, spellbookTabNum)
+	
+	if self.failed or (self.CurrentSpellName and not SpellIsTargeting()) then
+		self.failed = nil
+		return
+	end
+	
 	local spellName, rank = GetSpellName(spellId, spellbookTabNum)
 	_,_,rank = string.find(rank,"(%d+)")
-	if ( SpellIsTargeting() ) then 
-       -- Spell is waiting for a target
-       self.CurrentSpellName = spellName
-	   self.CurrentSpellRank = rank
-	elseif ( UnitIsVisible("target") and UnitIsConnected("target") and UnitCanAssist("player", "target") ) then
-       -- Spell is being cast on the current target.  
-       -- If ClearTarget() had been called, we'd be waiting target
-		if UnitIsPlayer("target") then
-			self:ProcessSpellCast(spellName, rank, UnitName("target"))
+	
+	if not (self.Spells[spellName] or Resurrections[spellName] or Hots[spellName]) then return end
+
+	self.CurrentSpellName = spellName
+	self.CurrentSpellRank = rank
+	if not SpellIsTargeting() then
+		if ( UnitIsVisible("target") and UnitIsConnected("target") and UnitCanAssist("player", "target") ) then
+			-- Spell is being cast on the current target.  
+			if UnitIsPlayer("target") then
+				self:ProcessSpellCast("target")
+			end
+		else
+			self:ProcessSpellCast("player")
 		end
-	else
-		self:ProcessSpellCast(spellName, rank, UnitName("player"))
 	end
 end
 
 function HealComm:CastSpellByName(spellName, onSelf)
 	self.hooks.CastSpellByName(spellName, onSelf)
+	
+	if self.failed then
+		self.failed = nil
+		return
+	end
+	
+	if (self.CurrentSpellName and not SpellIsTargeting()) or (GetCVar("AutoSelfCast") == "0" and onSelf ~= 1 and not SpellIsTargeting() and not (UnitExists("target") and UnitCanAssist("player", "target"))) then return end
+	
 	local _,_,rank = string.find(spellName,"(%d+)")
 	local _, _, spellName = string.find(spellName, "^([^%(]+)")
-	if not rank then
-		local i = 1
-		while GetSpellName(i, BOOKTYPE_SPELL) do
-			local s, r = GetSpellName(i, BOOKTYPE_SPELL)
-			if s == spellName then
-				rank = r
+	spellName = string.lower(spellName)
+	local i = 1
+	while GetSpellName(i, BOOKTYPE_SPELL) do
+		local s, r = GetSpellName(i, BOOKTYPE_SPELL)
+		if string.lower(s) == spellName then
+			spellName = s
+			if rank then
+				break
+			else
+				while s == spellName do
+					rank = r
+					i = i+1
+					s, r = GetSpellName(i, BOOKTYPE_SPELL)
+				end
+				break
 			end
-			i = i+1
 		end
-		if rank then
-			_,_,rank = string.find(rank,"(%d+)")
-		end
+		i = i+1
 	end
-	if ( spellName ) then
-		if ( SpellIsTargeting() ) then
-			self.CurrentSpellName = spellName
-			self.CurrentSpellRank = rank
-		else
+	if rank then
+		_,_,rank = string.find(rank,"(%d+)")
+	end
+	if spellName then
+		if not (self.Spells[spellName] or Resurrections[spellName] or Hots[spellName]) then return end
+		self.CurrentSpellName = spellName
+		self.CurrentSpellRank = rank
+		
+		if not SpellIsTargeting() then
 			if UnitIsVisible("target") and UnitIsConnected("target") and UnitCanAssist("player", "target") and onSelf ~= 1 then
 				if UnitIsPlayer("target") then
-					self:ProcessSpellCast(spellName, rank, UnitName("target"))
+					self:ProcessSpellCast("target")
 				end
 			else
-				self:ProcessSpellCast(spellName, rank, UnitName("player"))
+				self:ProcessSpellCast("player")
 			end
 		end
 	end
 end
 
 function HealComm:OnMouseDown(object)
-	-- If we're waiting to target
-	local targetName
-	
-	if ( self.CurrentSpellName and UnitExists("mouseover") ) then
-		targetName = UnitName("mouseover")
-	elseif ( self.CurrentSpellName and GameTooltipTextLeft1:IsVisible() ) then
+	local unit = "mouseover"
+	if ( self.CurrentSpellName and GameTooltipTextLeft1:IsVisible() ) then
 		local _, _, name = string.find(GameTooltipTextLeft1:GetText(), L["^Corpse of (.+)$"])
 		if ( name ) then
-			targetName = name
+			unit = roster:GetUnitIDFromName(name)
 		end
+	end
+	if ( self.CurrentSpellName and SpellIsTargeting() and UnitExists(unit) ) then
+		self:ProcessSpellCast(unit)
 	end
 	if ( self.hooks[object]["OnMouseDown"] ) then
 		self.hooks[object]["OnMouseDown"]()
-	end
-	if ( self.CurrentSpellName and targetName ) then
-		self:ProcessSpellCast(self.CurrentSpellName, self.CurrentSpellRank, targetName)
 	end
 end
 
@@ -1548,36 +1717,31 @@ function HealComm:UseAction(slot, checkCursor, onSelf)
 	healcommTip:SetAction(slot)
 	local spellName = healcommTipTextLeft1:GetText()
 	
-	-- Test to see if this is a macro
-	if not GetActionText(slot) then
-		self.CurrentSpellName = spellName
-	end
-	
 	self.hooks.UseAction(slot, checkCursor, onSelf)
 	
 	-- Test to see if this is a macro
-	if ( not self.CurrentSpellName ) then
+	if self.failed or GetActionText(slot) or (self.CurrentSpellName and not SpellIsTargeting()) or not (self.Spells[spellName] or Resurrections[spellName] or Hots[spellName]) then
+		self.failed = nil
 		return
 	end
+	
+	self.CurrentSpellName = spellName
 	local rank = healcommTipTextRight1:GetText()
 	if rank then
 		_,_,rank = string.find(rank,"(%d+)")
 	end
-	if not rank then
-		rank = 1
-	end
-	self.CurrentSpellRank = rank
-	if ( SpellIsTargeting() ) then
-		-- Spell is waiting for a target
-		return
-	elseif ( UnitIsVisible("target") and UnitIsConnected("target") and UnitCanAssist("player", "target") and onSelf ~= 1) then
-		-- Spell is being cast on the current target
-		if UnitIsPlayer("target") then
-			self:ProcessSpellCast(spellName, rank, UnitName("target"))
+	self.CurrentSpellRank = rank or 1
+	
+	if not SpellIsTargeting() then
+		if ( UnitIsVisible("target") and UnitIsConnected("target") and UnitCanAssist("player", "target") and onSelf ~= 1) then
+			-- Spell is being cast on the current target
+			if UnitIsPlayer("target") then
+				self:ProcessSpellCast("target")
+			end
+		else
+			-- Spell is being cast on the player
+			self:ProcessSpellCast("player")
 		end
-	else
-		-- Spell is being cast on the player
-		self:ProcessSpellCast(spellName, rank, UnitName("player"))
 	end
 end
 
@@ -1587,9 +1751,10 @@ function HealComm:SpellTargetUnit(unit)
 		shallTargetUnit = true
 	end
 	self.hooks.SpellTargetUnit(unit)
+	
 	if ( shallTargetUnit and self.CurrentSpellName and not SpellIsTargeting() ) then
 		if UnitIsPlayer(unit) then
-			self:ProcessSpellCast(self.CurrentSpellName, self.CurrentSpellRank, UnitName(unit))
+			self:ProcessSpellCast(unit)
 		end
 		self.CurrentSpellName = nil
 		self.CurrentSpellRank = nil
@@ -1606,18 +1771,18 @@ function HealComm:TargetUnit(unit)
 	-- Look to see if we're currently waiting for a target internally
 	-- If we are, then well glean the target info here.
 	if ( self.CurrentSpellName and UnitExists(unit) ) and UnitIsPlayer(unit) then
-		self:ProcessSpellCast(self.CurrentSpellName, self.CurrentSpellRank, UnitName(unit))
+		self:ProcessSpellCast(unit)
 	end
 	self.hooks.TargetUnit(unit)
 end
 
-function HealComm:ProcessSpellCast(spellName, rank, targetName)
-	local power, mod = self:GetTargetSpellPower(spellName)
-	self.SpellCastInfo[1] = self.SpellCastInfo[1] or spellName
-	self.SpellCastInfo[2] = self.SpellCastInfo[2] or rank
-	self.SpellCastInfo[3] = self.SpellCastInfo[3] or targetName
-	self.SpellCastInfo[4] = power
-	self.SpellCastInfo[5] = mod
+function HealComm:ProcessSpellCast(unit)
+	local power, mod = self:GetUnitSpellPower(unit, self.CurrentSpellName)
+	self.SpellCastInfo[1] = (self.SpellCastInfo[1] or self.CurrentSpellName)
+	self.SpellCastInfo[2] = (self.SpellCastInfo[2] or self.CurrentSpellRank)
+	self.SpellCastInfo[3] = (self.SpellCastInfo[3] or UnitName(unit))
+	self.SpellCastInfo[4] = (self.SpellCastInfo[4] or power)
+	self.SpellCastInfo[5] = (self.SpellCastInfo[5] or mod)
 end
 
 AceLibrary:Register(HealComm, MAJOR_VERSION, MINOR_VERSION, activate, nil, external)
