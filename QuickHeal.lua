@@ -349,7 +349,7 @@ local function UpdateQuickHealOverhealStatus()
     if QHV.OverhealMessageCastingBar then
         textframe:SetText(txt);
     end
-	-- BellTollAlliance.wav BellTollTribal.wav BellTollNightElf.wav BellTollHorde.wav
+
     local font = textframe:GetFont();
     if waste > 50 then
         if OverhealMessagePlaySound then PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav") end
