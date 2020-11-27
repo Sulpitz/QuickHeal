@@ -1,7 +1,7 @@
 local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
 
-if GetLocale() == "ruRU" then
 	-- Russian localization
+if (GetLocale() == "ruRU") then
     
 	-- XML
     QH_CONFIGURATION = "Настройка QuickHeal";
@@ -103,7 +103,7 @@ L:RegisterTranslations("ruRU", function() return {
     ["Player: "] = "Игрок: ",
     [" ID: "] = " ID: ",
     [" unit: "] = " unit: ",
-    ["partyPlayerPredictedMissingHealth: "] = "partyPlayerPredictedMissingHealth: ",
+    ["partyPlayerPredictedMissingHealth: "] = "ПрогнозируемоеНедостающееЗдоровьеГруппыИгрока: ",
     ["UnitHealthMax: "] = "UnitHealthMax: ",
     ["UnitHealth: "] = "UnitHealth: ",
     ["NOT Range: "] = "Вне досягаемости: ",
@@ -119,14 +119,14 @@ L:RegisterTranslations("ruRU", function() return {
     ["Found LH up to rank %d, H up top rank %d, GH up to rank %d, and FH up to rank %d"] = "Найдено М.И. уровень %d, И. уровень %d, В.И. уровень %d, и Б.И. уровень %d",
     ["Not in combat or target healthy or no flash heal available, will use closest available LH, H or GH (not FH)"] = "Не в бою или цель здорова или Быстрое исцеление не доступно, будет использоваться самый доступный М.И., И. или В.И. (нет Б.И.)",
     ["In combat and target unhealthy and player has flash heal, will only use FH"] = "В бою и цель нездорова, игрок имеет Быстрое исцеление, будет использоваться только Б.И.",
-    ["healneedGrp: "] = "healneedGrp: ",
-    ["HealSizePoH: "] = "HealSizePoH: ",
-    [", in PoH Range: "] = ", in PoH Range: ",
-    ["HPS_NH: "] = "HPS_NH: ",
-    ["HPS_FH: "] = "HPS_FH: ",
-    ["HPS_PoH: "] = "HPS_PoH: ",
-    ["USING FH"] = "USING FH",
-    ["USING POH"] = "USING POH",
+    ["healneedGrp: "] = "НужноИсцеленияГруппе: ",
+    ["HealSizePoH: "] = "РазмерИсцеленияМол.Исц.: ",
+    [", in PoH Range: "] = ", в диапазоне Мол.Исц.: ",
+    ["HPS_NH: "] = "ХПС_NH: ", -- ??
+    ["HPS_FH: "] = "ХПС_Б.И.: ",
+    ["HPS_PoH: "] = "ХПС_Мол.Исц.: ",
+    ["USING FH"] = "ИСПОЛЬЗУЮ Б.И.",
+    ["USING POH"] = "ИСПОЛЬЗУЮ Мол.Исц.",
     ["Set SpellID: "] = "Set SpellID: ",
     [" from SpellIDGrp "] = " from SpellIDGrp ",
     ["Final SpellID: "] = "Final SpellID: ",
@@ -139,7 +139,7 @@ L:RegisterTranslations("ruRU", function() return {
     [" to NH "] = " с NH ",
     
     -- LUA druid --
-    ["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,3.5,Regrowth)",
+    ["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,3.5,Восстановление)",
     ["Gift of Nature modifier: %f"] = "Модификатор Дар природы: %f",
     ["Tranquil Spirit modifier: %f"] = "Модификатор Мирный дух: %f",
     ["Moonglow modifier: %f"] = "Модификатор Лунное сияние: %f",
@@ -151,11 +151,11 @@ L:RegisterTranslations("ruRU", function() return {
     -- LUA shaman --
     [" will never be used in combat. "] = " никогда не будет использоваться в бою. ",
     [" will only be used in combat if the target has more than "] = " будет использоваться только в бою, если у цели больше чем ",
-    ["Final Healing Bonus (1.5,2.0,2.5,3.0,LHW)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,LHW)",
-    ["Purification modifier: %f"] = "Модификатор Чистота : %f",
+    ["Final Healing Bonus (1.5,2.0,2.5,3.0,LHW)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,М.В.И.)",
+    ["Purification modifier: %f"] = "Модификатор Очищение : %f",
     ["Healing Way healing modifier"] = "Модификатор Путь исцеления",
-    ["Found HW up to rank %d, and found LHW up to rank %d"] = "Найдена В.И. уровень %d, и найдена М.В.И. уровень %d",
-    ["In combat, will prefer LHW"] = "В бою предпочтение М.В.И",
+    ["Found HW up to rank %d, and found LHW up to rank %d"] = "Найдено В.И. уровень %d, и найдено М.В.И. уровень %d",
+    ["In combat, will prefer LHW"] = "В бою, предпочтение М.В.И",
     ["Not in combat, will use closest available HW or LHW"] = "Не в бою, будет исользоваться ближайший доступный В.И или М.В.И.",
     
     -- CORE LUA --
@@ -201,8 +201,8 @@ L:RegisterTranslations("ruRU", function() return {
     ["*Stopping Monitor"] = "*Останавливаю монитор",
     ["Unknown Trigger"] = "Неизвестный триггер",
     -- UIErrorsFrame Hook
-    [". %s blacklisted for 5 sec."] = ". %s в черном списоке на 5 сек.",
-    [". %s blacklisted for 2 sec."] = ". %s в черном списоке на 2 сек.",
+    [". %s blacklisted for 5 sec."] = ". %s в черном списке на 5 сек.",
+    [". %s blacklisted for 2 sec."] = ". %s в черном списке на 2 сек.",
     ["Blacklist"] = "Blacklist",  -- ?? need test ?? var
     ["Sending Addon version"] = "Sending Addon version",
     ["Unknown Event"] = "Неизвестное событие",
@@ -273,7 +273,7 @@ L:RegisterTranslations("ruRU", function() return {
     ["Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd."] = "Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd.",
     ["Haha! %s keeps dyin' an da %s voodoo, keeps bringin' em back!."] = "Haha! %s keeps dyin' an da %s voodoo, keeps bringin' em back!.",
     ["Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!"] = "Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!",
-    -- night elf" then
+    -- night elf
     ["Asht'velanon, %s! Elune sends you the gift of %s."] = "Asht'velanon, %s! Элуна отправляет тебе подарок of %s.",
     ["Remain vigilent %s, the Goddess' %s shall revitalize you!"] = "Оставайся бдительным %s, Богиня' %s оживит тебя!",
     ["By Elune's grace I grant you this %s, %s."] = "По милости Элуны я даю тебе это %s, %s.",
@@ -284,9 +284,8 @@ L:RegisterTranslations("ruRU", function() return {
     ["  Casting: "] = "  Произношу: ",
     [" on "] = " на ",
     [", ID: "] = ", ID: ",
+	-- The spell is awaiting target selection, write to screen if the spell can actually be cast
     ["Casting "] = "Произношу: ",
-    -- The spell is awaiting target selection, write to screen if the spell can actually be cast
-    -- переменные категории не изменены.
     -- Write to center of screen
     ["Casting %s on yourself"] = "Произношу %s на себя",
     ["Casting %s on %s"] = "Произношу %s на %s",
@@ -303,19 +302,18 @@ L:RegisterTranslations("ruRU", function() return {
     -- Does not need healing
     ["You don't need healing"] = "Тебе не нужно лечение",
     [" doesn't need healing"] = " не нужно лечение",
-    ["'s Target ("] = "'s Цель (",
+    ["'s Target ("] = " - Цель (",
     [") doesn't need healing"] = ") не нуждается в лечении",
     -- Unit is not healable, report reason and return
     ["You don't have a target"] = "У вас нет цели",
     [" doesn't have a target"] = " нет цели",
     [") cannot be healed"] = ") не может быть вылечена",
     -- Unit exists but cannot be healed
-    ["Target"] = "Target", -- ??
     ["You cannot be healed"] = "Ты не можешь быть вылечен",
     ["Unit does not exist"] = "Единица не существует",
     -- Means that FindWhoToHeal couldn't cast the CheckSpell
-    ["No players assigned as Main Tank by Raid Leader"] = "Нет игроков назначеных Главными Танками Рейд Лидером",
-    ["No Main Tank to heal"] = "Нет главного Танка для лечения",
+    ["No players assigned as Main Tank by Raid Leader"] = "Нет игроков назначеных Главными танками Рейд Лидером",
+    ["No Main Tank to heal"] = "Нет Главного танка для лечения",
     ["No one to heal"] = "Не кого лечить",
     ["You don't need healing"] = "Вам не нужно лечение",
     -- Target acquired
@@ -330,7 +328,7 @@ L:RegisterTranslations("ruRU", function() return {
     -- Print usage information
     [" Usage:"] = " Использование:",
     ["/qh cfg - Opens up the configuration panel."] = "/qh cfg - Открывает панель настройки.",
-    ["/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%)."] = "/qh toggle - Переключение между только Быстрое лечение и/или Нормальное лечение (Лимит лечения 0% или 100%).",
+    ["/qh toggle - Swiches between only Flashheals and or Normal Heals (Healthy Threshold 0% or 100%)."] = "/qh toggle - Переключение между только Быстрым исцением и/или Нормальным исцелением (Лимит лечения 0% или 100%).",
     ["/qh healmode [1,2,3]| hm [1,2,3] - Swich to healmode 1, 2 or 3. 1: default; 2: Flash Heal / Holy Light; 3: max HPS"] = "/qh healmode [1,2,3]| hm [1,2,3] - Переключает режим лечения 1, 2 или 3. 1: стандартный; 2: Быстрое исцеление / Свет небес; 3: макс. ХПС",
     ["/qh downrank | dr - Opens the slider to limit QuickHeal to use only lower ranks."] = "/qh downrank | dr - Открывает ползунок ограничения быстрого исцеления для использования только низких уровней заклинаний.",
     ["/qh - Heals the party/raid member that most need it with the best suited healing spell."] = "/qh - Лечение членов группы/рейда которым нужно лечение с наиболее подходящим заклинанием исцеления.",
@@ -338,9 +336,9 @@ L:RegisterTranslations("ruRU", function() return {
     ["/qh target - Forces the target of the healing to be your current target."] = "/qh target - Принудительно цель исцеления - ваша цель.",
     ["/qh targettarget - Forces the target of the healing to be your current target's target."] = "/qh targettarget - Принудительно цель исцеления - цель вашей цели.",
     ["/qh party - Restricts the healing to the party when in a raid."] = "/qh party - Ограничение лечения рейда, для вашей группы.",
-    ["/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA."] = "/qh mt - Ограничение лечения, для Главных Танков назначенных РЛ в CTRaidAssist или oRA.",
-    ["/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA."] = "/qh nonmt - Ограничение лечения, для лечения игроков не назначенных как главные Танки РЛ в CTRaidAssist или oRA.",
-    ["/qh subgroup - Forces the healing to the groups selected in the configuration panel."] = "/qh subgroup - Принудительно лечение группы выбранной в панели настройки.",
+    ["/qh mt - Restricts the healing to the Main Tanks defined by the Raid Leader in CTRaidAssist or oRA."] = "/qh mt - Ограничение лечения, для Главных танков назначенных РЛ в CTRaidAssist или oRA.",
+    ["/qh nonmt - Restricts the healing to players who are not defined as Main Tanks by the Raid Leader in CTRaidAssist or oRA."] = "/qh nonmt - Ограничение лечения, для игроков не назначенных как Главные танки РЛ в CTRaidAssist или oRA.",
+    ["/qh subgroup - Forces the healing to the groups selected in the configuration panel."] = "/qh subgroup - Принудительное лечение выбранной группы в панели настройки.",
     ["/qh reset - Reset configuration to default parameters for all classes."] = "/qh reset - Сброс настроек до стандартных значений.",
     ["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
     

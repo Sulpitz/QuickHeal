@@ -1,5 +1,5 @@
-local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
-local BS                = AceLibrary("Babble-Spell-2.2")
+local L		= AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS	= AceLibrary("Babble-Spell-2.2")
 
 QuickHeal = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0")
 
@@ -346,9 +346,10 @@ local function UpdateQuickHealOverhealStatus()
         textframe:SetText(txt);
     end
 
+-- BellTollAlliance.wav BellTollTribal.wav BellTollNightElf.wav BellTollHorde.wav
     local font = textframe:GetFont();
     if waste > 50 then
-        if OverhealMessagePlaySound then PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav") end
+        if OverhealMessagePlaySound then PlaySoundFile("Sound\\Doodad\\BellTollAlliance.wav") end
         QuickHealOverhealStatusScreenCenter:AddMessage(txt,1,0,0,1,5);
         textframe:SetTextColor(1,0,0);
         textframe:SetFont(font,14);
@@ -1402,7 +1403,7 @@ function QuickHeal(Target,SpellID,extParam)
                 if not UnitExists('target') then
                     Message(L["You don't have a target"],L["Error"],2);
                 elseif not UnitExists('targettarget') then
-                    Message((UnitFullName('target') or L["Target"]) .. L[" doesn't have a target"],L["Error"],2);
+                    Message((UnitFullName('target') or "Target") .. L[" doesn't have a target"],L["Error"],2);
                 else
                     Message(UnitFullName('target') .. L["'s Target ("] .. UnitFullName('targettarget') .. L[") cannot be healed"],L["Error"],2);
                 end

@@ -280,9 +280,8 @@ L:RegisterTranslations("enUS", function() return {
     ["  Casting: "] = true,
     [" on "] = true,
     [", ID: "] = true,
+	-- The spell is awaiting target selection, write to screen if the spell can actually be cast
     ["Casting "] = true,
-    -- The spell is awaiting target selection, write to screen if the spell can actually be cast
-    -- переменные категории не изменены.
     -- Write to center of screen
     ["Casting %s on yourself"] = true,
     ["Casting %s on %s"] = true,
@@ -306,7 +305,6 @@ L:RegisterTranslations("enUS", function() return {
     [" doesn't have a target"] = true,
     [") cannot be healed"] = true,
     -- Unit exists but cannot be healed
-    ["Target"] = true, -- ??
     ["You cannot be healed"] = true,
     ["Unit does not exist"] = true,
     -- Means that FindWhoToHeal couldn't cast the CheckSpell

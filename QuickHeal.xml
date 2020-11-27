@@ -1,12 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/"> 
-    <Script file="localization.en.lua"/> 
-    <Script file="localization.ru.lua"/> 
-    <Script file="QuickHeal.lua"/> 
+    <Script file="localization.en.lua"/>
+    <Script file="localization.ru.lua"/>
+    <Script file="QuickHeal.lua"/>
     <Script file="QuickClick.lua"/>
     <Script file="QuickHealDruid.lua"/>
     <Script file="QuickHealPaladin.lua"/>
     <Script file="QuickHealPriest.lua"/>
-    <Script file="QuickHealShaman.lua"/>	
+    <Script file="QuickHealShaman.lua"/>
 
     <GameTooltip name="QuickHeal_ScanningTooltip" inherits="GameTooltipTemplate">
         <Scripts>
