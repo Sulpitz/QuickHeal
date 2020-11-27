@@ -2,7 +2,7 @@ local L                 = AceLibrary("AceLocale-2.2"):new("QuickHeal")
 
 	-- Russian localization
 if (GetLocale() == "ruRU") then
-    
+
 	-- XML
     QH_CONFIGURATION = "Настройка QuickHeal";
     QH_GENERAL = "Основные";
@@ -38,7 +38,7 @@ if (GetLocale() == "ruRU") then
     QH_GROUP_7 = "Группа 7";
     QH_GROUP_8 = "Группа 8";
     QH_NOTE = "Заметка: 'Подгруппа' лечится командой '/qh subgroup' или назначением кнопки 'Лечить Подгруппу'.";
-    
+
     -- XML Slider text
     QH_GENERAL_HEALING_THRESHOLD = "Порог основного лечения: ";
     QH_HEALTHY_THRESHOLD = "Порог здоровья: ";
@@ -71,15 +71,15 @@ if (GetLocale() == "ruRU") then
     QH_BE_HEALED = "будет исцелена.";
     -- "DownrankValueNH: ";					not involved
     -- "General Healing Threshold: ";		not involved
-    
+
     -- XML Healing bar
     HB_HEALING_TARGET = "Цель исцеления";
     HB_CONFIGURATION = "Настройка шкалы исцеления\nЛевый-клик для перемещения.\nПравый-клик прикрепить к Шкале произнесения.";
-    
+
 end
 
 L:RegisterTranslations("ruRU", function() return {
-    
+
     -- LUA COMMON ROTATIONS LUA --
     [" will be used when out of combat. "] = " будут использоваться вне боя. ",
     [" will be used in combat if the target has less than "] = " будет использоваться в бою если у цели менее ",
@@ -97,8 +97,8 @@ L:RegisterTranslations("ruRU", function() return {
     ["Target debuff healing modifier"] = "Модификатор исцеления цели - дебафы",
     ["BUFF: Hand of Edward the Odd (out of combat healing forced)"] = "БАФФ: Рука Эдварда Странного (вне боя - отмена лечения)",
     ["BUFF: Nature's Swiftness (out of combat healing forced)"] = "БАФФ: Природная стремительность (вне боя - отмена лечения)",
-    
-    
+
+
     -- LUA priest --
     ["Player: "] = "Игрок: ",
     [" ID: "] = " ID: ",
@@ -130,14 +130,14 @@ L:RegisterTranslations("ruRU", function() return {
     ["Set SpellID: "] = "Set SpellID: ",
     [" from SpellIDGrp "] = " from SpellIDGrp ",
     ["Final SpellID: "] = "Final SpellID: ",
-    
+
     -- LUA paladin --
     ["Final Healing Bonus (1.5,2.5)"] = "Общий бонус лечения (1.5,2.5)",
     ["Healing Light talentmodification: %f"] = "Модификатор таланта Исцеляющий Свет: %f",
     ["Found HL up to rank %d, and found FL up to rank %d"] = "Найден С.Н. уровень %d, и найдена В.С. уровень %d",
     ["Compare: FH "] = "Сравнение: FH ",
     [" to NH "] = " с NH ",
-    
+
     -- LUA druid --
     ["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,3.5,Восстановление)",
     ["Gift of Nature modifier: %f"] = "Модификатор Дар природы: %f",
@@ -147,7 +147,7 @@ L:RegisterTranslations("ruRU", function() return {
     ["Found HT up to rank %d, RG up to rank %d"] = "Найден HT уровень %d, RG уровень %d",
     ["Not in combat or target healthy or no Regrowth available, will use Healing Touch"] = "Не в бою или цель здорова, или нет Восстановления, будет использоваться Целительное прикосновение",
     ["In combat and target unhealthy and Regrowth available, will use Regrowth"] = "В бою и цель нездорова и доступно Восстановление, будет использоваться Восстановление",
-    
+
     -- LUA shaman --
     [" will never be used in combat. "] = " никогда не будет использоваться в бою. ",
     [" will only be used in combat if the target has more than "] = " будет использоваться только в бою, если у цели больше чем ",
@@ -157,7 +157,7 @@ L:RegisterTranslations("ruRU", function() return {
     ["Found HW up to rank %d, and found LHW up to rank %d"] = "Найдено В.И. уровень %d, и найдено М.В.И. уровень %d",
     ["In combat, will prefer LHW"] = "В бою, предпочтение М.В.И",
     ["Not in combat, will use closest available HW or LHW"] = "Не в бою, будет исользоваться ближайший доступный В.И или М.В.И.",
-    
+
     -- CORE LUA --
     --[ Settings ]--
     ["Healing %s with %s"] = "Исцеление %s - %s",
@@ -341,5 +341,5 @@ L:RegisterTranslations("ruRU", function() return {
     ["/qh subgroup - Forces the healing to the groups selected in the configuration panel."] = "/qh subgroup - Принудительное лечение выбранной группы в панели настройки.",
     ["/qh reset - Reset configuration to default parameters for all classes."] = "/qh reset - Сброс настроек до стандартных значений.",
     ["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
-    
+
 } end)
