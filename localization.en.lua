@@ -19,7 +19,7 @@ local L					= AceLibrary("AceLocale-2.2"):new("QuickHeal")
 	QH_RAID = "Raid";
 	QH_TARGET_CHANNEL = "Target Channel:";
 	QH_CHAT_STYLE = "Chat Style:";
-	QH_HEALING_BAR_IS = "Healing Bar:";
+	QH_HEALING_BAR = "Healing Bar:";
 	QH_DISPLAY_HEALING_BAR = "Display Healing Bar";
 	QH_SCREEN_MESSAGES = "Screen Messages:";
 	QH_CONFIGURE = "Configure:";
@@ -48,7 +48,7 @@ local L					= AceLibrary("AceLocale-2.2"):new("QuickHeal")
 	QH_CHECK_MAXIMUM_PRIORITY = "Check this option to give your target maximum priority";
 	QH_CHECK_HEALING_MOUSE = "Check this option to enable healing with the mouse";
 	-- Tooltips variants answer
-	QH_HEALING_BAR = "Healing bar is";
+	QH_HEALING_BAR_IS = "Healing bar is";
 	QH_NOT = " not ";
 	QH_DISPLAYED = "displayed.";
 	QH_HEALING = "Healing"; -- MessageConfigure ComboBox --> -- XML-827, depends on - Deliver message ["Healing"] = 
