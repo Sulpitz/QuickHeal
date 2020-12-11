@@ -795,7 +795,7 @@
                             QuickHealVariables.DisplayHealingBar = false;
                         end
                         if( this.tooltipShown ) then
-                            GameTooltip:SetText(QH_HEALING_BAR .. (this:GetChecked() and " " or QH_NOT) .. QH_DISPLAYED);
+                            GameTooltip:SetText(QH_HEALING_BAR_IS .. (this:GetChecked() and " " or QH_NOT) .. QH_DISPLAYED);
                         end
                     </onClick>
                     <OnShow>
@@ -807,7 +807,7 @@
 					</OnShow>
                     <OnEnter>
                         GameTooltip:SetOwner(this,"ANCHOR_TOPLEFT");
-                        GameTooltip:SetText(QH_HEALING_BAR .. (this:GetChecked() and " " or QH_NOT) .. QH_DISPLAYED)
+                        GameTooltip:SetText(QH_HEALING_BAR_IS .. (this:GetChecked() and " " or QH_NOT) .. QH_DISPLAYED)
                         this.tooltipShown = true;
                     </OnEnter>
                     <OnLeave>

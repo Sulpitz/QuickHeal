@@ -201,7 +201,7 @@ local function Initialise()
     if (myAddOnsFrame_Register) then
         myAddOnsFrame_Register(QuickHealData,{L["Important commands:\n'/qh cfg' to open configuration panel.\n'/qh help' to list available commands."]});
     end
-    
+
     -- Update configuration panel with version information
     QuickHealConfig_TextVersion:SetText(L["Version: "] .. QuickHealData.version);
 
@@ -218,7 +218,7 @@ local function Initialise()
     elseif PlayerClass == "paladin" then
         FindSpellToUse = QuickHeal_Paladin_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Paladin_GetRatioHealthyExplanation;
-		QuickHeal_Paladin_SetDownrankGUI()        
+		QuickHeal_Paladin_SetDownrankGUI()
     elseif PlayerClass == "druid" then
         FindSpellToUse = QuickHeal_Druid_FindSpellToUse;
         GetRatioHealthyExplanation = QuickHeal_Druid_GetRatioHealthyExplanation;
@@ -261,7 +261,7 @@ local function Initialise()
 
     --Register for Addon message event
     QuickHealConfig:RegisterEvent("CHAT_MSG_ADDON")
-    
+
     QUICKHEAL_LOADED = true;
 end
 
@@ -298,7 +298,7 @@ local function UpdateHealingBar(hpcurrent,hpafter,name)
     end
     red = waste > 0.1 and 1 or waste*10;
     green = waste < 0.1 and 1 or -2.5*waste+1.25;
-    if waste < 0 then 
+    if waste < 0 then
         green = 1;
         red = 0;
     end
@@ -501,7 +501,7 @@ end
 -- Get an explanation of effects based on current settings
 function QuickHeal_GetExplanation(Parameter)
     local string = "";
-   
+
     if Parameter == "RatioFull" then
         if QHV.RatioFull > 0 then
             return L["Will only heal targets with less than "] .. QHV.RatioFull*100 .. L["% health."];
@@ -595,7 +595,7 @@ local _,PlayerClass = UnitClass('player');
     QuickHealDownrank_MarkerBot:Show()
     QuickHealDownrank_MarkerTop:Show()
     return
-  elseif mode == 2 then  
+  elseif mode == 2 then
     quickHealHealMode = 2
     --writeLine("Healmode 2")
     if string.lower(PlayerClass) == "priest" then
@@ -607,7 +607,7 @@ local _,PlayerClass = UnitClass('player');
     QuickHealDownrank_MarkerTop:Show()
     QuickHealDownrank_MarkerBot:Hide()
     return
-  elseif mode == 1 then 
+  elseif mode == 1 then
     quickHealHealMode = 1
     --writeLine("Healmode 1")
     if string.lower(PlayerClass) == "priest" then
@@ -691,7 +691,7 @@ local function ModifierScan(unit,idx,tab,debuff)
                     return 1;
                 end
             end
-        else 
+        else
             -- Unknown icon, don't even try to scan
             return 1;
         end
@@ -726,7 +726,7 @@ function QuickHeal_GetHealModifier(unit)
         local modifier = ModifierScan(unit,i,HealingBuffs,false);
         if modifier then HealModifier = HealModifier * modifier;
         else break end
-    end 
+    end
     for i=1,16 do -- Debuffs on unit that affects the amount healed on that unit
         local modifier = ModifierScan(unit,i,HealingDebuffs,true);
         if modifier then HealModifier = HealModifier * modifier;
@@ -772,9 +772,9 @@ end
 
 -- Returns true if health information is available for the unit
 --[[ TODO: Rewrite to use:
-Unit Functions 
-* New UnitPlayerOrPetInParty("unit") - Returns 1 if the specified unit is a member of the player's party, or is the pet of a member of the player's party, nil otherwise (Returns 1 for "player" and "pet") 
-* New UnitPlayerOrPetInRaid("unit") - Returns 1 if the specified unit is a member of the player's raid, or is the pet of a member of the player's raid, nil otherwise (Returns 1 for "player" and "pet") 
+Unit Functions
+* New UnitPlayerOrPetInParty("unit") - Returns 1 if the specified unit is a member of the player's party, or is the pet of a member of the player's party, nil otherwise (Returns 1 for "player" and "pet")
+* New UnitPlayerOrPetInRaid("unit") - Returns 1 if the specified unit is a member of the player's raid, or is the pet of a member of the player's raid, nil otherwise (Returns 1 for "player" and "pet")
 ]]
 function QuickHeal_UnitHasHealthInfo(unit)
     local i;
@@ -845,7 +845,7 @@ function QuickHeal_GetSpellInfo(spellName)
             spellRank = tonumber(spellRank);
             QuickHeal_ScanningTooltip:ClearLines();
             QuickHeal_ScanningTooltip:SetSpell(i, BOOKTYPE_SPELL);
-    
+
             -- Try to determine mana
             _,_,Mana = string.find(QuickHeal_ScanningTooltipTextLeft2:GetText(),"^(%d+) ");
             Mana = tonumber(Mana);
@@ -854,8 +854,8 @@ function QuickHeal_GetSpellInfo(spellName)
             -- Try to determine healing
             _,_,HealMin,HealMax = string.find(QuickHeal_ScanningTooltipTextLeft4:GetText()," (%d+) %a+ (%d+)");
             HealMin,HealMax = tonumber(HealMin),tonumber(HealMax);
-            if not ((type(HealMin) == "number") and (type(HealMax) == "number")) then 
-                Heal = 0 
+            if not ((type(HealMin) == "number") and (type(HealMax) == "number")) then
+                Heal = 0
             else
                 Heal = (HealMin+HealMax)/2;
             end
@@ -1021,7 +1021,7 @@ local function FindWhoToHeal(Restrict,extParam)
 
     -- Cast the checkspell
     CastCheckSpell();
-    if not SpellIsTargeting() then 
+    if not SpellIsTargeting() then
         -- Reacquire target if it was cleared
         if TargetWasCleared then
             TargetLastTarget();
@@ -1039,25 +1039,25 @@ local function FindWhoToHeal(Restrict,extParam)
         end
         if not RestrictSubgroup or RestrictParty or not InRaid() or (SubGroup and not QHV["FilterRaidGroup" .. SubGroup]) then
             if not IsBlacklisted(UnitFullName(unit)) then
-                if SpellCanTargetUnit(unit) then                
+                if SpellCanTargetUnit(unit) then
                     QuickHeal_debug(string.format("%s (%s) : %d/%d",UnitFullName(unit),unit,UnitHealth(unit),UnitHealthMax(unit)));
-                    
+
                     --Get who to heal for different classes
                     local IncHeal = HealComm:getHeal(UnitName(unit))
                     local PredictedHealth = (UnitHealth(unit) + IncHeal)
                     local PredictedHealthPct = (UnitHealth(unit) + IncHeal) / UnitHealthMax(unit);
                     local PredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - IncHeal ;
-                    
+
                     if PredictedHealthPct < QHV.RatioFull then
                         local _,PlayerClass = UnitClass('player');
                         PlayerClass = string.lower(PlayerClass);
-                   
+
                         if PlayerClass == "shaman" then
                             if PredictedHealthPct < healingTargetHealthPct then
                                 healingTarget = unit;
                                 healingTargetHealthPct = PredictedHealthPct;
                                 AllPlayersAreFull = false;
-                            end                     
+                            end
                         elseif PlayerClass == "priest" then
                         --writeLine("Find who to heal for Priest");
 							if healPlayerWithLowestPercentageOfLife == 1 then
@@ -1065,7 +1065,7 @@ local function FindWhoToHeal(Restrict,extParam)
 									healingTarget = unit;
 									healingTargetHealthPct = PredictedHealthPct;
 									AllPlayersAreFull = false;
-								end     							
+								end
 							else
 								if PredictedMissingHealth > healingTargetMissinHealth then
 									healingTarget = unit;
@@ -1074,33 +1074,33 @@ local function FindWhoToHeal(Restrict,extParam)
 								end
 							end
                         elseif PlayerClass == "paladin" then
-                        --writeLine("Find who to heal for Paladin") 
+                        --writeLine("Find who to heal for Paladin")
 							if healPlayerWithLowestPercentageOfLife == 1 then
 								if PredictedHealthPct < healingTargetHealthPct then
 									healingTarget = unit;
 									healingTargetHealthPct = PredictedHealthPct;
 									AllPlayersAreFull = false;
-								end     							
+								end
 							else
 								if PredictedHealth < healingTargetHealth then
 									healingTarget = unit;
 									healingTargetHealth = PredictedHealth;
 									AllPlayersAreFull = false;
-								end 
+								end
 							end
                         elseif PlayerClass == "druid" then
                             if PredictedHealthPct < healingTargetHealthPct then
                                 healingTarget = unit;
                                 healingTargetHealthPct = PredictedHealthPct;
                                 AllPlayersAreFull = false;
-                            end                  
+                            end
                         else
                             writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. UnitClass('player') .. ". " .. QuickHealData.name .. L[" not loaded."])
                             return;
                         end
                     end
-                    
-                    
+
+
                     --writeLine("Values for "..UnitName(unit)..":")
                     --writeLine("Health: "..UnitHealth(unit) / UnitHealthMax(unit).." | IncHeal: "..IncHeal / UnitHealthMax(unit).." | PredictedHealthPct: "..PredictedHealthPct) --Edelete
                 else
@@ -1121,7 +1121,7 @@ local function FindWhoToHeal(Restrict,extParam)
             end
             if not RestrictSubgroup or RestrictParty or not InRaid() or (SubGroup and not QHV["FilterRaidGroup" .. SubGroup]) then
                 if not IsBlacklisted(UnitFullName(unit)) then
-                if SpellCanTargetUnit(unit) then      
+                if SpellCanTargetUnit(unit) then
                         QuickHeal_debug(string.format("%s (%s) : %d/%d",UnitFullName(unit),unit,UnitHealth(unit),UnitHealthMax(unit)));
                         local Health = UnitHealth(unit) / UnitHealthMax(unit);
                         if Health < QHV.RatioFull then
@@ -1284,7 +1284,7 @@ local function ExecuteHeal(Target,SpellID)
         -- No channeling --> SpellStillTargeting (unhealable NPC's, duelists etc.)
 
     -- Target ~= 'target'
-        -- SpellCanTargetUnit == true           
+        -- SpellCanTargetUnit == true
             -- Channeling --> succesful cast
             -- Channeling --> instant 'out of range' fail
             -- Channeling --> delayed 'line of sight' fail
@@ -1312,9 +1312,9 @@ local function ExecuteHeal(Target,SpellID)
     SpellTargetUnit(Target);
 
     -- just in case something went wrong here (Healing people in duels!)
-    if SpellIsTargeting() then 
+    if SpellIsTargeting() then
         StopMonitor(L["Spell cannot target "] .. (UnitFullName(Target) or "unit"));
-        SpellStopTargeting() 
+        SpellStopTargeting()
     end
 
     -- Reacquire target if it was changed earlier
@@ -1354,7 +1354,7 @@ function QuickHeal(Target,SpellID,extParam)
     -- Decode special values for Target
     local Restrict = nil;
     if Target then Target = string.lower(Target) end
-    if Target == "party" or Target == "subgroup" then 
+    if Target == "party" or Target == "subgroup" then
         Restrict = Target;
         Target = nil;
     elseif Target == "mt" or Target == "nonmt" then
@@ -1362,7 +1362,7 @@ function QuickHeal(Target,SpellID,extParam)
             Restrict = Target;
             Target = nil;
         else
-            Message(L["You are not in a raid"],L["Error"],2);            
+            Message(L["You are not in a raid"],L["Error"],2);
             SetCVar("autoSelfCast",AutoSelfCast);
             QuickHealBusy = false;
             return;
@@ -1516,7 +1516,7 @@ function QuickHeal_Command(msg)
         QuickHeal_ToggleConfigurationPanel();
         return;
     end
-    
+
     if cmd == "toggle" then
         QuickHeal_Toggle_Healthy_Threshold();
         return;
@@ -1525,8 +1525,8 @@ function QuickHeal_Command(msg)
     if cmd == "downrank" or cmd == "dr" then
         ToggleDownrankWindow()
         return;
-    end   
-    
+    end
+
     if cmd == "debug on" then
         QHV.DebugMode = true;
         writeLine(QuickHealData.name .. L[" debug mode enabled"],0,0,1);
@@ -1570,7 +1570,7 @@ function QuickHeal_Command(msg)
         QuickHealPohTest()
         return;
     end
-	
+
 
 
     -- Parse healing commands
