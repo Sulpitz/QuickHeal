@@ -91,7 +91,7 @@ L:RegisterTranslations("enUS", function() return {
 	[" available. "] = true,
 	["Equipment Healing Bonus: %d"] = true,
 	["Improved Healing modifier: %f"] = true,
-	["Target is healthy"] = true,
+	["Target is healthy "] = true,
 	["Target debuff healing modifier"] = true,
 	["BUFF: Hand of Edward the Odd (out of combat healing forced)"] = true,
 	["BUFF: Nature's Swiftness (out of combat healing forced)"] = true,
