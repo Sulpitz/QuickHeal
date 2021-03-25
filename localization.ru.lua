@@ -75,7 +75,6 @@ if GetLocale() == "ruRU" then
 	-- XML Healing bar
 	HB_HEALING_TARGET = "Цель исцеления";
 	HB_CONFIGURATION = "Настройка полосы лечения\nЛевый-клик для перемещения.\nПравый-клик прикрепить к Полосе произнесения.";
-	
 end
 
 L:RegisterTranslations("ruRU", function() return {
@@ -97,7 +96,6 @@ L:RegisterTranslations("ruRU", function() return {
 	["Target debuff healing modifier"] = "Модификатор исцеления цели - дебафы",
 	["BUFF: Hand of Edward the Odd (out of combat healing forced)"] = "БАФФ: Рука Эдварда Странного (вне боя - отмена лечения)",
 	["BUFF: Nature's Swiftness (out of combat healing forced)"] = "БАФФ: Природная стремительность (вне боя - отмена лечения)",
-	
 	
 	-- LUA priest --
 	["Player: "] = "Игрок: ",
@@ -139,6 +137,7 @@ L:RegisterTranslations("ruRU", function() return {
 	[" to NH "] = " с NH ",
 	
 	-- LUA druid --
+		--debug messages
 	["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"] = "Общий бонус лечения (1.5,2.0,2.5,3.0,3.5,Восстановление)",
 	["Gift of Nature modifier: %f"] = "Модификатор Дар природы: %f",
 	["Tranquil Spirit modifier: %f"] = "Модификатор Мирный дух: %f",
@@ -342,5 +341,4 @@ L:RegisterTranslations("ruRU", function() return {
 	["/qh subgroup - Forces the healing to the groups selected in the configuration panel."] = "/qh subgroup - Принудительное лечение выбранной группы в панели настройки.",
 	["/qh reset - Reset configuration to default parameters for all classes."] = "/qh reset - Сброс настроек до стандартных значений.",
 	["/qh healpct - Will prioritise the player with the lowest percentage of health."] = "/qh healpct - Приоритет для игрока с наименьшим процентом здоровья.",
-	
 } end)

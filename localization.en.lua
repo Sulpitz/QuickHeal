@@ -136,6 +136,7 @@ L:RegisterTranslations("enUS", function() return {
 	[" to NH "] = true,
 	
 	-- LUA druid --
+		--debug messages
 	["Final Healing Bonus (1.5,2.0,2.5,3.0,3.5,Regrowth)"] = true,
 	["Gift of Nature modifier: %f"] = true,
 	["Tranquil Spirit modifier: %f"] = true,
@@ -154,7 +155,6 @@ L:RegisterTranslations("enUS", function() return {
 	["Found HW up to rank %d, and found LHW up to rank %d"] = true,
 	["In combat, will prefer LHW"] = true,
 	["Not in combat, will use closest available HW or LHW"] = true,
-	
 	
 	-- CORE LUA --
 	--[ Settings ]--
