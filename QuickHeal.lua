@@ -1,12 +1,11 @@
-	local L = LibStub("AceLocale-3.1"):GetLocale("QuickHeal");
-	local B = LibStub("LibBabble-Spell-3.0");
-	local BS = B:GetLookupTable();
+local L		= AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS	= AceLibrary("Babble-Spell-2.2")
 
-QuickHeal = LibStub("AceAddon-3.0"):NewAddon("QuickHeal", "AceConsole-3.0", "AceEvent-3.0")
+QuickHeal = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0")
 
 -- other libs ----------------------------------------------------------------------------------
 HealComm = AceLibrary("HealComm-1.0")
---HealComm = LibStub("LibHealComm-4.0")
+
 --[ Mod data ]--
 QuickHealData = {
 	name = 'QuickHeal',

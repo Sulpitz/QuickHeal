@@ -1,6 +1,5 @@
-	local L = LibStub("AceLocale-3.1"):GetLocale("QuickHeal");
-	local B = LibStub("LibBabble-Spell-3.0");
-	local BS = B:GetLookupTable();
+local L					= AceLibrary("AceLocale-2.2"):new("QuickHeal")
+local BS				= AceLibrary("Babble-Spell-2.2")
 
 function QuickHeal_Shaman_GetRatioHealthyExplanation()
 	local RatioHealthy = QuickHeal_GetRatioHealthy();
