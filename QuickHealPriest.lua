@@ -1,5 +1,6 @@
-local L					= AceLibrary("AceLocale-2.2"):new("QuickHeal")
-local BS				= AceLibrary("Babble-Spell-2.2")
+	local L = LibStub("AceLocale-3.1"):GetLocale("QuickHeal");
+	local B = LibStub("LibBabble-Spell-3.0");
+	local BS = B:GetLookupTable();
 
 local function writePriestLine(s,r,g,b)
 	if DEFAULT_CHAT_FRAME then

@@ -9,6 +9,7 @@
 ## SavedVariables: 
 ## SavedVariablesPerCharacter: QuickHealVariables
 
+#Ace2 Libs
 libs\AceLibrary\AceLibrary.lua
 libs\AceOO-2.0\AceOO-2.0.lua
 libs\AceEvent-2.0\AceEvent-2.0.lua
@@ -17,6 +18,7 @@ libs\AceLocale-2.2\AceLocale-2.2.lua
 libs\AceConsole-2.0\AceConsole-2.0.lua
 libs\AceDebug-2.0\AceDebug-2.0.lua
 libs\AceAddon-2.0\AceAddon-2.0.lua
+
 libs\RosterLib-2.0\RosterLib-2.0.lua
 libs\Gratuity-2.0\Gratuity-2.0.lua
 libs\Compost-2.0\Compost-2.0.lua
@@ -27,9 +29,47 @@ libs\ItemBonusLib-1.0\Locales\frFR.lua
 libs\ItemBonusLib-1.0\Locales\ruRU.lua
 libs\ItemBonusLib-1.0\ItemBonusLib-1.0.lua
 libs\HealComm-1.0\HealComm-1.0.lua
-libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
 
+#TEMPLATE
+#libs3\Ace3v\LibStub\LibStub.lua
+#libs3\Ace3v\CallbackHandler-1.0\CallbackHandler-1.0.xml
+
+#libs3\Ace3v\AceCore-3.0\AceCore-3.0.xml
+#libs3\Ace3v\AceAddon-3.0\AceAddon-3.0.xml
+#libs3\Ace3v\AceEvent-3.0\AceEvent-3.0.xml
+#libs3\Ace3v\AceTimer-3.0\AceTimer-3.0.xml
+#libs3\Ace3v\AceBucket-3.0\AceBucket-3.0.xml
+#libs3\Ace3v\AceHook-3.0\AceHook-3.0.xml
+#libs3\Ace3v\AceDB-3.0\AceDB-3.0.xml
+#libs3\Ace3v\AceDBOptions-3.0\AceDBOptions-3.0.xml
+#libs3\Ace3v\AceLocale-3.0\AceLocale-3.0.xml
+#libs3\Ace3v\AceLocale-3.1\AceLocale-3.1.xml
+#libs3\Ace3v\AceConsole-3.0\AceConsole-3.0.xml
+#libs3\Ace3v\AceCursor-3.0\AceCursor-3.0.xml
+#libs3\Ace3v\AceGUI-3.0\AceGUI-3.0.xml
+#libs3\Ace3v\AceGUI-3.0\widgets\widgets.xml
+#libs3\Ace3v\AceConfig-3.0\AceConfig-3.0.xml
+#libs3\Ace3v\AceComm-3.0\AceComm-3.0.xml
+#libs3\Ace3v\AceTab-3.0\AceTab-3.0.xml
+#libs3\Ace3v\AceSerializer-3.0\AceSerializer-3.0.xml
+
+#Ace3 Libs
+libs3\Ace3v\LibStub\LibStub.lua
+libs3\Ace3v\CallbackHandler-1.0\CallbackHandler-1.0.xml
+
+libs3\Ace3v\AceCore-3.0\AceCore-3.0.xml
+libs3\Ace3v\AceAddon-3.0\AceAddon-3.0.xml
+libs3\Ace3v\AceEvent-3.0\AceEvent-3.0.xml
+
+#libs3\Ace3v\AceLocale-3.0\AceLocale-3.0.xml
+libs3\Ace3v\AceLocale-3.1\AceLocale-3.1.xml
+libs3\Ace3v\AceConsole-3.0\AceConsole-3.0.xml
+
+libs3\LibBabble-Spell-3.0\lib.xml
+
+#CORE
 Bindings.xml
 
+locales\_Locales.xml
 QuickHeal.xml
 HealingBar.xml

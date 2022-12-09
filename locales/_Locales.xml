@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+../../FrameXML/UI.xsd">
+
+<!-- enUS MUST be loaded first as default, this is due to changes in AceLocale, 26.01.2011 -->
+<Script file="Locale_enUS.lua"/>
+<Script file="Locale_deDE.lua"/>
+<Script file="Locale_frFR.lua"/>
+<Script file="Locale_koKR.lua"/>
+<Script file="Locale_zhCN.lua"/>
+<Script file="Locale_zhTW.lua"/>
+<Script file="Locale_esES.lua"/>
+<Script file="Locale_esMX.lua"/>
+<Script file="Locale_itIT.lua"/>
+<Script file="Locale_ptBR.lua"/>
+<Script file="Locale_ruRU.lua"/>
+
+</Ui>
