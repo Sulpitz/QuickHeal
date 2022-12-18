@@ -72,22 +72,22 @@ function QuickHeal_Druid_FindSpellToUse(Target)
 	local InCombat = UnitAffectingCombat('player') or UnitAffectingCombat(Target);
 
 	-- Gift of Nature - Increases healing by 2% per rank
-	local _,_,_,_,talentRank,_ = GetTalentInfo(3,12); 
+	local _,_,_,_,talentRank,_ = GetTalentInfo(3,12);
 	local gnMod = 2*talentRank/100 + 1;
 	debug(string.format(L["Gift of Nature modifier: %f"], gnMod));
 
 	-- Tranquil Spirit - Decreases mana usage by 2% per rank on HT only
-	local _,_,_,_,talentRank,_ = GetTalentInfo(3,9); 
+	local _,_,_,_,talentRank,_ = GetTalentInfo(3,9);
 	local tsMod = 1 - 2*talentRank/100;
 	debug(string.format(L["Tranquil Spirit modifier: %f"], tsMod));
 
 	-- Moonglow - Decrease mana usage by 3% per rank
-	local _,_,_,_,talentRank,_ = GetTalentInfo(1,14); 
+	local _,_,_,_,talentRank,_ = GetTalentInfo(1,14);
 	local mgMod = 1 - 3*talentRank/100;
 	debug(string.format(L["Moonglow modifier: %f"], mgMod));
 
 	-- Improved Rejuvenation -- Increases Rejuvenation effects by 5% per rank
-	--local _,_,_,_,talentRank,_ = GetTalentInfo(3,10); 
+	--local _,_,_,_,talentRank,_ = GetTalentInfo(3,10);
 	--local irMod = 5*talentRank/100 + 1;
 	--debug(string.format("Improved Rejuvenation modifier: %f", irMod));
 

@@ -31,5 +31,6 @@ libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
 
 Bindings.xml
 
+locales\_Locales.xml
 QuickHeal.xml
 HealingBar.xml

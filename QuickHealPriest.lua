@@ -32,19 +32,19 @@ function QuickHealFindGroupMembers()
 			subgroupTbl[name] = x
 		end
 	end
-	return subgroupTbl  
+	return subgroupTbl
 end
 
 function QuickHealPohTest()
 
-	QuickHealHealInfoFrame = CreateFrame("Frame", UIParent) 
-	QuickHealHealInfoFrame:SetPoint("CENTER",-190, -25)  
+	QuickHealHealInfoFrame = CreateFrame("Frame", UIParent)
+	QuickHealHealInfoFrame:SetPoint("CENTER",-190, -25)
 	QuickHealHealInfoFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
 	QuickHealHealInfoFrame:SetWidth(200)
 	QuickHealHealInfoFrame:SetHeight(22)
 
-	QuickHealHealInfoFrameFontstring = QuickHealHealInfoFrame:CreateFontString(nil, "OVERLAY")  
-	QuickHealHealInfoFrameFontstring:SetPoint("CENTER",0, 0)  
+	QuickHealHealInfoFrameFontstring = QuickHealHealInfoFrame:CreateFontString(nil, "OVERLAY")
+	QuickHealHealInfoFrameFontstring:SetPoint("CENTER",0, 0)
 	QuickHealHealInfoFrameFontstring:SetFont("Fonts\\FRIZQT__.TTF", 9)
 	QuickHealHealInfoFrameFontstring:SetText("Mytext")
 
@@ -113,8 +113,8 @@ function dummmyforlolz()
 			partyPlayerInRange = partyPlayerInRange - 1
 		end
 		-- PoH table here
-		
-		
+
+
 		partyPredictedMissingHealth = partyPlayerInRange * partyPlayerPredictedLeastMissingHealth
 	end
 
@@ -190,7 +190,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
 	QuickHeal_debug(string.format(L["Spiritual Healing modifier: %f"], shMod));
 
 	-- Improved Healing - Decreases mana usage by 5% per rank on LH,H and GH
-	local _,_,_,_,talentRank,_ = GetTalentInfo(2,10); 
+	local _,_,_,_,talentRank,_ = GetTalentInfo(2,10);
 	local ihMod = 1 - 5*talentRank/100;
 	QuickHeal_debug(string.format(L["Improved Healing modifier: %f"], ihMod));
 
@@ -387,7 +387,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
 		writePriestLine(L["HealSizePoH: "] .. HealSizePoH .. L[", in PoH Range: "] .. partyPlayersToHeal)
 		writePriestLine(L["HPS_NH: "] .. HealHPS)
 		writePriestLine(L["HPS_FH: "] .. HPS_FH)
-		writePriestLine(L["HPS_PoH: "] .. HPS_PoH)  
+		writePriestLine(L["HPS_PoH: "] .. HPS_PoH)
 		--writePriestLine(HPS_FH .. " > " .. HealHPS)
 	end
 	if HPS_FH > HealHPS then

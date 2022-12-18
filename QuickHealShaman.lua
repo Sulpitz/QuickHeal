@@ -9,9 +9,9 @@ function QuickHeal_Shaman_GetRatioHealthyExplanation()
 		return BS["Healing Wave"] .. L[" will never be used in combat. "];
 	else
 		if RatioHealthy > 0 then
-			return BS["Healing Wave"] .. L[" will only be used in combat if the target has more than "] .. RatioHealthy*100 .. L["% life, and only if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];          
+			return BS["Healing Wave"] .. L[" will only be used in combat if the target has more than "] .. RatioHealthy*100 .. L["% life, and only if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];
 		else
-			return BS["Healing Wave"] .. L[" will only be used in combat if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];         
+			return BS["Healing Wave"] .. L[" will only be used in combat if the healing done is greater than the greatest "] .. BS["Lesser Healing Wave"] .. L[" available. "];
 		end
 	end
 end
@@ -124,7 +124,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
 			-- OR LHW is unavailable (sub level 20 characters)
 		debug(string.format(L["In combat, will prefer LHW"]))
 		if Health < RatioFull then
-			local k = 0.9; -- In combat means that target is losing life while casting, so compensate           
+			local k = 0.9; -- In combat means that target is losing life while casting, so compensate
 			local K = 0.8; -- k for fast spells (LHW and HW Rank 1 and 2) and K for slow spells (HW)
 			if maxRankLHW >=1 then SpellID = SpellIDsLHW[1]; HealSize = 174*pMod+healModLHW else SpellID = SpellIDsHW[1]; HealSize = 39*pMod*hwMod+healMod15*PF1 end -- Default to HW or LHW
 				if healneed > (  71*pMod*hwMod+healMod20*PF6 )*k and ManaLeft >= 45*tfMod and maxRankHW >=2 and NoLHW then SpellID = SpellIDsHW[2]; HealSize =  71*pMod*hwMod+healMod20*PF6 end
@@ -147,7 +147,7 @@ function QuickHeal_Shaman_FindSpellToUse(Target)
 		-- Not in combat so use the closest available healing
 		debug(string.format(L["Not in combat, will use closest available HW or LHW"]))
 		if Health < RatioFull then
-			SpellID = SpellIDsHW[1]; HealSize = 39*pMod*hwMod+healMod15*PF1; 
+			SpellID = SpellIDsHW[1]; HealSize = 39*pMod*hwMod+healMod15*PF1;
 				if healneed > ( 71*pMod*hwMod+healMod20*PF6 ) and ManaLeft >= 45*tfMod and maxRankHW >=2 then SpellID = SpellIDsHW[2]; HealSize = 71*pMod*hwMod+healMod20*PF6 end
 				if healneed > (142*pMod*hwMod+healMod25*PF12) and ManaLeft >= 80*tfMod and maxRankHW >=3 then SpellID = SpellIDsHW[3]; HealSize = 142*pMod*hwMod+healMod25*PF12 end
 			if healneed > (174*pMod+healModLHW) and ManaLeft >= 105*tfMod and maxRankLHW >=1 then SpellID = SpellIDsLHW[1]; HealSize = 174*pMod+healModLHW end
