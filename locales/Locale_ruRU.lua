@@ -2,6 +2,21 @@ local L = AceLibrary("AceLocale-2.2"):new("QuickHeal")
 
 -- Russian localization
 L:RegisterTranslations("ruRU", function()
+
+	--[ Keybinding ]--
+	BINDING_HEADER_QUICKHEAL = "Быстрое Лечение"
+	BINDING_NAME_QUICKHEAL_HEAL = "Лечение"
+	BINDING_NAME_QUICKHEAL_HEALSUBGROUP = "Лечить Подгруппу"
+	BINDING_NAME_QUICKHEAL_HEALPARTY = "Лечить Группу"
+	BINDING_NAME_QUICKHEAL_HEALMT = "Лечить Танков"
+	BINDING_NAME_QUICKHEAL_HEALNONMT = "Лечить не Танков"
+	BINDING_NAME_QUICKHEAL_HEALSELF = "Лечить Игрока"
+	BINDING_NAME_QUICKHEAL_HEALTARGET = "Лечить Цель"
+	BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Лечить Цель-Цели"
+	BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Переключить порог здоровья 0 / 100%"
+	BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Показать/Скрыть Окно Уровня"
+	BINDING_NAME_QUICKHEAL_SETHEALMODE3 = "Переключить в Режим 3"
+
 	-- XML
 	QH_CONFIGURATION = "Настройка QuickHeal"
 	QH_GENERAL = "Основные"
@@ -69,7 +84,6 @@ L:RegisterTranslations("ruRU", function()
 	QH_RAID_GROUP_8 = "Рейд группа 8"
 	QH_BE_HEALED = "будет исцелена."
 	-- "DownrankValueNH: ";					not involved
-	-- "General Healing Threshold: ";		not involved
 
 	-- XML Healing bar
 	HB_HEALING_TARGET = "Цель исцеления"
@@ -158,19 +172,6 @@ L:RegisterTranslations("ruRU", function()
 		--[ Settings ]--
 		["Healing %s with %s"] = "Исцеление %s - %s",
 		["Healing you with %s"] = "Исцеляю тебя: %s",
-		--[ Keybinding ]--
-		["QuickHeal"] = "Быстрое Лечение",
-		["Heal"] = "Лечение",
-		["Heal Subgroup"] = "Лечить Подгруппу",
-		["Heal Party"] = "Лечить Группу",
-		["Heal MT"] = "Лечить Танков",
-		["Heal Non MT"] = "Лечить не Танков",
-		["Heal Player"] = "Лечить Игрока",
-		["Heal Target"] = "Лечить Цель",
-		["Heal Target's Target"] = "Лечить Цель-Цели",
-		["Toggle Healthy Threshold 0 / 100%"] = "Переключить порог здоровья 0 / 100%",
-		["Show/Hide Downrank Window"] = "Показать/Скрыть Окно Уровня",
-		["Swich to Healmode 3"] = "Переключить в Режим 3",
 		--[ Titan Panel functions ]--
 		[" Configuration"] = " Настройки",
 		["Click to toggle configuration panel"] = "Нажмите, чтобы открыть панель настроек",

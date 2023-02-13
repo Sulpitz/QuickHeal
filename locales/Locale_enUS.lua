@@ -2,6 +2,21 @@ local L = AceLibrary("AceLocale-2.2"):new("QuickHeal")
 
 -- English localization
 L:RegisterTranslations("enUS", function()
+
+	--[ Keybinding ]--
+	BINDING_HEADER_QUICKHEAL = "QuickHeal"
+	BINDING_NAME_QUICKHEAL_HEAL = "Heal"
+	BINDING_NAME_QUICKHEAL_HEALSUBGROUP = "Heal Subgroup"
+	BINDING_NAME_QUICKHEAL_HEALPARTY = "Heal Party"
+	BINDING_NAME_QUICKHEAL_HEALMT = "Heal MT"
+	BINDING_NAME_QUICKHEAL_HEALNONMT = "Heal Non MT"
+	BINDING_NAME_QUICKHEAL_HEALSELF = "Heal Player"
+	BINDING_NAME_QUICKHEAL_HEALTARGET = "Heal Target"
+	BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Heal Target's Target"
+	BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Toggle Healthy Threshold 0 / 100%"
+	BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Show/Hide Downrank Window"
+	BINDING_NAME_QUICKHEAL_SETHEALMODE3 = "Swich to Healmode 3"
+
 	-- XML
 	QH_CONFIGURATION = "QuickHeal Configuration"
 	QH_GENERAL = "General"
@@ -69,7 +84,6 @@ L:RegisterTranslations("enUS", function()
 	QH_RAID_GROUP_8 = "Raid group 8 will"
 	QH_BE_HEALED = "be healed."
 	-- "DownrankValueNH: ";					not involved
-	-- "General Healing Threshold: ";		not involved
 
 	-- XML Healing bar
 	HB_HEALING_TARGET = "Healing Target"
@@ -158,19 +172,6 @@ L:RegisterTranslations("enUS", function()
 		--[ Settings ]--
 		["Healing %s with %s"] = true,
 		["Healing you with %s"] = true,
-		--[ Keybinding ]--
-		["QuickHeal"] = true,
-		["Heal"] = true,
-		["Heal Subgroup"] = true,
-		["Heal Party"] = true,
-		["Heal MT"] = true,
-		["Heal Non MT"] = true,
-		["Heal Player"] = true,
-		["Heal Target"] = true,
-		["Heal Target's Target"] = true,
-		["Toggle Healthy Threshold 0 / 100%"] = true,
-		["Show/Hide Downrank Window"] = true,
-		["Swich to Healmode 3"] = true,
 		--[ Titan Panel functions ]--
 		[" Configuration"] = true,
 		["Click to toggle configuration panel"] = true,

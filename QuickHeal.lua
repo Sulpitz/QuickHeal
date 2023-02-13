@@ -72,20 +72,6 @@ local HealingTarget -- Contains the unitID of the last player that was attempted
 local BlackList = {} -- List of times were the players are no longer blacklisted
 local LastBlackListTime = 0
 
---[ Keybinding ]--
-BINDING_HEADER_QUICKHEAL = L["QuickHeal"]
-BINDING_NAME_QUICKHEAL_HEAL = L["Heal"]
-BINDING_NAME_QUICKHEAL_HEALSUBGROUP = L["Heal Subgroup"]
-BINDING_NAME_QUICKHEAL_HEALPARTY = L["Heal Party"]
-BINDING_NAME_QUICKHEAL_HEALMT = L["Heal MT"]
-BINDING_NAME_QUICKHEAL_HEALNONMT = L["Heal Non MT"]
-BINDING_NAME_QUICKHEAL_HEALSELF = L["Heal Player"]
-BINDING_NAME_QUICKHEAL_HEALTARGET = L["Heal Target"]
-BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = L["Heal Target's Target"]
-BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = L["Toggle Healthy Threshold 0 / 100%"]
-BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = L["Show/Hide Downrank Window"]
-BINDING_NAME_QUICKHEAL_SETHEALMODE3 = L["Swich to Healmode 3"]
-
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil
 local GetRatioHealthyExplanation = nil

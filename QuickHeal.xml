@@ -1413,7 +1413,7 @@
 						QuickHealDownrank_RankNumberTop:SetText(quickHealDownRankNH);
 					<!--
 						DEFAULT_CHAT_FRAME:AddMessage("DownrankValueNH: " .. QuickHealVariables["DownrankValueNH"], 1, 1, 0.5)
-						QuickHealConfig_TextRatioFull:SetText("General Healing Threshold: " .. this:GetValue() .. "%");
+						QuickHealConfig_TextRatioFull:SetText(QH_GENERAL_HEALING_THRESHOLD .. this:GetValue() .. "%");
 						QuickHealConfig_Explanation:SetText(QuickHeal_GetExplanation("RatioHealthy"));
 						if( this.tooltipShown ) then
 							GameTooltip:SetText(QuickHeal_GetExplanation("RatioFull"));
