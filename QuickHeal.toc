@@ -29,8 +29,8 @@ libs\ItemBonusLib-1.0\ItemBonusLib-1.0.lua
 libs\HealComm-1.0\HealComm-1.0.lua
 libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
 
-Bindings.xml
-
 locales\_Locales.xml
+
+Bindings.xml
 QuickHeal.xml
 HealingBar.xml
