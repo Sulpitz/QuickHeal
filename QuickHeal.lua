@@ -12,7 +12,7 @@ QuickHealData = {
 	version = "1.13.4_hc05",
 	releaseDate = "September 6th, 2006",
 	author = "T. Thorsen, S. Geeding and K. Karachalios",
-	website = "http://ui.worldofwar.net/ui.php?id=1872",
+	website = "https://github.com/Sulpitz/QuickHeal",
 	category = MYADDONS_CATEGORY_CLASS,
 }
 

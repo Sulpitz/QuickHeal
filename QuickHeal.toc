@@ -1,6 +1,7 @@
 ## Interface: 11200
 ## Title: QuickHeal
 ## Title-ruRU: Быстрое Лечение
+## Version: 1.13.4_hc05
 ## Author: Thomas Thorsen, Scott Geeding and Kostas Karachalios
 ## Notes: Quick healing of party/raid members
 ## Notes-ruRU: Быстрое лечение группы/рейда
