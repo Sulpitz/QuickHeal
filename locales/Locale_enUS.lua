@@ -213,7 +213,7 @@ L:RegisterTranslations("enUS", function()
 		-- Get an explanation of effects based on current settings
 		["Will only heal targets with less than "] = true,
 		["% health."] = true,
-		[" is disabled.]"] = true,
+		[" is disabled."] = true,
 		["If you have less than "] = true,
 		["% health, you will become the target of the heal."] = true,
 		["Self preservation disabled."] = true,

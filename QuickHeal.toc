@@ -5,7 +5,7 @@
 ## Author: Thomas Thorsen, Scott Geeding and Kostas Karachalios
 ## Notes: Quick healing of party/raid members
 ## Notes-ruRU: Быстрое лечение группы/рейда
-## OptionalDeps: BonusScanner,Titan Panel,myAddOns,CT_RaidAssist
+## OptionalDeps: BonusScanner, Titan Panel, myAddOns, CT_RaidAssist
 ## RequiredDeps:
 ## SavedVariables: 
 ## SavedVariablesPerCharacter: QuickHealVariables

@@ -14,7 +14,7 @@ L:RegisterTranslations("ruRU", function()
 	BINDING_NAME_QUICKHEAL_HEALTARGET = "Лечить Цель"
 	BINDING_NAME_QUICKHEAL_HEALTARGETTARGET = "Лечить Цель-Цели"
 	BINDING_NAME_QUICKHEAL_TOGGLEHEALTHYTHRESHOLD = "Переключить порог здоровья 0 / 100%"
-	BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Показать/Скрыть Окно Уровня"
+	BINDING_NAME_QUICKHEAL_SHOWDOWNRANKWINDOW = "Показать / Скрыть Окно Уровня"
 	BINDING_NAME_QUICKHEAL_SETHEALMODE3 = "Переключить в Режим 3"
 
 	-- XML
@@ -65,7 +65,7 @@ L:RegisterTranslations("ruRU", function()
 	QH_HEALING_BAR_IS = "Полоса лечения"
 	QH_NOT = " не "
 	QH_DISPLAYED = "отображается."
-	QH_HEALING = "Лечение" -- MessageConfigure ComboBox --> -- XML-827, depends on - Deliver message ["Healing"] =
+	QH_HEALING = "Healing" -- MessageConfigure ComboBox --> -- XML-827, depends on - Deliver message ["Healing"] =
 	QH_MESSAGES = " - сообщения"
 	QH_DELIVERED_CENTER_SCREEN = "будут показаны по центру экрана"
 	QH_DELIVERED_CHAT_WINDOW = "будут доставлены в чат."
@@ -176,10 +176,10 @@ L:RegisterTranslations("ruRU", function()
 		[" Configuration"] = " Настройки",
 		["Click to toggle configuration panel"] = "Нажмите, чтобы открыть панель настроек",
 		-- Deliver message
-		["Healing"] = "Лечение", -- Переводить так же как QH_HEALING
-		["Info"] = "Информация",
-		["Blacklist"] = "Черный список",
-		["Error"] = "Ошибка",
+		["Healing"] = nil, -- Переводить так же как QH_HEALING
+		["Info"] = nil,
+		["Blacklist"] = nil,
+		["Error"] = nil,
 		-- QuickHeal_ListUnitEffects
 		["|cffffff80******* Buffs on "] = "|cffffff80******* Баффы на ",
 		["Unknown"] = "Неизвестно",
@@ -213,7 +213,7 @@ L:RegisterTranslations("ruRU", function()
 		-- Get an explanation of effects based on current settings
 		["Will only heal targets with less than "] = "Будет лечить только цели с менее, чем ",
 		["% health."] = "% здоровья.",
-		[" is disabled.]"] = " отключен.",
+		[" is disabled."] = " отключен.",
 		["If you have less than "] = "Если у вас менее ",
 		["% health, you will become the target of the heal."] = "% здоровья, вы станете целью лечения.",
 		["Self preservation disabled."] = "Самосохранение отключено.",
