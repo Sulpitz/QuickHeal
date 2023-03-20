@@ -71,6 +71,8 @@ local HealingSpellSize = 0
 local HealingTarget -- Contains the unitID of the last player that was attempted healed
 local BlackList = {} -- List of times were the players are no longer blacklisted
 local LastBlackListTime = 0
+local LocPlayerClass, PlayerClass = UnitClass("player")
+local _, UnitRace = UnitRace("player")
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil
@@ -199,25 +201,23 @@ local function Initialise()
 	-- Update configuration panel with version information
 	QuickHealConfig_TextVersion:SetText(L["Version: "] .. QuickHealData.version)
 
-	local _, PlayerClass = UnitClass("player")
-	PlayerClass = string.lower(PlayerClass)
 	quickHealHealMode = 1
 
-	if PlayerClass == "shaman" then
+	if PlayerClass == "SHAMAN" then
 		FindSpellToUse = QuickHeal_Shaman_FindSpellToUse
 		GetRatioHealthyExplanation = QuickHeal_Shaman_GetRatioHealthyExplanation
-	elseif PlayerClass == "priest" then
+	elseif PlayerClass == "PRIEST" then
 		FindSpellToUse = QuickHeal_Priest_FindSpellToUse
 		GetRatioHealthyExplanation = QuickHeal_Priest_GetRatioHealthyExplanation
-	elseif PlayerClass == "paladin" then
+	elseif PlayerClass == "PALADIN" then
 		FindSpellToUse = QuickHeal_Paladin_FindSpellToUse
 		GetRatioHealthyExplanation = QuickHeal_Paladin_GetRatioHealthyExplanation
 		QuickHeal_Paladin_SetDownrankGUI()
-	elseif PlayerClass == "druid" then
+	elseif PlayerClass == "DRUID" then
 		FindSpellToUse = QuickHeal_Druid_FindSpellToUse
 		GetRatioHealthyExplanation = QuickHeal_Druid_GetRatioHealthyExplanation
 	else
-		writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. UnitClass("player") .. ". " .. QuickHealData.name .. L[" not loaded."])
+		writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. string.lower(LocPlayerClass) .. ". " .. QuickHealData.name .. L[" not loaded."])
 		return
 	end
 
@@ -230,6 +230,8 @@ local function Initialise()
 	UIErrorsFrame_OnEvent = NewUIErrorsFrame_OnEvent
 
 	-- Setup QuickHealVariables (and initialise upon first use)
+	
+	if not QuickHealVariables then QuickHealVariables={}; end
 	QHV = QuickHealVariables
 	for k in pairs(DQHV) do
 		if QHV[k] == nil then
@@ -247,7 +249,7 @@ local function Initialise()
 	--table.insert(UnitPopupMenus["PARTY"],table.getn(UnitPopupMenus["PARTY"]),"DEDICATEDHEALINGTARGET");
 	--UnitPopupButtons["DEDICATEDHEALINGTARGET"] = { text = TEXT("Designate Healing Target"), dist = 0 };
 
-	writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" for "] .. UnitClass("player") .. L[" Loaded. Usage: '/qh help'."])
+	writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" for "] .. string.lower(LocPlayerClass) .. L[" Loaded. Usage: '/qh help'."])
 
 	-- Initialise QuickClick
 	if QHV.QuickClickEnabled and (type(QuickClick_Load) == "function") then
@@ -350,11 +352,19 @@ local function UpdateQuickHealOverhealStatus()
 		textframe:SetText(txt)
 	end
 
-	-- BellTollAlliance.wav BellTollTribal.wav BellTollNightElf.wav BellTollHorde.wav
 	local font = textframe:GetFont()
+	local englishFaction, _ = UnitFactionGroup("player")
 	if waste > 50 then
-		if OverhealMessagePlaySound then
-			PlaySoundFile("Sound\\Doodad\\BellTollAlliance.wav")
+		if QHV.OverhealMessagePlaySound then
+			if UnitRace == "NightElf" then
+				PlaySoundFile("Sound\\Doodad\\BellTollNightElf.wav")
+			elseif PlayerClass == "Shaman" then
+				PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav")
+			elseif englishFaction == "Alliance" then
+				PlaySoundFile("Sound\\Doodad\\BellTollAlliance.wav")
+			elseif englishFaction == "Horde" then
+				PlaySoundFile("Sound\\Doodad\\BellTollHorde.wav")
+			end
 		end
 		QuickHealOverhealStatusScreenCenter:AddMessage(txt, 1, 0, 0, 1, 5)
 		textframe:SetTextColor(1, 0, 0)
@@ -585,17 +595,16 @@ function QuickHeal_GetExplanation(Parameter)
 end
 
 function QuickHeal_GetRatioHealthy()
-	local _, PlayerClass = UnitClass("player")
-	if string.lower(PlayerClass) == "druid" then
+	if PlayerClass == "DRUID" then
 		return QHV.RatioHealthyDruid
 	end
-	if string.lower(PlayerClass) == "paladin" then
+	if PlayerClass == "PALADIN" then
 		return QHV.RatioHealthyPaladin
 	end
-	if string.lower(PlayerClass) == "priest" then
+	if PlayerClass == "PRIEST" then
 		return QHV.RatioHealthyPriest
 	end
-	if string.lower(PlayerClass) == "shaman" then
+	if PlayerClass == "SHAMAN" then
 		return QHV.RatioHealthyShaman
 	end
 	return nil
@@ -612,7 +621,6 @@ end
 
 -- Change HealMode
 function QuickHeal_SetHealMode(mode)
-	local _, PlayerClass = UnitClass("player")
 	if mode == 3 then
 		quickHealHealMode = 3
 		--writeLine("Healmode 3")
@@ -622,7 +630,7 @@ function QuickHeal_SetHealMode(mode)
 	elseif mode == 2 then
 		quickHealHealMode = 2
 		--writeLine("Healmode 2")
-		if string.lower(PlayerClass) == "priest" then
+		if PlayerClass == "PRIEST" then
 			--writeLine("priest")
 			QuickHealDownrank_MarkerTop:Hide()
 			QuickHealDownrank_MarkerBot:Show()
@@ -634,7 +642,7 @@ function QuickHeal_SetHealMode(mode)
 	elseif mode == 1 then
 		quickHealHealMode = 1
 		--writeLine("Healmode 1")
-		if string.lower(PlayerClass) == "priest" then
+		if PlayerClass == "PRIEST" then
 			--writeLine("priest")
 			QuickHealDownrank_MarkerTop:Show()
 			QuickHealDownrank_MarkerBot:Hide()
@@ -986,28 +994,26 @@ function QuickHeal_EstimateUnitHealNeed(unit, report)
 	-- Estimate target health
 	local HealthPercentage = UnitHealth(unit) or 0
 	HealthPercentage = HealthPercentage / 100
-	local _, Class = UnitClass(unit)
-	Class = Class or "Unknown"
-	MaxHealthTab = { warrior = 4100, paladin = 4000, shaman = 3500, rogue = 3100, hunter = 3100, druid = 3100, warlock = 2300, mage = 2200, priest = 2100 }
-	local MaxHealth = MaxHealthTab[string.lower(Class)] or 4000
+	local LocUnitClass, UnitClass = UnitClass(unit)
+	UnitClass = UnitClass or "Unknown"
+	MaxHealthTab = { WARRIOR = 4100, PALADIN = 4000, SHAMAN = 3500, ROGUE = 3100, HUNTER = 3100, DRUID = 3100, WARLOCK = 2300, MAGE = 2200, PRIEST = 2100 }
+	local MaxHealth = MaxHealthTab[UnitClass] or 4000
 	local Level = UnitLevel(unit) or 60
 	local HealNeed = (1 - HealthPercentage) * MaxHealth * Level / 60
 	if report then
-		QuickHeal_debug(L["Health deficit estimate ("] .. Level .. " " .. string.lower(Class) .. " @ " .. HealthPercentage * 100 .. "%)", HealNeed)
+		QuickHeal_debug(L["Health deficit estimate ("] .. Level .. " " .. string.lower(LocUnitClass) .. " @ " .. HealthPercentage * 100 .. "%)", HealNeed)
 	end
 	return HealNeed
 end
 
 local function CastCheckSpell()
-	local _, class = UnitClass("player")
-	class = string.lower(class)
-	if class == "druid" then
+	if PlayerClass == "DRUID" then
 		CastSpell(QuickHeal_GetSpellInfo(BS["Healing Touch"])[1].SpellID, BOOKTYPE_SPELL)
-	elseif class == "paladin" then
+	elseif PlayerClass == "PALADIN" then
 		CastSpell(QuickHeal_GetSpellInfo(BS["Holy Light"])[1].SpellID, BOOKTYPE_SPELL)
-	elseif class == "priest" then
+	elseif PlayerClass == "PRIEST" then
 		CastSpell(QuickHeal_GetSpellInfo(BS["Lesser Heal"])[1].SpellID, BOOKTYPE_SPELL)
-	elseif class == "shaman" then
+	elseif PlayerClass == "SHAMAN" then
 		CastSpell(QuickHeal_GetSpellInfo(BS["Healing Wave"])[1].SpellID, BOOKTYPE_SPELL)
 	end
 end
@@ -1132,16 +1138,14 @@ local function FindWhoToHeal(Restrict, extParam)
 					local PredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - IncHeal
 
 					if PredictedHealthPct < QHV.RatioFull then
-						local _, PlayerClass = UnitClass("player")
-						PlayerClass = string.lower(PlayerClass)
 
-						if PlayerClass == "shaman" then
+						if PlayerClass == "SHAMAN" then
 							if PredictedHealthPct < healingTargetHealthPct then
 								healingTarget = unit
 								healingTargetHealthPct = PredictedHealthPct
 								AllPlayersAreFull = false
 							end
-						elseif PlayerClass == "priest" then
+						elseif PlayerClass == "PRIEST" then
 							--writeLine("Find who to heal for Priest");
 							if healPlayerWithLowestPercentageOfLife == 1 then
 								if PredictedHealthPct < healingTargetHealthPct then
@@ -1156,7 +1160,7 @@ local function FindWhoToHeal(Restrict, extParam)
 									AllPlayersAreFull = false
 								end
 							end
-						elseif PlayerClass == "paladin" then
+						elseif PlayerClass == "PALADIN" then
 							--writeLine("Find who to heal for Paladin")
 							if healPlayerWithLowestPercentageOfLife == 1 then
 								if PredictedHealthPct < healingTargetHealthPct then
@@ -1171,14 +1175,14 @@ local function FindWhoToHeal(Restrict, extParam)
 									AllPlayersAreFull = false
 								end
 							end
-						elseif PlayerClass == "druid" then
+						elseif PlayerClass == "DRUID" then
 							if PredictedHealthPct < healingTargetHealthPct then
 								healingTarget = unit
 								healingTargetHealthPct = PredictedHealthPct
 								AllPlayersAreFull = false
 							end
 						else
-							writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. UnitClass("player") .. ". " .. QuickHealData.name .. L[" not loaded."])
+							writeLine(QuickHealData.name .. " " .. QuickHealData.version .. L[" does not support "] .. string.lower(LocPlayerClass) .. ". " .. QuickHealData.name .. L[" not loaded."])
 							return
 						end
 					end
@@ -1251,18 +1255,16 @@ local function Notification(unit, spellName)
 	local unitName = UnitFullName(unit)
 	local rand = math.random(1, 10)
 	local read
-	local _, race = UnitRace("player")
-	race = string.lower(race)
 
-	if race == "scourge" then
+	if UnitRace == "Scourge" then
 		rand = math.random(1, 7)
 	end
 
-	if race == "human" then
+	if UnitRace == "Human" then
 		rand = math.random(1, 7)
 	end
 
-	if race == "dwarf" then
+	if UnitRace == "Dwarf" then
 		rand = math.random(1, 7)
 	end
 
@@ -1295,7 +1297,7 @@ local function Notification(unit, spellName)
 	if rand == 7 then
 		read = string.format(L["%s is being healed with %s."], unitName, spellName)
 	end
-	if race == "orc" then
+	if UnitRace == "Orc" then
 		if rand == 8 then
 			read = string.format(L["Zug Zug %s with %s."], unitName, spellName)
 		end
@@ -1306,7 +1308,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Health gud %s, %s make you healthy again!"], unitName, spellName)
 		end
 	end
-	if race == "tauren" then
+	if UnitRace == "Tauren" then
 		if rand == 8 then
 			read = string.format(L["By the spirits, %s be healed with %s."], unitName, spellName)
 		end
@@ -1317,7 +1319,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Your noble sacrifice is not in vain %s, %s will keep you in the fight!"], unitName, spellName)
 		end
 	end
-	if race == "troll" then
+	if UnitRace == "Troll" then
 		if rand == 8 then
 			read = string.format(L["Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd."], unitName, spellName)
 		end
@@ -1328,7 +1330,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!"], unitName, spellName)
 		end
 	end
-	if race == "night elf" then
+	if UnitRace == "NightElf" then
 		if rand == 8 then
 			read = string.format(L["Asht'velanon, %s! Elune sends you the gift of %s."], unitName, spellName)
 		end
