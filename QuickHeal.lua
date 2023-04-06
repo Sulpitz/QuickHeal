@@ -72,7 +72,7 @@ local HealingTarget -- Contains the unitID of the last player that was attempted
 local BlackList = {} -- List of times were the players are no longer blacklisted
 local LastBlackListTime = 0
 local LocPlayerClass, PlayerClass = UnitClass("player")
-local _, UnitRace = UnitRace("player")
+local _, PlayerRace = UnitRace("player")
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil
@@ -356,9 +356,9 @@ local function UpdateQuickHealOverhealStatus()
 	local englishFaction, _ = UnitFactionGroup("player")
 	if waste > 50 then
 		if QHV.OverhealMessagePlaySound then
-			if UnitRace == "NightElf" then
+			if PlayerRace == "NightElf" then
 				PlaySoundFile("Sound\\Doodad\\BellTollNightElf.wav")
-			elseif PlayerClass == "Shaman" then
+			elseif PlayerClass == "SHAMAN" then
 				PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav")
 			elseif englishFaction == "Alliance" then
 				PlaySoundFile("Sound\\Doodad\\BellTollAlliance.wav")
@@ -1256,15 +1256,15 @@ local function Notification(unit, spellName)
 	local rand = math.random(1, 10)
 	local read
 
-	if UnitRace == "Scourge" then
+	if PlayerRace == "Scourge" then
 		rand = math.random(1, 7)
 	end
 
-	if UnitRace == "Human" then
+	if PlayerRace == "Human" then
 		rand = math.random(1, 7)
 	end
 
-	if UnitRace == "Dwarf" then
+	if PlayerRace == "Dwarf" then
 		rand = math.random(1, 7)
 	end
 
@@ -1297,7 +1297,7 @@ local function Notification(unit, spellName)
 	if rand == 7 then
 		read = string.format(L["%s is being healed with %s."], unitName, spellName)
 	end
-	if UnitRace == "Orc" then
+	if PlayerRace == "Orc" then
 		if rand == 8 then
 			read = string.format(L["Zug Zug %s with %s."], unitName, spellName)
 		end
@@ -1308,7 +1308,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Health gud %s, %s make you healthy again!"], unitName, spellName)
 		end
 	end
-	if UnitRace == "Tauren" then
+	if PlayerRace == "Tauren" then
 		if rand == 8 then
 			read = string.format(L["By the spirits, %s be healed with %s."], unitName, spellName)
 		end
@@ -1319,7 +1319,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Your noble sacrifice is not in vain %s, %s will keep you in the fight!"], unitName, spellName)
 		end
 	end
-	if UnitRace == "Troll" then
+	if PlayerRace == "Troll" then
 		if rand == 8 then
 			read = string.format(L["Whoa mon, doncha be dyin' on me yet! %s is gettin' %s'd."], unitName, spellName)
 		end
@@ -1330,7 +1330,7 @@ local function Notification(unit, spellName)
 			read = string.format(L["Doncha tink the heal is comin' %s, %s should keep ya' from whinin' too much!"], unitName, spellName)
 		end
 	end
-	if UnitRace == "NightElf" then
+	if PlayerRace == "NightElf" then
 		if rand == 8 then
 			read = string.format(L["Asht'velanon, %s! Elune sends you the gift of %s."], unitName, spellName)
 		end
