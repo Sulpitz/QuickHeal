@@ -95,7 +95,7 @@ function QuickHeal_Druid_FindSpellToUse(Target)
 	local ManaLeft = UnitMana("player")
 
 	if TargetIsHealthy then
-		debug(L["Target is healthy "], Health)
+		debug(L["Target is healthy"], Health)
 	end
 
 	-- Detect Clearcasting (from Omen of Clarity, talent(1,9))

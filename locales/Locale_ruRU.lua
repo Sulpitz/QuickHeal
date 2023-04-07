@@ -103,7 +103,7 @@ L:RegisterTranslations("ruRU", function()
 		[" available. "] = " доступно. ",
 		["Equipment Healing Bonus: %d"] = "Бонус лечения от Экипировки: %d",
 		["Improved Healing modifier: %f"] = "Модификатор улучшенного исцеления: %f",
-		["Target is healthy "] = "Цель здорова",
+		["Target is healthy"] = "Цель здорова",
 		["Target debuff healing modifier"] = "Модификатор исцеления цели - дебафы",
 		["BUFF: Hand of Edward the Odd (out of combat healing forced)"] = "БАФФ: Рука Эдварда Странного (вне боя - отмена лечения)",
 		["BUFF: Nature's Swiftness (out of combat healing forced)"] = "БАФФ: Природная стремительность (вне боя - отмена лечения)",
