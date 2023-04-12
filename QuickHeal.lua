@@ -71,8 +71,6 @@ local HealingSpellSize = 0
 local HealingTarget -- Contains the unitID of the last player that was attempted healed
 local BlackList = {} -- List of times were the players are no longer blacklisted
 local LastBlackListTime = 0
-local LocPlayerClass, PlayerClass = UnitClass("player")
-local _, PlayerRace = UnitRace("player")
 
 --[ Reference to external Who-To-Heal modules ]--
 local FindSpellToUse = nil
@@ -202,7 +200,7 @@ local function Initialise()
 	QuickHealConfig_TextVersion:SetText(L["Version: "] .. QuickHealData.version)
 
 	quickHealHealMode = 1
-
+	local LocPlayerClass, PlayerClass = UnitClass("player")
 	if PlayerClass == "SHAMAN" then
 		FindSpellToUse = QuickHeal_Shaman_FindSpellToUse
 		GetRatioHealthyExplanation = QuickHeal_Shaman_GetRatioHealthyExplanation
@@ -595,6 +593,7 @@ function QuickHeal_GetExplanation(Parameter)
 end
 
 function QuickHeal_GetRatioHealthy()
+	local _, PlayerClass = UnitClass("player")
 	if PlayerClass == "DRUID" then
 		return QHV.RatioHealthyDruid
 	end
@@ -621,6 +620,7 @@ end
 
 -- Change HealMode
 function QuickHeal_SetHealMode(mode)
+	local _, PlayerClass = UnitClass("player")
 	if mode == 3 then
 		quickHealHealMode = 3
 		--writeLine("Healmode 3")
@@ -1007,6 +1007,7 @@ function QuickHeal_EstimateUnitHealNeed(unit, report)
 end
 
 local function CastCheckSpell()
+	local _, PlayerClass = UnitClass("player")
 	if PlayerClass == "DRUID" then
 		CastSpell(QuickHeal_GetSpellInfo(BS["Healing Touch"])[1].SpellID, BOOKTYPE_SPELL)
 	elseif PlayerClass == "PALADIN" then
@@ -1138,7 +1139,7 @@ local function FindWhoToHeal(Restrict, extParam)
 					local PredictedMissingHealth = UnitHealthMax(unit) - UnitHealth(unit) - IncHeal
 
 					if PredictedHealthPct < QHV.RatioFull then
-
+						local LocPlayerClass, PlayerClass = UnitClass("player")
 						if PlayerClass == "SHAMAN" then
 							if PredictedHealthPct < healingTargetHealthPct then
 								healingTarget = unit
@@ -1255,6 +1256,7 @@ local function Notification(unit, spellName)
 	local unitName = UnitFullName(unit)
 	local rand = math.random(1, 10)
 	local read
+	local _, PlayerRace = UnitRace("player")
 
 	if PlayerRace == "Scourge" then
 		rand = math.random(1, 7)
