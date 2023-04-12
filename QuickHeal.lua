@@ -351,19 +351,20 @@ local function UpdateQuickHealOverhealStatus()
 	end
 
 	local font = textframe:GetFont()
+	local _, PlayerClass = UnitClass("player")
+	local _, PlayerRace = UnitRace("player")
 	local englishFaction, _ = UnitFactionGroup("player")
-	if waste > 50 then
-		if QHV.OverhealMessagePlaySound then
-			if PlayerRace == "NightElf" then
-				PlaySoundFile("Sound\\Doodad\\BellTollNightElf.wav")
-			elseif PlayerClass == "SHAMAN" then
-				PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav")
-			elseif englishFaction == "Alliance" then
-				PlaySoundFile("Sound\\Doodad\\BellTollAlliance.wav")
-			elseif englishFaction == "Horde" then
-				PlaySoundFile("Sound\\Doodad\\BellTollHorde.wav")
-			end
-		end
+	if waste > 50 and QHV.OverhealMessagePlaySound then
+		local sounds = {
+			["NightElf"] = "Sound\\Doodad\\BellTollNightElf.wav",
+			["SHAMAN"] = "Sound\\Doodad\\BellTollTribal.wav",
+			["Alliance"] = "Sound\\Doodad\\BellTollAlliance.wav",
+			["Horde"] = "Sound\\Doodad\\BellTollHorde.wav"
+		}
+		local soundFile = sounds[PlayerRace] or sounds[PlayerClass] or sounds[englishFaction]
+	if soundFile then
+		PlaySoundFile(soundFile)
+	end
 		QuickHealOverhealStatusScreenCenter:AddMessage(txt, 1, 0, 0, 1, 5)
 		textframe:SetTextColor(1, 0, 0)
 		textframe:SetFont(font, 14)
