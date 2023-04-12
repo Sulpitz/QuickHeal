@@ -62,6 +62,7 @@ local DQHV = { -- Default values
 	FilterRaidGroup8 = false,
 	DisplayHealingBar = true,
 	QuickClickEnabled = true,
+	ColourTargetNames = true,
 }
 
 --[ Monitor variables ]--
@@ -103,13 +104,29 @@ end
 --[ Utilities ]--
 
 -- Append server name to unit name when available (battlegrounds)
-local function UnitFullName(unit)
+local function GetName(unit)
 	local name, server = UnitName(unit)
-	if server and type(server) == "string" and type(name) == "string" then
-		return name .. " of " .. server
-	else
-		return name
+	if not name then
+		return "Unknown"
 	end
+	if server and type(server) == "string" then
+		name = name .. " of " .. server
+	end
+	return name
+end
+
+local function UnitFullName(unit)
+	local name = GetName(unit)
+	if QHV.ColourTargetNames then
+		local _, UnitClass = UnitClass(unit)
+		if UnitClass then
+			local color = RAID_CLASS_COLORS[UnitClass]
+			if color then
+				name = "|c" .. color.colorStr .. name .. "|r"
+			end
+		end
+	end
+	return name
 end
 
 -- Write one line to chat
