@@ -104,29 +104,19 @@ end
 --[ Utilities ]--
 
 -- Append server name to unit name when available (battlegrounds)
-local function GetName(unit)
+local function UnitFullName(unit)
 	local name, server = UnitName(unit)
-	if not name then
-		return "Unknown"
-	end
-	if server and type(server) == "string" then
+	if server and type(server) == "string" and type(name) == "string" then
 		name = name .. " of " .. server
 	end
-	return name
-end
-
-local function UnitFullName(unit)
-	local name = GetName(unit)
-	if QHV.ColourTargetNames then
-		local _, UnitClass = UnitClass(unit)
-		if UnitClass then
-			local color = RAID_CLASS_COLORS[UnitClass]
-			if color then
-				name = "|c" .. color.colorStr .. name .. "|r"
-			end
-		end
+	local _, class = UnitClass(unit)
+	if class and QHV.ColourTargetNames then
+		local color = RAID_CLASS_COLORS[class]
+		local coloredName = format("|cff%.2x%.2x%.2x%s|r", color.r * 255, color.g * 255, color.b * 255, name)
+		return coloredName
+	else
+		return name
 	end
-	return name
 end
 
 -- Write one line to chat
