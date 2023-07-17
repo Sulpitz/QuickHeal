@@ -109,9 +109,9 @@ local function UnitFullName(unit)
 	if server and type(server) == "string" and type(name) == "string" then
 		name = name .. " of " .. server
 	end
-	local _, class = UnitClass(unit)
-	if class and QHV.ColourTargetNames then
-		local color = RAID_CLASS_COLORS[class]
+	local _, UClass = UnitClass(unit)
+	if UClass and QHV.ColourTargetNames then
+		local color = RAID_CLASS_COLORS[UClass]
 		local coloredName = format("|cff%.2x%.2x%.2x%s|r", color.r * 255, color.g * 255, color.b * 255, name)
 		return coloredName
 	else
@@ -1002,10 +1002,10 @@ function QuickHeal_EstimateUnitHealNeed(unit, report)
 	-- Estimate target health
 	local HealthPercentage = UnitHealth(unit) or 0
 	HealthPercentage = HealthPercentage / 100
-	local LocUnitClass, UnitClass = UnitClass(unit)
-	UnitClass = UnitClass or "Unknown"
+	local LocUnitClass, UClass = UnitClass(unit)
+	UClass = UClass or "Unknown"
 	MaxHealthTab = { WARRIOR = 4100, PALADIN = 4000, SHAMAN = 3500, ROGUE = 3100, HUNTER = 3100, DRUID = 3100, WARLOCK = 2300, MAGE = 2200, PRIEST = 2100 }
-	local MaxHealth = MaxHealthTab[UnitClass] or 4000
+	local MaxHealth = MaxHealthTab[UClass] or 4000
 	local Level = UnitLevel(unit) or 60
 	local HealNeed = (1 - HealthPercentage) * MaxHealth * Level / 60
 	if report then
