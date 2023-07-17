@@ -537,7 +537,7 @@ function QuickHeal_Priest_FindSpellToUse(Target)
 			writePriestLine(L["USING FH"])
 			HealSize = HealSizeFH
 		end
-		if HPS_PoH > HealHPS then
+		if HPS_PoH > HealHPS and SpellIDGrp then -- [fix error] avoid using SpellIDGrp if it is nil
 			writePriestLine(L["USING POH"])
 			SpellID = SpellIDGrp
 			writePriestLine(L["Set SpellID: "] .. SpellID .. L[" from SpellIDGrp "] .. SpellIDGrp)
