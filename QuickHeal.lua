@@ -62,7 +62,7 @@ local DQHV = { -- Default values
 	FilterRaidGroup8 = false,
 	DisplayHealingBar = true,
 	QuickClickEnabled = true,
-	ColourTargetNames = true,
+	ColourNames = true,
 }
 
 --[ Monitor variables ]--
@@ -104,15 +104,28 @@ end
 --[ Utilities ]--
 
 -- Append server name to unit name when available (battlegrounds)
-local function UnitFullName(unit)
+local function UnitFullName(unit, useColor)
 	local name, server = UnitName(unit)
 	if server and type(server) == "string" and type(name) == "string" then
 		name = name .. " of " .. server
 	end
+	
 	local _, UClass = UnitClass(unit)
-	if UClass and QHV.ColourTargetNames then
-		local color = RAID_CLASS_COLORS[UClass]
-		local coloredName = format("|cff%.2x%.2x%.2x%s|r", color.r * 255, color.g * 255, color.b * 255, name)
+	
+	if UClass then
+		local color
+		if useColor ~= nil then
+			color = useColor and RAID_CLASS_COLORS[UClass]
+		else
+			color = RAID_CLASS_COLORS[UClass]
+		end
+		
+		local coloredName = name
+		if color and QHV.ColourNames then
+			local r, g, b = color.r * 255, color.g * 255, color.b * 255
+			coloredName = string.format("|cff%.2x%.2x%.2x%s|r", r, g, b, name)
+		end
+		
 		return coloredName
 	else
 		return name
@@ -1261,7 +1274,7 @@ local function FindWhoToHeal(Restrict, extParam)
 end
 
 local function Notification(unit, spellName)
-	local unitName = UnitFullName(unit)
+	local unitName = UnitFullName(unit, false)
 	local rand = math.random(1, 10)
 	local read
 	local _, PlayerRace = UnitRace("player")
