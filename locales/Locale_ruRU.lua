@@ -303,7 +303,7 @@ L:RegisterTranslations("ruRU", function()
 		-- Unit is not healable, report reason and return
 		["You don't have a target"] = "У вас нет цели",
 		[" doesn't have a target"] = " нет цели",
-		[") cannot be healed"] = ") не может быть вылечен",
+		[" cannot be healed"] = " не может быть вылечен",
 		-- Unit exists but cannot be healed
 		["You cannot be healed"] = "Ты не можешь быть вылечен",
 		["Unit does not exist"] = "Единица не существует",

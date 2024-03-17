@@ -1556,7 +1556,7 @@ function QuickHeal(Target, SpellID, extParam)
 				elseif not UnitExists("targettarget") then
 					Message((UnitFullName("target") or "Target") .. L[" doesn't have a target"], L["Error"], 2)
 				else
-					Message(UnitFullName("target") .. L["'s Target ("] .. UnitFullName("targettarget") .. L[") cannot be healed"], L["Error"], 2)
+					Message(UnitFullName("target") .. L["'s Target ("] .. UnitFullName("targettarget") .. ")" .. L[" cannot be healed"], L["Error"], 2)
 				end
 			elseif UnitExists(Target) then
 				-- Unit exists but cannot be healed

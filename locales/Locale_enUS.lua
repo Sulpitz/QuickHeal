@@ -303,7 +303,7 @@ L:RegisterTranslations("enUS", function()
 		-- Unit is not healable, report reason and return
 		["You don't have a target"] = true,
 		[" doesn't have a target"] = true,
-		[") cannot be healed"] = true,
+		[" cannot be healed"] = true,
 		-- Unit exists but cannot be healed
 		["You cannot be healed"] = true,
 		["Unit does not exist"] = true,
